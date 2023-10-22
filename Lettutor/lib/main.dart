@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/login/Login.dart';
+import 'package:lettutor/presentation/tutors-list/Tutors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,12 +33,36 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
-        fontFamily: GoogleFonts.poppins().fontFamily,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderSide: BorderSide(
+                color: Colors.black12,
+              )
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          isDense: true,
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(
+              color: Colors.blue,
+            ),
+            elevation: 0,
+
+          )
+        )
 
       ),
-      home: Login(),
+      home: Tutors(),
     );
   }
 }
