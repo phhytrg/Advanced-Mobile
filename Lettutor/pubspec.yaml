@@ -40,6 +40,7 @@ dependencies:
   google_fonts: ^6.1.0
   flag: ^7.0.0
   video_player: ^2.7.2
+  expandable_text: 2.3.0
 
 dev_dependencies:
   flutter_test:

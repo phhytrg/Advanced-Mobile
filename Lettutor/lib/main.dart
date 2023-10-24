@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/presentation/booking/BookingStudent.dart';
 import 'package:lettutor/presentation/login/Login.dart';
 import 'package:lettutor/presentation/theme/AppTheme.dart';
 import 'package:lettutor/presentation/tutor/Tutor.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: Tutor(),
+      home: BookingStudent(),
     );
   }
 }
