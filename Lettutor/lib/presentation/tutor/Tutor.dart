@@ -5,7 +5,8 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/login/Appbar.dart';
-import 'package:lettutor/presentation/style/TextStyle.dart';
+
+import '../custom-widgets/TextStyle.dart';
 
 class Tutor extends StatelessWidget {
   const Tutor({super.key});
