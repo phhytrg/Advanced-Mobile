@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/presentation/constant.dart';
-import 'package:lettutor/presentation/custom-widgets/ButtonStyle.dart';
-import 'package:lettutor/presentation/login/Appbar.dart';
+import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
+import 'package:lettutor/presentation/custom-widgets/page_header.dart';
+import 'package:lettutor/presentation/custom-widgets/tutor_mini_item.dart';
+import 'package:lettutor/presentation/login/appbar.dart';
 
-class BookingStudent extends StatelessWidget {
-  const BookingStudent({super.key});
+class BookingStudentPage extends StatelessWidget {
+  const BookingStudentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class BookingStudent extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Column(
             children: [
-              _BookingHeader(),
+              PageHeader(svgIconPath: 'icons/calendar-check.svg', pageDescription: sampleText),
               const SizedBox(
                 height: 32,
               ),
@@ -34,64 +36,6 @@ class BookingStudent extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _BookingHeader extends StatelessWidget {
-  const _BookingHeader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-
-    final headerIcon = SizedBox(
-        height: 108,
-        width: 108,
-        child: SvgPicture.asset('/icons/calendar-check.svg',)
-    );
-
-    final headerDescription = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Schedule', style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-          fontWeight: FontWeight.w900,
-        )),
-        ExpandableText(
-          sampleText,
-          textAlign: TextAlign.justify,
-          expandText: 'show more',
-          collapseText: 'show less',
-          maxLines: 3,
-          linkColor: Colors.lightBlue,
-        ),
-      ],
-    );
-
-    return LayoutBuilder(
-      builder: (context, constraints){
-        if(constraints.maxWidth <= mobileWidth){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              headerIcon,
-              headerDescription,
-            ],
-          );
-        }
-        else{
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              headerIcon,
-              const SizedBox(
-                width: 16,
-              ),
-              Expanded(child: headerDescription),
-            ],
-          );
-        }
-      }
     );
   }
 }
@@ -184,77 +128,32 @@ class _LatestBook extends StatelessWidget {
 class _BookingBody extends StatelessWidget {
   _BookingBody({super.key});
 
-  final bookingItemHeader = Builder(
-    builder: (context) {
-      return Wrap(
-        alignment: WrapAlignment.spaceAround,
-        crossAxisAlignment: WrapCrossAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Thu, 26 Oct 23',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                Text('1 lesson'),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 32,
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                child: Icon(Icons.portrait),
-                minRadius: 48,
-              ),
-              SizedBox(
-                width: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Keegan',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Flag.fromCode(FlagsCode.TN, height: 16, width: 16*4/3, borderRadius: 4),
-                      SizedBox(width: 4,),
-                      Text('Tunisia'),
-                    ],
-                  ),
-                  MyTextButton(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Icon(Icons.message_rounded, size: Theme.of(context).textTheme.bodyLarge!.fontSize,),
-                        ),
-                        Text('Direct Message'),
-                      ],
-                    )
-                  ),
-                ],
-              )
-            ],
-          )
-        ],
-      );
-    }
-  );
+
 
   @override
   Widget build(BuildContext context) {
+    final bookingItemHeader = Wrap(
+      alignment: WrapAlignment.spaceAround,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      spacing: 32,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Thu, 26 Oct 23',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Text('1 lesson'),
+            ],
+          ),
+        ),
+        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN')
+      ],
+    );
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.circular(8.0),
@@ -267,7 +166,7 @@ class _BookingBody extends StatelessWidget {
           decoration: decoration,
           child: Column(
             children: [
-              bookingItemHeader,
+              Container(child: bookingItemHeader, width: double.infinity,),
               _LessonLine(),
             ],
           ),

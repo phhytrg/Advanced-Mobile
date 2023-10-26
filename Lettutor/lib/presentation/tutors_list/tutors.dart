@@ -2,12 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/presentation/login/Appbar.dart';
-import 'package:lettutor/presentation/tutors-list/TutorItem.dart';
-import 'package:lettutor/presentation/tutors-list/UpcomingLesson.dart';
+import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/tutors_list/tutor_item.dart';
+import 'package:lettutor/presentation/tutors_list/upcoming-lesson.dart';
 
-class Tutors extends StatelessWidget{
-  const Tutors({super.key});
+class TutorsPage extends StatelessWidget{
+  const TutorsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

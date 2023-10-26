@@ -4,12 +4,11 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/presentation/constant.dart';
-import 'package:lettutor/presentation/login/Appbar.dart';
+import 'package:lettutor/presentation/custom-widgets/text_widget.dart';
+import 'package:lettutor/presentation/login/appbar.dart';
 
-import '../custom-widgets/TextStyle.dart';
-
-class Tutor extends StatelessWidget {
-  const Tutor({super.key});
+class TutorPage extends StatelessWidget {
+  const TutorPage({super.key});
 
   @override
   Widget build(BuildContext context) {

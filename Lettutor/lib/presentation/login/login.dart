@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'Appbar.dart';
+import 'appbar.dart';
 
-class Login extends StatefulWidget{
-  const Login({super.key});
+class LoginPage extends StatefulWidget{
+  const LoginPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginState();
+    return _LoginPageState();
   }
   
 }
 
-class _LoginState extends State<Login>{
+class _LoginPageState extends State<LoginPage>{
 
   bool isMobile(BuildContext context){
     return MediaQuery.of(context).size.width < 600;
