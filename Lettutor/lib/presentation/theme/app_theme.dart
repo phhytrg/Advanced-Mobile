@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme{
   AppTheme._();
@@ -31,10 +32,7 @@ class AppTheme{
 
         )
     ),
-  );
-
-  static final ThemeData darkTheme = ThemeData(
-
+    textTheme: GoogleFonts.poppinsTextTheme(),
   );
 
 }

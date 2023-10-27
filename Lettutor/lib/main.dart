@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/booking/booking_student.dart';
+import 'package:lettutor/presentation/courses/courses_page.dart';
 import 'package:lettutor/presentation/history/history.dart';
 import 'package:lettutor/presentation/login/login.dart';
 import 'package:lettutor/presentation/theme/app_theme.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: HistoryPage(),
+      home: CoursesPage(),
     );
   }
 }
