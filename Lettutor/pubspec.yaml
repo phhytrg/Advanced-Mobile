@@ -68,6 +68,30 @@ flutter:
 
   assets:
     - assets/
+    - assets/icons/
+    - assets/images/
+
+  fonts:
+    - family: RobotoSlab
+      fonts:
+        - asset: google_fonts/Poppins-Thin.ttf
+          weight: 100
+        - asset: google_fonts/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: google_fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: google_fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: google_fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: google_fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: google_fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: google_fonts/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: google_fonts/Poppins-Black.ttf
+          weight: 900
 
   # To add assets to your application, add an assets section, like this:
   # assets:

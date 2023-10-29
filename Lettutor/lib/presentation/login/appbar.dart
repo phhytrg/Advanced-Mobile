@@ -20,7 +20,7 @@ class LettutorAppbar extends StatelessWidget implements PreferredSizeWidget{
       leading: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
         child: SvgPicture.asset(
-          "/icons/lettutor_logo.svg",
+          "assets/icons/lettutor-logo.svg",
         ),
       ),
       leadingWidth: 180,
@@ -36,7 +36,7 @@ class LettutorAppbar extends StatelessWidget implements PreferredSizeWidget{
               foregroundColor: Colors.grey[500], // <-- Splash color
             ),
             child: SvgPicture.asset(
-              "/icons/usa-flag.svg",
+              "assets/icons/usa-flag.svg",
               width: 20,
               fit: BoxFit.scaleDown,
             ),

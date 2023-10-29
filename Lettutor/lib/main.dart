@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/booking/booking_student.dart';
+import 'package:lettutor/presentation/courses/course_information_page.dart';
 import 'package:lettutor/presentation/courses/courses_page.dart';
 import 'package:lettutor/presentation/history/history.dart';
 import 'package:lettutor/presentation/login/login.dart';
-import 'package:lettutor/presentation/theme/app_theme.dart';
 import 'package:lettutor/presentation/tutor/tutor.dart';
 import 'package:lettutor/presentation/tutors_list/tutors.dart';
 
@@ -22,8 +22,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: CoursesPage(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderSide: BorderSide(
+                color: Colors.black12,
+              )),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          isDense: true,
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+          side: const BorderSide(
+            color: Colors.blue,
+          ),
+          elevation: 0,
+        )),
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme
+        ),
+      ),
+      home: CourseInformationPage(),
     );
   }
 }
