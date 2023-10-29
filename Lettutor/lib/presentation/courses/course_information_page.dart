@@ -20,7 +20,15 @@ class CourseInformationPage extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints){
                 if(constraints.maxWidth <= mobileWidth * 1.5){
-                  return Container();
+                  return Column(
+                    children: [
+                      _buildCourseCard(context),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      _buildCourseInfo(context)
+                    ],
+                  );
                 }else{
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
