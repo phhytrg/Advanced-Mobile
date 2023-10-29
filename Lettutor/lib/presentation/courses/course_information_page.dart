@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
+import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
 import 'package:lettutor/presentation/login/appbar.dart';
 
 class CourseInformationPage extends StatelessWidget {
@@ -161,11 +162,11 @@ class CourseInformationPage extends StatelessWidget {
           if(constraints.maxWidth <= 600){
             return Column(
               children: [
-                // _buildTopicCard(context, '1. Foods you love'),
-                // _buildTopicCard(context, '2. Your jobs'),
-                // _buildTopicCard(context, '3. Playing and watching sports'),
-                // _buildTopicCard(context, '4. The Best Pet'),
-                // _buildTopicCard(context, '5. Having fun in your free time'),
+                _buildTopicCard(context, '1. Foods you love'),
+                _buildTopicCard(context, '2. Your jobs'),
+                _buildTopicCard(context, '3. Playing and watching sports'),
+                _buildTopicCard(context, '4. The Best Pet'),
+                _buildTopicCard(context, '5. Having fun in your free time'),
               ],
             );
           }
@@ -188,21 +189,19 @@ class CourseInformationPage extends StatelessWidget {
                 );
               },
             );
-            return GridView.count(
-              childAspectRatio: 1/ .4,
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              crossAxisCount: 2,
-              children: [
-                _buildTopicCard(context, '1. Foods you love'),
-                _buildTopicCard(context, '2. Your jobs'),
-                _buildTopicCard(context, sampleText),
-                _buildTopicCard(context, '4. The Best Pet'),
-                _buildTopicCard(context, '5. Having fun in your free time'),
-              ],
-            );
           }
-        })
+        }),
+        const SizedBox(
+          height: 32,
+        ),
+        _buildTitleText(context, 'Suggested Tutors'),
+        Divider(),
+        Row(
+          children: [
+            Text('Keegan'),
+            MyTextButton(child: Text('More info')),
+          ],
+        )
       ],
     );
   }
