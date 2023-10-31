@@ -43,6 +43,11 @@ dependencies:
   expandable_text: 2.3.0
   country_picker: ^2.0.21
   multi_dropdown: ^2.1.0
+  pdfx: ^2.4.0
+  http: ^1.1.0
+
+  # Paid Packet
+#  syncfusion_flutter_pdfviewer: ^23.1.42
 
 dev_dependencies:
   flutter_test:
