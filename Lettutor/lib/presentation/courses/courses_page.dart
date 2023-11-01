@@ -6,16 +6,29 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/courses/courses_tab.dart';
 import 'package:lettutor/presentation/custom-widgets/search.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
+import '../drawer/drawer.dart';
+
 class CoursesPage extends StatelessWidget {
-  const CoursesPage({super.key});
+  CoursesPage({super.key});
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: LettutorAppbar(),
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16.0),

@@ -9,7 +9,7 @@ import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
 import 'package:lettutor/presentation/custom-widgets/page_header.dart';
 import 'package:lettutor/presentation/custom-widgets/tutor_mini_item.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
 
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});

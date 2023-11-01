@@ -5,14 +5,74 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/custom-widgets/text_widget.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
+
+import '../drawer/drawer.dart';
 
 class TutorPage extends StatelessWidget {
-  const TutorPage({super.key});
+  TutorPage({super.key});
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    var tutorBriefIntro = Column(
+
+    double width = MediaQuery.of(context).size.width;
+    
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
+      body: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraint){
+            if(constraint.maxWidth <= mobileWidth){
+              //This is for mobile
+              return Container(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: Column(
+                  children: [
+                    _TutorInfoMobileBody(_buildTutorBriefIntro(context), Container(
+                      color: Colors.black12,
+                      width: double.infinity,
+                      height: 300,
+                    )),
+                    _TutorDetailMobileBody(
+                      tutorDetailInfo: _buildTutorDetail(context),
+                      schedule: Container(),
+                    )
+                  ],
+                ),
+              );
+            }
+            else{
+              //This this for desktop
+              return Container(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                child: Column(
+                  children: [
+                    _TutorInfoDesktopBody(_buildTutorBriefIntro(context), Container(
+                      color: Colors.black12,
+                      width: double.infinity,
+                      height: 300,
+                    )),
+                    _TutorDetailDesktopBody(tutorDetailInfo: _buildTutorDetail(context), schedule: Container())
+                  ],
+                ),
+              );
+            }
+          },
+        ),
+      )
+    );
+  }
+
+  Widget _buildTutorBriefIntro(BuildContext context) {
+    return Column(
       children: [
         Row(
           children: [
@@ -73,105 +133,62 @@ class TutorPage extends StatelessWidget {
         )
       ],
     );
+  }
 
-    var tutorVideo = Container(
-      color: Colors.black12,
-      width: double.infinity,
-      height: 300,
-    );
-
-    var tutorDetail = Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _PartInfo(
-            partDescription: Text('BA'),
-            partTitle: 'Education',
+  _buildTutorDetail(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PartInfo(
+          partDescription: Text('BA'),
+          partTitle: 'Education',
+        ),
+        _PartInfo(
+          partDescription: Wrap(
+            runSpacing: 8,
+            spacing: 8,
+            children: [
+              OutlinedText(text: 'English')
+            ],
           ),
-          _PartInfo(
-            partDescription: Wrap(
-              runSpacing: 8,
-              spacing: 8,
-              children: [
-                OutlinedText(text: 'English')
-              ],
-            ),
-            partTitle: 'Languages',
+          partTitle: 'Languages',
+        ),
+        _PartInfo(
+          partDescription: Wrap(
+            runSpacing: 8,
+            spacing: 8,
+            children: [
+              OutlinedText(text:'English for business'),
+              OutlinedText(text: 'Conversational'),
+              OutlinedText(text: 'English for kids'),
+              OutlinedText(text: 'IELTS'),
+              OutlinedText(text: 'STARTERS'),
+              OutlinedText(text: 'MOVERS'),
+            ],
           ),
-          _PartInfo(
-            partDescription: Wrap(
-              runSpacing: 8,
-              spacing: 8,
-              children: [
-                OutlinedText(text:'English for business'),
-                OutlinedText(text: 'Conversational'),
-                OutlinedText(text: 'English for kids'),
-                OutlinedText(text: 'IELTS'),
-                OutlinedText(text: 'STARTERS'),
-                OutlinedText(text: 'MOVERS'),
-              ],
-            ),
-            partTitle: 'Specialties',
-          ),
-          _PartInfo(
+          partTitle: 'Specialties',
+        ),
+        _PartInfo(
             partTitle: 'Suggested Courses',
             partDescription: Wrap(
               children: [
 
               ],
             )
-          ),
-          _PartInfo(
-            partTitle: 'Interests',
-            partDescription: Text('I loved the weather, the scenery and the laid-back lifestyle of the locals.'),
-          ),
-          _PartInfo(
-            partTitle: 'Teaching experiences',
-            partDescription: Text(''),
-          ),
-          _PartInfo(
-            partTitle: 'Others review',
-            partDescription: Text('This field for review'),
-          )
-        ],
-      ),
-    );
-    
-    return Scaffold(
-      appBar: LettutorAppbar(),
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraint){
-            if(constraint.maxWidth <= mobileWidth){
-              //This is for mobile
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                child: Column(
-                  children: [
-                    _TutorInfoMobileBody(tutorBriefIntro, tutorVideo),
-                    _TutorDetailMobileBody(
-                      tutorDetailInfo: tutorDetail,
-                      schedule: Container(),
-                    )
-                  ],
-                ),
-              );
-            }
-            else{
-              //This this for desktop
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                child: Column(
-                  children: [
-                    _TutorInfoDesktopBody(tutorBriefIntro, tutorVideo),
-                    _TutorDetailDesktopBody(tutorDetailInfo: tutorDetail, schedule: Container())
-                  ],
-                ),
-              );
-            }
-          },
         ),
-      )
+        _PartInfo(
+          partTitle: 'Interests',
+          partDescription: Text('I loved the weather, the scenery and the laid-back lifestyle of the locals.'),
+        ),
+        _PartInfo(
+          partTitle: 'Teaching experiences',
+          partDescription: Text(''),
+        ),
+        _PartInfo(
+          partTitle: 'Others review',
+          partDescription: Text('This field for review'),
+        )
+      ],
     );
   }
 }

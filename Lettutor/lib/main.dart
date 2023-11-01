@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/booking/booking_student.dart';
 import 'package:lettutor/presentation/courses/course_detail_page.dart';
 import 'package:lettutor/presentation/courses/course_information_page.dart';
 import 'package:lettutor/presentation/courses/courses_page.dart';
-import 'package:lettutor/presentation/history/history.dart';
-import 'package:lettutor/presentation/login/login.dart';
-import 'package:lettutor/presentation/tutor/tutor.dart';
-import 'package:lettutor/presentation/tutors_list/tutors.dart';
+import 'package:lettutor/presentation/history/history_page.dart';
+import 'package:lettutor/presentation/tutor/tutor_page.dart';
+import 'package:lettutor/presentation/tutors_list/tutors_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -23,6 +21,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/booking-student': (context) => BookingStudentPage(),
+        '/tutor': (context) => TutorPage(),
+        '/history': (context) => HistoryPage(),
+        '/courses': (context) => CoursesPage(),
+        '/course-info': (context) => CourseInformationPage(),
+        '/course-detail': (context) => CourseDetailPage(),
+      },
+      // builder: (context, child){
+      //   double width = MediaQuery.of(context).size.width;
+      //   return Scaffold(
+      //     key: _scaffoldKey,
+      //     appBar: LettutorAppbar(
+      //       onMenuIconPressed: (){
+      //         _scaffoldKey.currentState?.openEndDrawer();
+      //       },
+      //     ),
+      //     endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
+      //     body: child,
+      //   );
+      // },
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
@@ -49,7 +69,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme
         ),
       ),
-      home: CourseDetailPage(),
+      home: TutorsPage(),
     );
   }
 }

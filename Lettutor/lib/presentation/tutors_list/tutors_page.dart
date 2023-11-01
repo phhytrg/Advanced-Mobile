@@ -1,17 +1,37 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/presentation/appbar.dart';
 import 'package:lettutor/presentation/tutors_list/tutor_item.dart';
 import 'package:lettutor/presentation/tutors_list/upcoming-lesson.dart';
 
-class TutorsPage extends StatelessWidget{
-  const TutorsPage({super.key});
+import '../constant.dart';
+import '../drawer/drawer.dart';
+
+class TutorsPage extends StatefulWidget{
+  TutorsPage({super.key});
+
+  @override
+  State<TutorsPage> createState() => _TutorsPageState();
+}
+
+class _TutorsPageState extends State<TutorsPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: LettutorAppbar(),
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState!.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -31,7 +51,17 @@ class TutorsPage extends StatelessWidget{
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            TutorItem(),
+            Wrap(
+              children: [
+                TutorItem(),
+                TutorItem(),
+                TutorItem(),
+                TutorItem(),
+                TutorItem(),
+                TutorItem(),
+                TutorItem(),
+              ],
+            ),
             const SizedBox(
               height: 108,
             ),
@@ -40,7 +70,6 @@ class TutorsPage extends StatelessWidget{
       ),
     );
   }
-
 }
 
 class TutorsSearchBox extends StatelessWidget {
@@ -56,6 +85,7 @@ class TutorsSearchBox extends StatelessWidget {
           Text('Find a tutor',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Colors.black,
+              fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
             ),
           ),
           TextField(
@@ -79,6 +109,7 @@ class TutorsSearchBox extends StatelessWidget {
           Text('Select available tutoring time:',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: Colors.black,
+              fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
             ),
           ),
           TextField(

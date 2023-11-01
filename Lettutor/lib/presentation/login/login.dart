@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'appbar.dart';
+import '../appbar.dart';
 
 class LoginPage extends StatefulWidget{
   const LoginPage({super.key});
@@ -24,12 +24,8 @@ class _LoginPageState extends State<LoginPage>{
 
   @override
   Widget build(BuildContext context) {
-
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: LettutorAppbar(),
+      appBar: LoginAppbar(),
       body: SingleChildScrollView(
         child:
         (isMobile(context)) ?

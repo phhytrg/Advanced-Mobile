@@ -3,15 +3,35 @@ import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
 import 'package:lettutor/presentation/custom-widgets/page_header.dart';
 import 'package:lettutor/presentation/custom-widgets/tutor_mini_item.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
 
-class HistoryPage extends StatelessWidget {
+import '../drawer/drawer.dart';
+
+
+class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
   @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: LettutorAppbar(),
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),

@@ -5,15 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
 
-class CourseInformationPage extends StatelessWidget {
+import '../drawer/drawer.dart';
+
+class CourseInformationPage extends StatefulWidget {
   const CourseInformationPage({super.key});
 
   @override
+  State<CourseInformationPage> createState() => _CourseInformationPageState();
+}
+
+class _CourseInformationPageState extends State<CourseInformationPage> {
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: LettutorAppbar(),
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.all(16.0),
@@ -90,7 +109,9 @@ class CourseInformationPage extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.of(context).pushNamed('/course-detail');
+              },
               child: Text('Discover'),
             ),
           )
@@ -235,7 +256,7 @@ class CourseInformationPage extends StatelessWidget {
         border: Border.all(
           color: Colors.grey.shade300
         ),
-        
+
       ),
       child: Text(text, overflow: TextOverflow.fade,),
     );

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/courses/PdfViewerPage.dart';
 import 'package:lettutor/presentation/courses/pdf_viewer.dart';
-import 'package:lettutor/presentation/login/appbar.dart';
+import 'package:lettutor/presentation/appbar.dart';
+
+import '../drawer/drawer.dart';
 
 class CourseDetailPage extends StatefulWidget {
   const CourseDetailPage({super.key});
@@ -13,12 +16,23 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
+
   var _selectedIndex;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: LettutorAppbar(),
+      key: _scaffoldKey,
+      appBar: LettutorAppbar(
+        onMenuIconPressed: (){
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: LayoutBuilder(
         builder: (context, constraints){
           if(constraints.maxWidth <= mobileWidth){
