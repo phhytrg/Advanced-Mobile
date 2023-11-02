@@ -1,13 +1,15 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
 
 class PageHeader extends StatelessWidget {
 
   final String svgIconPath;
   final String pageDescription;
-  const PageHeader({super.key, required this.svgIconPath, required this.pageDescription});
+  final String pageName;
+  const PageHeader({super.key, required this.svgIconPath, required this.pageDescription, required this.pageName});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,11 @@ class PageHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Schedule', style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-          fontWeight: FontWeight.w900,
+        Text(pageName, style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+          fontFamily: GoogleFonts.poppins(
+            fontWeight: FontWeight.w700,
+          ).fontFamily,
+          color: Colors.black,
         )),
         ExpandableText(
           pageDescription,

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
 import 'package:lettutor/presentation/custom-widgets/page_header.dart';
@@ -23,28 +24,27 @@ class BookingStudentPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Column(
             children: [
-              PageHeader(svgIconPath: 'icons/calendar-check.svg', pageDescription: sampleText),
+              PageHeader(
+                svgIconPath: 'icons/calendar-check.svg',
+                pageDescription: sampleText,
+                pageName: 'Schedule',
+              ),
               const SizedBox(
                 height: 32,
               ),
-              _LatestBook(),
+              _buildLatestBook(context),
               const SizedBox(
                 height: 32,
               ),
-              _BookingBody(),
+              _buildBookingBody(context),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class _LatestBook extends StatelessWidget {
-  const _LatestBook({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLatestBook(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -123,75 +123,8 @@ class _LatestBook extends StatelessWidget {
       ],
     );
   }
-}
 
-class _BookingBody extends StatelessWidget {
-  _BookingBody({super.key});
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    final bookingItemHeader = Wrap(
-      alignment: WrapAlignment.spaceAround,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      spacing: 32,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Thu, 26 Oct 23',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              Text('1 lesson'),
-            ],
-          ),
-        ),
-        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN')
-      ],
-    );
-
-    final decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(8.0),
-      color: Colors.grey.shade200,
-    );
-
-    return LayoutBuilder(builder: (context, constrainst){
-      if(constrainst.maxWidth <= mobileWidth * 2){
-        return Container(
-          decoration: decoration,
-          child: Column(
-            children: [
-              Container(child: bookingItemHeader, width: double.infinity,),
-              _LessonLine(),
-            ],
-          ),
-        );
-      }
-      else{
-        return Container(
-          decoration: decoration,
-          child: Row(
-            children: [
-              Expanded(child: bookingItemHeader),
-              Expanded(child: _LessonLine()),
-            ],
-          ),
-        );
-      }
-    });
-  }
-}
-
-class _LessonLine extends StatelessWidget {
-  const _LessonLine({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLessonLine(BuildContext context){
     return Container(
       color: Colors.white,
       margin: EdgeInsets.all(8.0),
@@ -201,21 +134,27 @@ class _LessonLine extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('00:00 - 00:25'),
-              OutlinedButton(
-                onPressed: (){},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: BorderSide(
-                    color: Colors.red
-                  )
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text('00:00 - 00:25'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OutlinedButton(
+                    onPressed: (){},
+                    style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.red,
+                        side: BorderSide(
+                            color: Colors.red
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.cancel),
+                        Text('Cancel'),
+                      ],
+                    )
                 ),
-                child: Row(
-                  children: [
-                    Icon(Icons.cancel),
-                    Text('Cancel'),
-                  ],
-                )
               ),
             ],
           ),
@@ -243,20 +182,88 @@ class _LessonLine extends StatelessWidget {
                 expandedAlignment: Alignment.centerLeft,
                 children: [
                   Container(
-                    color: Colors.white,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text('Currently there are no requests for this class. Please write down any requests for the teacher.')
+                      color: Colors.white,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Text('Currently there are no requests for this class. Please write down any requests for the teacher.')
                   )
                 ],
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: OutlinedButton(
+                onPressed: () {  },
+                child: Text('Go to meeting'),
+              ),
+            ),
+          )
         ],
       ),
     );
   }
+
+  Widget _buildBookingBody(BuildContext context){
+    return LayoutBuilder(builder: (context, constrainst){
+      if(constrainst.maxWidth <= mobileWidth * 2){
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.grey.shade200,
+          ),
+          child: Column(
+            children: [
+              Container(child: _buildBookingItemHeader(context), width: double.infinity,),
+              _buildLessonLine(context),
+            ],
+          ),
+        );
+      }
+      else{
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.grey.shade200,
+          ),
+          child: Row(
+            children: [
+              Expanded(child: _buildBookingItemHeader(context)),
+              Expanded(child: _buildLessonLine(context)),
+            ],
+          ),
+        );
+      }
+    });
+  }
+
+  Widget _buildBookingItemHeader(BuildContext context){
+    return Wrap(
+      alignment: WrapAlignment.spaceAround,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      spacing: 32,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Thu, 26 Oct 23',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                ),
+              ),
+              Text('1 lesson'),
+            ],
+          ),
+        ),
+        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN')
+      ],
+    );
+  }
 }
+
 
 
 

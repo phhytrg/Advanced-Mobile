@@ -12,8 +12,33 @@ void main() {
   runApp(MyApp());
 }
 
+enum RoutePath{
+  bookingStudents, tutor, tutorsList, history, courses, courseInfo, courseDetail;
+
+  String getString(){
+    switch (this){
+      case RoutePath.bookingStudents:
+        return '/booking-student';
+      case RoutePath.history:
+        return '/history';
+      case RoutePath.courses:
+        return '/courses';
+      case RoutePath.courseInfo:
+        return '/course-info';
+      case RoutePath.courseDetail:
+        return '/course-detail';
+      case RoutePath.tutor:
+        return '/tutor';
+      case RoutePath.tutorsList:
+        return '/';
+      default:
+        return '/';
+    }
+  }
+}
+
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -23,12 +48,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/booking-student': (context) => BookingStudentPage(),
-        '/tutor': (context) => TutorPage(),
-        '/history': (context) => HistoryPage(),
-        '/courses': (context) => CoursesPage(),
-        '/course-info': (context) => CourseInformationPage(),
-        '/course-detail': (context) => CourseDetailPage(),
+        RoutePath.bookingStudents.getString(): (context) => BookingStudentPage(),
+        RoutePath.tutor.getString(): (context) => TutorPage(),
+        RoutePath.history.getString(): (context) => HistoryPage(),
+        RoutePath.courses.getString(): (context) => CoursesPage(),
+        RoutePath.courseInfo.getString(): (context) => CourseInformationPage(),
+        RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
       },
       // builder: (context, child){
       //   double width = MediaQuery.of(context).size.width;

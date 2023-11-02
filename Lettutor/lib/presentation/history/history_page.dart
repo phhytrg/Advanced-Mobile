@@ -37,7 +37,10 @@ class _HistoryPageState extends State<HistoryPage> {
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Column(
             children: [
-              PageHeader(svgIconPath: 'icons/history.svg', pageDescription: sampleText),
+              PageHeader(
+                svgIconPath: 'icons/history.svg',
+                pageDescription: sampleText,
+                pageName: 'History',),
               const SizedBox(
                 height: 32,
               ),
@@ -55,7 +58,47 @@ class HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemHeader = Wrap(
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey.shade200,
+      ),
+      child: LayoutBuilder(builder: (context, constraints){
+        if(constraints.maxWidth <= mobileWidth * 2){
+          return Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: _buildItemHeader(context),
+                padding: EdgeInsets.all(16.0),
+                width: double.infinity,
+              ),
+              _buildItemBody(context),
+            ],
+          );
+        }
+        else{
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildItemHeader(context),
+              ),
+                flex: 1,
+              ),
+              Expanded(child: _buildItemBody(context), flex: 2,),
+            ],
+          );
+        }
+      }),
+    );
+  }
+
+  Widget _buildItemHeader(BuildContext context){
+    return Wrap(
       alignment: WrapAlignment.spaceAround,
       spacing: 32,
       runSpacing: 8,
@@ -71,8 +114,10 @@ class HistoryItem extends StatelessWidget {
         TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN'),
       ],
     );
+  }
 
-    final itemInfo = Column(
+  Widget _buildItemBody(BuildContext context){
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -107,49 +152,18 @@ class HistoryItem extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.all(8.0),
-          margin: EdgeInsets.only(top: 1, bottom: 16, right: 16, left: 16),
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MyTextButton(child: Text('Add a rating')),
-              MyTextButton(child: Text('Report')),
-            ],
-          )
+            padding: EdgeInsets.all(8.0),
+            margin: EdgeInsets.only(top: 1, bottom: 16, right: 16, left: 16),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MyTextButton(child: Text('Add a rating')),
+                MyTextButton(child: Text('Report')),
+              ],
+            )
         ),
       ],
-    );
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.grey.shade200,
-      ),
-      child: LayoutBuilder(builder: (context, constraints){
-        if(constraints.maxWidth <= mobileWidth * 2){
-          return Column(
-            children: [
-              Container(
-                child: itemHeader,
-                padding: EdgeInsets.all(16.0),
-                width: double.infinity,
-              ),
-              itemInfo,
-            ],
-          );
-        }
-        else{
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: itemHeader),
-              Expanded(child: itemInfo),
-            ],
-          );
-        }
-      }),
     );
   }
 }

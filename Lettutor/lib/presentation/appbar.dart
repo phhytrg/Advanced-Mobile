@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lettutor/main.dart';
 import 'package:lettutor/presentation/constant.dart';
 
 import 'booking/booking_student.dart';
@@ -84,121 +85,125 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
   }
 
   Widget _buildTitle(BuildContext context) {
+    String? currentRoutePath = ModalRoute.of(context)?.settings.name;
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 24,
         ),
         InkWell(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              'TUTOR',
-              style: TextStyle(
-                color: _hoverNavBar[0] ? Colors.blue : Colors.black,
-              ),
-            ),
-          ),
           hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            Navigator.pushNamed(context, '/');
+            Navigator.pushReplacementNamed(context, '/');
           },
           onHover: (value) {
             setState(() {
               value ? _hoverNavBar[0] = true : _hoverNavBar[0] = false;
             });
           },
-        ),
-        SizedBox(
-          width: 24,
-        ),
-        InkWell(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'SCHEDULE',
+              'TUTOR',
               style: TextStyle(
-                color: _hoverNavBar[1] ? Colors.blue : Colors.black,
+                color: _hoverNavBar[0]
+                    || currentRoutePath == RoutePath.tutorsList.getString()
+                    ? Colors.blue
+                    : Colors.black,
               ),
             ),
           ),
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+        InkWell(
           hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            Navigator.pushNamed(context, '/booking-student');
+            Navigator.pushReplacementNamed(context, '/booking-student');
           },
           onHover: (value) {
             setState(() {
               value ? _hoverNavBar[1] = true : _hoverNavBar[1] = false;
             });
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              'SCHEDULE',
+              style: TextStyle(
+                color: _hoverNavBar[1]
+                    || currentRoutePath == RoutePath.bookingStudents.getString()
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+          ),
         ),
         SizedBox(
           width: 24,
         ),
         InkWell(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              'HISTORY',
-              style: TextStyle(
-                color: _hoverNavBar[2] ? Colors.blue : Colors.black,
-              ),
-            ),
-          ),
           hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            Navigator.pushNamed(context, '/history');
+            Navigator.pushReplacementNamed(context, '/history');
           },
           onHover: (value) {
             setState(() {
               value ? _hoverNavBar[2] = true : _hoverNavBar[2] = false;
             });
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'HISTORY',
+              style: TextStyle(
+                color: _hoverNavBar[2]
+                    || currentRoutePath == RoutePath.history.getString()
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+          ),
         ),
         SizedBox(
           width: 24,
         ),
         InkWell(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              'COURSES',
-              style: TextStyle(
-                color: _hoverNavBar[3] ? Colors.blue : Colors.black,
-              ),
-            ),
-          ),
           hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            Navigator.pushNamed(context, '/courses');
+            Navigator.pushReplacementNamed(context, '/courses',);
           },
           onHover: (value) {
             setState(() {
               value ? _hoverNavBar[3] = true : _hoverNavBar[3] = false;
             });
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'COURSES',
+              style: TextStyle(
+                color: _hoverNavBar[3]
+                    || currentRoutePath == RoutePath.courses.getString()
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+          ),
         ),
         SizedBox(
           width: 24,
         ),
         InkWell(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              'MY COURSE',
-              style: TextStyle(
-                color: _hoverNavBar[4] ? Colors.blue : Colors.black,
-              ),
-            ),
-          ),
           hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
@@ -210,6 +215,18 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               value ? _hoverNavBar[4] = true : _hoverNavBar[4] = false;
             });
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'MY COURSE',
+              style: TextStyle(
+                color: _hoverNavBar[4]
+                    // || currentRoutePath == RoutePath.myCourse.getString();
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+          ),
         ),
       ],
     );
