@@ -4,7 +4,7 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/presentation/constant.dart';
-import 'package:lettutor/presentation/custom-widgets/text_widget.dart';
+import 'package:lettutor/presentation/common/text_widget.dart';
 import 'package:lettutor/presentation/appbar.dart';
 
 import '../drawer/drawer.dart';

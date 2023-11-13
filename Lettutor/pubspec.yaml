@@ -45,6 +45,8 @@ dependencies:
   multi_dropdown: ^2.1.0
   pdfx: ^2.4.0
   http: ^1.1.0
+  provider: ^6.1.1
+  dio: ^5.3.3
 
   # Paid Packet
 #  syncfusion_flutter_pdfviewer: ^23.1.42

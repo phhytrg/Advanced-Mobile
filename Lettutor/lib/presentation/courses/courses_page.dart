@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/presentation/constant.dart';
 import 'package:lettutor/presentation/courses/courses_tab.dart';
-import 'package:lettutor/presentation/custom-widgets/search.dart';
+import 'package:lettutor/presentation/common/search.dart';
 import 'package:lettutor/presentation/appbar.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 

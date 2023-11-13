@@ -7,9 +7,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
-import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
-import 'package:lettutor/presentation/custom-widgets/page_header.dart';
-import 'package:lettutor/presentation/custom-widgets/tutor_mini_item.dart';
+import 'package:lettutor/presentation/common/button_widget.dart';
+import 'package:lettutor/presentation/common/page_header.dart';
+import 'package:lettutor/presentation/common/tutor_mini_item.dart';
 import 'package:lettutor/presentation/appbar.dart';
 
 class BookingStudentPage extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/presentation/constant.dart';
-import 'package:lettutor/presentation/custom-widgets/button_widget.dart';
+import 'package:lettutor/presentation/common/button_widget.dart';
 import 'package:lettutor/presentation/appbar.dart';
 
 import '../drawer/drawer.dart';
