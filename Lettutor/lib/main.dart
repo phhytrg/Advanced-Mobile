@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/presentation/advertising/advertising.dart';
 import 'package:lettutor/presentation/booking/booking_student.dart';
 import 'package:lettutor/presentation/courses/course_detail_page.dart';
 import 'package:lettutor/presentation/courses/course_information_page.dart';
 import 'package:lettutor/presentation/courses/courses_page.dart';
 import 'package:lettutor/presentation/history/history_page.dart';
+import 'package:lettutor/presentation/login/login.dart';
 import 'package:lettutor/presentation/tutor/tutor_page.dart';
 import 'package:lettutor/presentation/tutors_list/tutors_page.dart';
 
@@ -13,7 +15,7 @@ void main() {
 }
 
 enum RoutePath{
-  bookingStudents, tutor, tutorsList, history, courses, courseInfo, courseDetail;
+  bookingStudents, tutor, tutorsList, history, courses, courseInfo, courseDetail, login, signup;
 
   String getString(){
     switch (this){
@@ -30,7 +32,11 @@ enum RoutePath{
       case RoutePath.tutor:
         return '/tutor';
       case RoutePath.tutorsList:
-        return '/';
+        return '/tutors';
+      case RoutePath.login:
+        return '/login';
+      case RoutePath.signup:
+        return '/signup';
       default:
         return '/';
     }
@@ -54,6 +60,8 @@ class MyApp extends StatelessWidget {
         RoutePath.courses.getString(): (context) => CoursesPage(),
         RoutePath.courseInfo.getString(): (context) => CourseInformationPage(),
         RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
+        RoutePath.login.getString(): (context) => LoginPage(),
+        // RoutePath.signup.getString(): (context) => LoginPage(),
       },
       // builder: (context, child){
       //   double width = MediaQuery.of(context).size.width;
@@ -94,7 +102,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme
         ),
       ),
-      home: TutorsPage(),
+      home: AdvertisingPage(),
     );
   }
 }
