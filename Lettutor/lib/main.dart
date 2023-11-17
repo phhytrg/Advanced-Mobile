@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/presentation/advertising/advertising.dart';
-import 'package:lettutor/presentation/booking/booking_student.dart';
-import 'package:lettutor/presentation/courses/course_detail_page.dart';
-import 'package:lettutor/presentation/courses/course_information_page.dart';
-import 'package:lettutor/presentation/courses/courses_page.dart';
-import 'package:lettutor/presentation/history/history_page.dart';
-import 'package:lettutor/presentation/login/login.dart';
-import 'package:lettutor/presentation/tutor/tutor_page.dart';
-import 'package:lettutor/presentation/tutors_list/tutors_page.dart';
+import 'package:lettutor/app/presentation/tutors_list/tutors_page.dart';
+
+import 'app/presentation/advertising/advertising.dart';
+import 'app/presentation/booking/booking_student.dart';
+import 'app/presentation/courses/course_detail_page.dart';
+import 'app/presentation/courses/course_information_page.dart';
+import 'app/presentation/courses/courses_page.dart';
+import 'app/presentation/history/history_page.dart';
+import 'app/login/presentation/login.dart';
+import 'app/presentation/signup/signup.dart';
+import 'app/presentation/tutor/tutor_page.dart';
+import 'configure_nonweb.dart';
 
 void main() {
+  configureApp();
   runApp(MyApp());
 }
 
@@ -56,12 +60,13 @@ class MyApp extends StatelessWidget {
       routes: {
         RoutePath.bookingStudents.getString(): (context) => BookingStudentPage(),
         RoutePath.tutor.getString(): (context) => TutorPage(),
+        RoutePath.tutorsList.getString(): (context) => TutorsPage(),
         RoutePath.history.getString(): (context) => HistoryPage(),
         RoutePath.courses.getString(): (context) => CoursesPage(),
         RoutePath.courseInfo.getString(): (context) => CourseInformationPage(),
         RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
         RoutePath.login.getString(): (context) => LoginPage(),
-        // RoutePath.signup.getString(): (context) => LoginPage(),
+        RoutePath.signup.getString(): (context) => SignupPage(),
       },
       // builder: (context, child){
       //   double width = MediaQuery.of(context).size.width;
