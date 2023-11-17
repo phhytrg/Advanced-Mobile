@@ -4,8 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/commom-widgets/button_widget.dart';
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 import '../drawer/drawer.dart';
 
 class CourseInformationPage extends StatefulWidget {

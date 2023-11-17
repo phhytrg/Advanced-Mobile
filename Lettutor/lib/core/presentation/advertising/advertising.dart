@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/main.dart';
 
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 
 class AdvertisingPage extends StatelessWidget {
   const AdvertisingPage({super.key});

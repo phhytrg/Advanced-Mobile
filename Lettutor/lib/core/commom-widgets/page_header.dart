@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../app/presentation/constant.dart';
+import '../constant.dart';
 
 class PageHeader extends StatelessWidget {
 

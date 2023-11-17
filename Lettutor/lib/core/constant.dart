@@ -8,3 +8,5 @@ const sampleText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
     'voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint '
     'occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit '
     'anim id est laborum.';
+final emailValidator = RegExp(
+    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');

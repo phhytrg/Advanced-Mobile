@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/main.dart';
 
-import 'booking/booking_student.dart';
-import 'constant.dart';
+import '../constant.dart';
 
 class LettutorAppbar extends StatefulWidget implements PreferredSizeWidget {
   final VoidCallback? onMenuIconPressed;

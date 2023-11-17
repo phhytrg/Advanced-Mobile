@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 import '../drawer/drawer.dart';
 import 'pdf_viewer.dart';
 

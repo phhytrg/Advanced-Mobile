@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 import '../drawer/drawer.dart';
 import 'PdfViewerPage.dart';
 import 'pdf_viewer.dart';

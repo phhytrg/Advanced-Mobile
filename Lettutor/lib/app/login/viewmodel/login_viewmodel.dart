@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/app/login/presentation/login.dart';
 import 'package:lettutor/main.dart';
-
 import '../../../core/network/network_service.dart';
 import '../service/auth_service.dart';
 
@@ -30,5 +29,9 @@ abstract class LoginViewModel extends State<LoginPage>{
         ),
       );
     }
+  }
+
+  Future<void> resetPassword(String email) async{
+
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../../../core/commom-widgets/search.dart';
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 import '../drawer/drawer.dart';
 import 'courses_tab.dart';
 

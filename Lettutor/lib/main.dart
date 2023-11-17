@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/app/presentation/tutors_list/tutors_page.dart';
-
-import 'app/presentation/advertising/advertising.dart';
-import 'app/presentation/booking/booking_student.dart';
-import 'app/presentation/courses/course_detail_page.dart';
-import 'app/presentation/courses/course_information_page.dart';
-import 'app/presentation/courses/courses_page.dart';
-import 'app/presentation/history/history_page.dart';
+import 'package:lettutor/app/login/presentation/reset_password.dart';
 import 'app/login/presentation/login.dart';
-import 'app/presentation/signup/signup.dart';
-import 'app/presentation/tutor/tutor_page.dart';
+import 'app/signup/presentation/signup.dart';
 import 'configure_nonweb.dart';
+import 'core/presentation/advertising/advertising.dart';
+import 'core/presentation/booking/booking_student.dart';
+import 'core/presentation/courses/course_detail_page.dart';
+import 'core/presentation/courses/course_information_page.dart';
+import 'core/presentation/courses/courses_page.dart';
+import 'core/presentation/history/history_page.dart';
+import 'core/presentation/tutor/tutor_page.dart';
+import 'core/presentation/tutors_list/tutors_page.dart';
 
 void main() {
   configureApp();
@@ -19,7 +19,16 @@ void main() {
 }
 
 enum RoutePath{
-  bookingStudents, tutor, tutorsList, history, courses, courseInfo, courseDetail, login, signup;
+  bookingStudents,
+  tutor,
+  tutorsList,
+  history,
+  courses,
+  courseInfo,
+  courseDetail,
+  login,
+  signup,
+  resetPassword;
 
   String getString(){
     switch (this){
@@ -41,6 +50,8 @@ enum RoutePath{
         return '/login';
       case RoutePath.signup:
         return '/signup';
+      case RoutePath.resetPassword:
+        return '/reset-password';
       default:
         return '/';
     }
@@ -67,6 +78,7 @@ class MyApp extends StatelessWidget {
         RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
         RoutePath.login.getString(): (context) => LoginPage(),
         RoutePath.signup.getString(): (context) => SignupPage(),
+        RoutePath.resetPassword.getString(): (context) => ResetPasswordPage(),
       },
       // builder: (context, child){
       //   double width = MediaQuery.of(context).size.width;

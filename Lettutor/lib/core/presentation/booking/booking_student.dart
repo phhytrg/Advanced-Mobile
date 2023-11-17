@@ -5,8 +5,8 @@ import 'package:flutter/rendering.dart';
 import '../../../core/commom-widgets/button_widget.dart';
 import '../../../core/commom-widgets/page_header.dart';
 import '../../../core/commom-widgets/tutor_mini_item.dart';
-import '../appbar.dart';
-import '../constant.dart';
+import '../../commom-widgets/appbar.dart';
+import '../../constant.dart';
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});
 
