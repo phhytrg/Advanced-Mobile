@@ -2,10 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
-import '../drawer/drawer.dart';
+import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/constant.dart';
+import '../../../core/commom-widgets/drawer.dart';
 import 'tutor_item.dart';
 import 'upcoming-lesson.dart';
 

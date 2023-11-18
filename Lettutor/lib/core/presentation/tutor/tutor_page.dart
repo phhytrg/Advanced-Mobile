@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/commom-widgets/text_widget.dart';
 import '../../commom-widgets/appbar.dart';
 import '../../constant.dart';
-import '../drawer/drawer.dart';
+import '../../commom-widgets/drawer.dart';
 
 class TutorPage extends StatelessWidget {
   TutorPage({super.key});

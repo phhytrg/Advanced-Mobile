@@ -1,16 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/main.dart';
 
 import '../../commom-widgets/appbar.dart';
 import '../../constant.dart';
+import '../../route/router.dart';
 
-class AdvertisingPage extends StatelessWidget {
+
+class AdvertisingPage extends ConsumerWidget {
   const AdvertisingPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
     return Scaffold(
         appBar: LoginAppbar(),
         body: SingleChildScrollView(
@@ -63,8 +66,7 @@ class AdvertisingPage extends StatelessWidget {
                       ),
                       FilledButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, RoutePath.login.getString());
+                            ref.read(goRouterProvider).goNamed(RoutePath.login.name);
                           },
                           child: Text("JOIN NOW"),
                           style: FilledButton.styleFrom(
@@ -117,8 +119,7 @@ class AdvertisingPage extends StatelessWidget {
                             ),
                             FilledButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, RoutePath.login.getString());
+                                  ref.read(goRouterProvider).goNamed(RoutePath.login.name);
                                 },
                                 child: Text("Get Started"),
                                 style: FilledButton.styleFrom(
@@ -171,8 +172,7 @@ class AdvertisingPage extends StatelessWidget {
                                   ),
                                   FilledButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(context,
-                                            RoutePath.login.getString());
+                                        ref.read(goRouterProvider).goNamed(RoutePath.login.name);
                                       },
                                       child: Text("Get Started"),
                                       style: FilledButton.styleFrom(

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../commom-widgets/appbar.dart';
 import '../../constant.dart';
-import '../drawer/drawer.dart';
+import '../../commom-widgets/drawer.dart';
 import 'PdfViewerPage.dart';
 import 'pdf_viewer.dart';
 

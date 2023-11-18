@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../core/commom-widgets/button_widget.dart';
 import '../../commom-widgets/appbar.dart';
 import '../../constant.dart';
-import '../drawer/drawer.dart';
+import '../../commom-widgets/drawer.dart';
 
 class CourseInformationPage extends StatefulWidget {
   const CourseInformationPage({super.key});

@@ -1,53 +1,44 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/app/login/viewmodel/login_viewmodel.dart';
 import 'package:lettutor/core/constant.dart';
+import 'package:lettutor/core/presentation/notification.dart';
 
 import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/domain/user.dart';
+import '../../../core/route/auth_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _LoginPageState();
   }
-
 }
 
-class _LoginPageState extends LoginViewModel {
-
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool isMobile(BuildContext context) {
-    return MediaQuery
-        .of(context)
-        .size
-        .width < 600;
-  }
-
-  void onLoginButtonClick() {
-    if(_formKey.currentState!.validate()){
-      fetchUserLogin(emailController.text, passwordController.text);
-    }
+    return MediaQuery.of(context).size.width < 600;
   }
 
   void onForgotPasswordClick() {
-    Navigator.pushNamed(
-        context,
-        '/reset-password'
-    );
+    Navigator.pushNamed(context, '/reset-password');
   }
 
   void onSignupClick() {
-    Navigator.pushNamed(
-        context,
-        '/signup'
-    );
+    // Navigator.pushNamed(
+    //     context,
+    //     '/signup'
+    // );
   }
 
   @override
@@ -55,54 +46,57 @@ class _LoginPageState extends LoginViewModel {
     return Scaffold(
         appBar: LoginAppbar(),
         body: SingleChildScrollView(
-            child:
-            (isMobile(context)) ?
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Image(
-                    image: Image
-                        .asset('images/login-image.png')
-                        .image,
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-                buildLoginForm(),
-              ],
-            )
-                :
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: MediaQuery.of(context).size.width > 1200
-                      ? const EdgeInsets.only(left: 80)
-                      : const EdgeInsets.only(left: 16),
-                  width: 480,
-                  child: buildLoginForm(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Image(
-                    image: Image
-                        .asset('images/login-image.png')
-                        .image,
-                    fit: BoxFit.scaleDown,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.8,
-                  ),
-                ),
-              ],
-            )
-        )
-    );
+            child: (isMobile(context))
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Image(
+                          image: Image.asset('images/login-image.png').image,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                      buildLoginForm(),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: MediaQuery.of(context).size.width > 1200
+                            ? const EdgeInsets.only(left: 80)
+                            : const EdgeInsets.only(left: 16),
+                        width: 480,
+                        // child: FilledButton(
+                        //   onPressed: (){
+                        //     Provider.of<LoginViewModel>(context, listen:false).login("a","a");
+                        //   },
+                        //   child: Text("Click me"),
+                        // ),
+                        child: buildLoginForm(),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image(
+                            image: Image.asset('images/login-image.png').image,
+                            fit: BoxFit.scaleDown,
+                            height: MediaQuery.of(context).size.height * 0.8,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )));
   }
 
   Widget buildLoginForm() {
+    final AsyncValue<void> state = ref.watch(loginViewModelProvider);
+
+    ref.listen<AsyncValue>(loginViewModelProvider, (_, state) {
+      state.showSnackBarOnError(context);
+    });
+
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Form(
@@ -117,10 +111,7 @@ class _LoginPageState extends LoginViewModel {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue[600],
-                  fontSize: MediaQuery
-                      .of(context)
-                      .size
-                      .width < 600 ? 28 : 40,
+                  fontSize: MediaQuery.of(context).size.width < 600 ? 28 : 40,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -159,23 +150,21 @@ class _LoginPageState extends LoginViewModel {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: Colors.grey.shade300,
-                    )
-                ),
+                    )),
                 focusedBorder: OutlineInputBorder(
                     gapPadding: 1,
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(
                       color: Colors.lightBlue,
                       width: 1.3,
-                    )
-                ),
+                    )),
               ),
               controller: emailController,
-              validator: (value){
-                if(value == null || value.isEmpty){
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
-                if(!emailValidator.hasMatch(value)){
+                if (!emailValidator.hasMatch(value)) {
                   return 'Please enter a valid email';
                 }
                 return null;
@@ -199,23 +188,20 @@ class _LoginPageState extends LoginViewModel {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         color: Colors.grey.shade300,
-                      )
-                  ),
+                      )),
                   focusedBorder: OutlineInputBorder(
                       gapPadding: 1,
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
                         color: Colors.lightBlue,
                         width: 1.3,
-                      )
-                  )
-              ),
+                      ))),
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
               controller: passwordController,
-              validator: (value){
-                if(value == null || value.isEmpty){
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your password';
                 }
                 return null;
@@ -226,34 +212,44 @@ class _LoginPageState extends LoginViewModel {
             ),
             RichText(
                 text: TextSpan(
-                  text: "Forgot Password?",
-                  style: const TextStyle(
-                      color: Colors.blue
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = onForgotPasswordClick,
-                )
-            ),
+              text: "Forgot Password?",
+              style: const TextStyle(color: Colors.blue),
+              recognizer: TapGestureRecognizer()..onTap = onForgotPasswordClick,
+            )),
             const SizedBox(
               height: 10,
             ),
             FilledButton(
-                onPressed: onLoginButtonClick,
-                style: const ButtonStyle(
-
-                ),
-                child: const Text(
-                  "LOG IN",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+              onPressed: state.isLoading
+                ? null
+                : () async {
+                    if (_formKey.currentState!.validate()) {
+                      var result = await ref.read(loginViewModelProvider.notifier).login(
+                          emailController.text, passwordController.text);
+                      if(mounted && result != null){
+                        ref.read(authStateProvider.notifier).state = const User(id: '1');
+                      }
+                      print(ref.read(authStateProvider.notifier).state);
+                    }
+                  },
+              style: const ButtonStyle(),
+              child: state.isLoading
+                ? const CircularProgressIndicator()
+                : const Text(
+                    "LOG IN",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                )
             ),
             SizedBox(
               height: 40,
             ),
-            Text("Or continue with", textAlign: TextAlign.center,),
+            Text(
+              "Or continue with",
+              textAlign: TextAlign.center,
+            ),
             SizedBox(
               height: 40,
             ),
@@ -264,26 +260,30 @@ class _LoginPageState extends LoginViewModel {
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.blue),
-                        shape: const CircleBorder()
-                    ),
-                    child: const Icon(Icons.facebook, color: Colors.blue,)
-                ),
+                        shape: const CircleBorder()),
+                    child: const Icon(
+                      Icons.facebook,
+                      color: Colors.blue,
+                    )),
                 OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.blue),
-                      shape: const CircleBorder()
+                      shape: const CircleBorder()),
+                  child: SvgPicture.asset(
+                    '/icons/google.svg',
+                    height: 24,
                   ),
-                  child: SvgPicture.asset('/icons/google.svg', height: 24,),
                 ),
                 OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.blue),
-                        shape: const CircleBorder()
-                    ),
-                    child: const Icon(Icons.phone_android, color: Colors.blue,)
-                ),
+                        shape: const CircleBorder()),
+                    child: const Icon(
+                      Icons.phone_android,
+                      color: Colors.blue,
+                    )),
               ],
             ),
             const SizedBox(
@@ -296,8 +296,7 @@ class _LoginPageState extends LoginViewModel {
                 RichText(
                   text: TextSpan(
                     text: "Sign up",
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = onSignupClick,
+                    recognizer: TapGestureRecognizer()..onTap = onSignupClick,
                     style: const TextStyle(
                       color: Colors.blue,
                     ),
@@ -313,5 +312,4 @@ class _LoginPageState extends LoginViewModel {
       ),
     );
   }
-
 }

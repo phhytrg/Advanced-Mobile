@@ -1,19 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lettutor/app/login/data/auth_repository.dart';
 
-class AuthService {
-  late Dio dio;
-
-  AuthService({required this.dio});
-
-  Future<bool> login(String username, String password) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return username == 'admin' && password == 'admin';
-  }
-
-  Future<void> resetPassword(String email) async{
-
-  }
-}
+import '../../../core/domain/user.dart';
 
 enum AuthPath {
   login,
@@ -42,3 +31,20 @@ extension ServiceAuthPath on AuthPath {
     }
   }
 }
+
+class LoginService{
+  LoginService(this.ref);
+  final Ref ref;
+  // final AuthRepository authRepository;
+  //
+  // LoginService({required this.authRepository});
+
+  Future<User?> login(String email, String password) async{
+    return await ref.read(authRepositoryProvider).login(email, password);
+  }
+}
+
+final loginServiceProvider = Provider<LoginService>((ref) {
+  // return a concrete implementation of AuthRepository
+  return LoginService(ref);
+});

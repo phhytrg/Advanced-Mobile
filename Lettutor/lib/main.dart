@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/app/login/presentation/reset_password.dart';
-import 'app/login/presentation/login.dart';
-import 'app/signup/presentation/signup.dart';
 import 'configure_nonweb.dart';
-import 'core/presentation/advertising/advertising.dart';
-import 'core/presentation/booking/booking_student.dart';
-import 'core/presentation/courses/course_detail_page.dart';
-import 'core/presentation/courses/course_information_page.dart';
-import 'core/presentation/courses/courses_page.dart';
-import 'core/presentation/history/history_page.dart';
-import 'core/presentation/tutor/tutor_page.dart';
-import 'core/presentation/tutors_list/tutors_page.dart';
+import 'core/route/auth_provider.dart';
+import 'core/route/router.dart';
 
 void main() {
   configureApp();
-  runApp(MyApp());
+  runApp(
+    ProviderScope(child: MyApp()),
+  );
 }
 
-enum RoutePath{
+enum RoutePath {
   bookingStudents,
   tutor,
   tutorsList,
@@ -30,8 +24,8 @@ enum RoutePath{
   signup,
   resetPassword;
 
-  String getString(){
-    switch (this){
+  String getString() {
+    switch (this) {
       case RoutePath.bookingStudents:
         return '/booking-student';
       case RoutePath.history:
@@ -58,28 +52,34 @@ enum RoutePath{
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends ConsumerWidget {
+  MyApp({super.key});
+
+  final _authProvider = AuthState();
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final appRouter = AppRouter(_authProvider);
+    final goRouter = ref.watch(goRouterProvider);
+
+    return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        RoutePath.bookingStudents.getString(): (context) => BookingStudentPage(),
-        RoutePath.tutor.getString(): (context) => TutorPage(),
-        RoutePath.tutorsList.getString(): (context) => TutorsPage(),
-        RoutePath.history.getString(): (context) => HistoryPage(),
-        RoutePath.courses.getString(): (context) => CoursesPage(),
-        RoutePath.courseInfo.getString(): (context) => CourseInformationPage(),
-        RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
-        RoutePath.login.getString(): (context) => LoginPage(),
-        RoutePath.signup.getString(): (context) => SignupPage(),
-        RoutePath.resetPassword.getString(): (context) => ResetPasswordPage(),
-      },
+      routerConfig: goRouter,
+      // initialRoute: '/',
+      // routes: {
+      //   RoutePath.bookingStudents.getString(): (context) => BookingStudentPage(),
+      //   RoutePath.tutor.getString(): (context) => TutorPage(),
+      //   RoutePath.tutorsList.getString(): (context) => TutorsPage(),
+      //   RoutePath.history.getString(): (context) => HistoryPage(),
+      //   RoutePath.courses.getString(): (context) => CoursesPage(),
+      //   RoutePath.courseInfo.getString(): (context) => CourseInformationPage(),
+      //   RoutePath.courseDetail.getString(): (context) => CourseDetailPage(),
+      //   RoutePath.login.getString(): (context) => LoginPage(),
+      //   RoutePath.signup.getString(): (context) => SignupPage(),
+      //   RoutePath.resetPassword.getString(): (context) => ResetPasswordPage(),
+      // },
       // builder: (context, child){
       //   double width = MediaQuery.of(context).size.width;
       //   return Scaffold(
@@ -115,11 +115,16 @@ class MyApp extends StatelessWidget {
           ),
           elevation: 0,
         )),
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme
-        ),
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
-      home: AdvertisingPage(),
+      // home: Consumer<AuthProvider>(
+      //   builder: (context, authProvider, child){
+      //     if(authProvider.isAuthenticated){
+      //       return TutorsPage();
+      //     }
+      //     return AdvertisingPage();
+      //   }
+      // )
     );
   }
 }

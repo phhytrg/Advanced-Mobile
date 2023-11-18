@@ -1,37 +1,44 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:lettutor/app/login/presentation/login.dart';
-import 'package:lettutor/main.dart';
-import '../../../core/network/network_service.dart';
-import '../service/auth_service.dart';
+import 'dart:async';
 
-abstract class LoginViewModel extends State<LoginPage>{
-  late final AuthService authService;
-  final Dio dio = NetworkService.instance.dio;
+import 'package:lettutor/core/route/auth_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../core/domain/user.dart';
+import '../data/auth_repository.dart';
+part 'login_viewmodel.g.dart';
 
+// class LoginViewModel with ChangeNotifier{
+//   late final AuthService authService;
+//   late final Dio dio;
+//
+//   LoginViewModel(){
+//     dio = NetworkService.instance.dio;
+//     authService = AuthService(dio: dio);
+//   }
+//
+//   Future<String> login(String email, String password) async{
+//     final response = await authService.login(email, password);
+//     return response;
+//   }
+//
+//   Future<void> resetPassword(String email) async{
+//
+//   }
+// }
+
+
+@riverpod
+class LoginViewModel extends _$LoginViewModel{
 
   @override
-  void initState() {
-    super.initState();
-    authService = AuthService(dio: dio);
+  FutureOr<User?> build() {
+    return null;
   }
 
-  Future<void> fetchUserLogin(String email, String password) async{
-    final response = await authService.login(email, password);
-    if(response && context.mounted){
-      Navigator.pushNamed(context, RoutePath.tutorsList.getString());
-      return;
-    }else if(context.mounted && !response){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Invalid Login Credentials"),
-          duration: Duration(seconds: 1),
-        ),
-      );
-    }
+  Future<User?> login(String email, String password) async {
+    final authRepository = ref.read(authRepositoryProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard<User?>(() => authRepository.login(email, password));
+    return state.valueOrNull;
   }
 
-  Future<void> resetPassword(String email) async{
-
-  }
 }

@@ -7,7 +7,7 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '../../../core/commom-widgets/search.dart';
 import '../../commom-widgets/appbar.dart';
 import '../../constant.dart';
-import '../drawer/drawer.dart';
+import '../../commom-widgets/drawer.dart';
 import 'courses_tab.dart';
 
 class CoursesPage extends StatelessWidget {
