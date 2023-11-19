@@ -1,9 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/login/viewmodel/login_viewmodel.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
@@ -11,6 +11,7 @@ import 'package:lettutor/core/presentation/notification.dart';
 import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/domain/user.dart';
 import '../../../core/route/auth_provider.dart';
+import '../../../core/route/router.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -219,29 +220,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             const SizedBox(
               height: 10,
             ),
-            FilledButton(
-              onPressed: state.isLoading
-                ? null
-                : () async {
-                    if (_formKey.currentState!.validate()) {
-                      var result = await ref.read(loginViewModelProvider.notifier).login(
-                          emailController.text, passwordController.text);
-                      if(mounted && result != null){
-                        ref.read(authStateProvider.notifier).state = const User(id: '1');
-                      }
-                      print(ref.read(authStateProvider.notifier).state);
-                    }
-                  },
-              style: const ButtonStyle(),
-              child: state.isLoading
-                ? const CircularProgressIndicator()
-                : const Text(
-                    "LOG IN",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return FilledButton(
+                  onPressed: state.isLoading
+                      ? null
+                      : () async {
+                          if (_formKey.currentState!.validate()) {
+                            var result = await ref
+                                .read(loginViewModelProvider.notifier)
+                                .login(emailController.text,
+                                    passwordController.text);
+                            if (mounted && result != null) {
+                              ref.read(authStateProvider.notifier).state =
+                                  const User(id: '1');
+                            }
+                          }
+                        },
+                  style: const ButtonStyle(),
+                  child: state.isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          "LOG IN",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                );
+              },
             ),
             SizedBox(
               height: 40,

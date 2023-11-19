@@ -76,24 +76,24 @@ final goRouterProvider = Provider<GoRouter>((ref){
           builder: (context, state) => TutorsPage(),
         ),
       ],
-      redirect: (context, state) {
-        if(authState == null) {
-          if(state.matchedLocation != RoutePath.login.getString() && state.matchedLocation != '/'){
-            return RoutePath.login.getString();
-          }
-          else{
-            return null;
-          }
-        }
-        else{
-          if(state.matchedLocation == RoutePath.login.getString() || state.matchedLocation == '/'){
-            return AppRoute.tutorsList.getString();
-          }
-          else{
-            return null;
-          }
-        }
-        return null;
-      }
+      // redirect: (context, state) {
+      //   if(authState == null) {
+      //     if(state.matchedLocation != RoutePath.login.getString() && state.matchedLocation != '/'){
+      //       return RoutePath.login.getString();
+      //     }
+      //     else{
+      //       return null;
+      //     }
+      //   }
+      //   else{
+      //     if(state.matchedLocation == RoutePath.login.getString() || state.matchedLocation == '/'){
+      //       return AppRoute.tutorsList.getString();
+      //     }
+      //     else{
+      //       return null;
+      //     }
+      //   }
+      //   return null;
+      // }
   );
 });

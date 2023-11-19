@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/main.dart';
 
@@ -66,7 +67,7 @@ class AdvertisingPage extends ConsumerWidget {
                       ),
                       FilledButton(
                           onPressed: () {
-                            ref.read(goRouterProvider).goNamed(RoutePath.login.name);
+                            GoRouter.of(context).goNamed(RoutePath.login.name);
                           },
                           child: Text("JOIN NOW"),
                           style: FilledButton.styleFrom(

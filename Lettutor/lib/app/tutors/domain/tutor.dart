@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class TutorModel {
+import 'feedback.dart';
+
+part 'tutor.g.dart';
+@JsonSerializable(explicitToJson: true)
+class Tutor {
   String? level;
   String? email;
   String? google;
@@ -47,4 +51,55 @@ class TutorModel {
   String? youtubeVideoId;
   int? price;
   bool? isOnline;
+
+  Tutor({
+      this.level,
+      this.email,
+      this.google,
+      this.facebook,
+      this.apple,
+      this.avatar,
+      this.name,
+      this.country,
+      this.phone,
+      this.language,
+      this.birthday,
+      this.requestPassword,
+      this.isActivated,
+      this.isPhoneActivated,
+      this.requireNote,
+      this.timezone,
+      this.phoneAuth,
+      this.isPhoneAuthActivated,
+      this.studySchedule,
+      this.canSendMessage,
+      this.isPublicRecord,
+      this.caredByStaffId,
+      this.zaloUserId,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.studentGroupId,
+      this.feedbacks,
+      this.id,
+      this.userId,
+      this.video,
+      this.bio,
+      this.education,
+      this.experience,
+      this.profession,
+      this.accent,
+      this.targetStudent,
+      this.interests,
+      this.languages,
+      this.specialties,
+      this.resume,
+      this.rating,
+      this.isNative,
+      this.youtubeVideoId,
+      this.price,
+      this.isOnline});
+
+  factory Tutor.fromJson(Map<String, dynamic> json) => _$TutorFromJson(json);
+  Map<String, dynamic> toJson() => _$TutorToJson(this);
 }
