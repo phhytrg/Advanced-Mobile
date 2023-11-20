@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tutor_repository.dart';
+part of 'favorite_tutor_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tutorsListFutureHash() => r'ccf41a4aba8e9bec1aa9ee75382583b8526f389c';
+String _$favoriteTutorViewModelHash() =>
+    r'8c40440cb299da8e6e15e19ae50033a6eb19a9a2';
 
-/// See also [tutorsListFuture].
-@ProviderFor(tutorsListFuture)
-final tutorsListFutureProvider =
-    AutoDisposeFutureProvider<TutorsList?>.internal(
-  tutorsListFuture,
-  name: r'tutorsListFutureProvider',
+/// See also [FavoriteTutorViewModel].
+@ProviderFor(FavoriteTutorViewModel)
+final favoriteTutorViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<FavoriteTutorViewModel, void>.internal(
+  FavoriteTutorViewModel.new,
+  name: r'favoriteTutorViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$tutorsListFutureHash,
+      : _$favoriteTutorViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef TutorsListFutureRef = AutoDisposeFutureProviderRef<TutorsList?>;
+typedef _$FavoriteTutorViewModel = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

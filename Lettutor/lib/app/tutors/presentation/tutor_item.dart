@@ -1,6 +1,12 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lettutor/app/tutors/data/tutor_repository.dart';
 import 'package:lettutor/app/tutors/domain/tutor.dart';
+import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
+import 'package:lettutor/core/constant.dart';
+
+import '../../../core/commom-widgets/highligh_text.dart';
 
 class TutorItem extends StatelessWidget {
   final Tutor tutor;
@@ -47,13 +53,18 @@ class TutorItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    )),
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
+                    return Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        ));
+                  },
+                ),
               ],
             ),
             Text(
@@ -69,7 +80,11 @@ class TutorItem extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                   borderRadius: 8,
                 ),
-                tutor.country != null ? Text(tutor.country!) : const Text(''),
+                  tutor.country != null
+                      ? Text(tutor.country!.length <= 2
+                        ? Countries.alpha2ToCountryName(tutor.country!)
+                        : tutor.country!)
+                      : const Text(''),
               ],
             ) : const Text(''),
 
@@ -89,61 +104,15 @@ class TutorItem extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100]!.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Text(
-                      'English for Bussiness',
-                      style: TextStyle(
-                        color: Colors.blue[800],
-                      ),
-                    )),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100]!.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Text(
-                      'English for kids',
-                      style: TextStyle(
-                        color: Colors.blue[800],
-                      ),
-                    )),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100]!.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Text(
-                      'IELTS',
-                      style: TextStyle(
-                        color: Colors.blue[800],
-                      ),
-                    )),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100]!.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: Text(
-                      'STARTERS',
-                      style: TextStyle(
-                        color: Colors.blue[800],
-                      ),
-                    )),
+                if(tutor.specialties != null)
+                  for(var specialty in TutorUtils.extractSpecialties(tutor.specialties!)) HighlightText(text: specialty),
               ],
             ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
+              tutor.bio != null ? tutor.bio! : 'Nothing to show',
               textAlign: TextAlign.justify,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
