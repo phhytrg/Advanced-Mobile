@@ -7,7 +7,7 @@ part of 'favorite_tutor_viewmodel.dart';
 // **************************************************************************
 
 String _$favoriteTutorViewModelHash() =>
-    r'8c40440cb299da8e6e15e19ae50033a6eb19a9a2';
+    r'5910e838217a3e03e345a3fc293a5a624d68caad';
 
 /// See also [FavoriteTutorViewModel].
 @ProviderFor(FavoriteTutorViewModel)

@@ -13,8 +13,8 @@ class FavoriteTutorViewModel extends _$FavoriteTutorViewModel{
 
   TutorService get tutorService => ref.read(tutorServiceProvider);
 
-  Future<void> addTutorIntoFavoriteList(String tutorId) async{
+  Future<void> updateTutorInFavoriteList(String tutorId) async{
     state = AsyncLoading();
-    state = await AsyncValue.guard(() => tutorService.addTutorIntoFavoriteList(tutorId));
+    state = await AsyncValue.guard(() => tutorService.updateTutorInFavoriteList(tutorId));
   }
 }

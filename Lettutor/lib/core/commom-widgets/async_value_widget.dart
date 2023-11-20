@@ -16,7 +16,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, stackTrace) => Center(
         child: Text(
-          e.toString(),
+          e.toString() + "\n" + stackTrace.toString(),
           style: Theme.of(context)
               .textTheme
               .titleMedium!

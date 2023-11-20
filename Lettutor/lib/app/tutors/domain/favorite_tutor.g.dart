@@ -13,7 +13,6 @@ FavoriteTutor _$FavoriteTutorFromJson(Map<String, dynamic> json) =>
       secondId: json['secondId'] as String?,
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
-      secondInfo: json['secondInfo'] as String?,
     );
 
 Map<String, dynamic> _$FavoriteTutorToJson(FavoriteTutor instance) =>
@@ -23,5 +22,4 @@ Map<String, dynamic> _$FavoriteTutorToJson(FavoriteTutor instance) =>
       'secondId': instance.secondId,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'secondInfo': instance.secondInfo,
     };

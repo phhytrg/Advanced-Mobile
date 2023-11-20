@@ -7,11 +7,11 @@ import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
 import 'package:lettutor/core/constant.dart';
 
 import '../../../core/commom-widgets/highligh_text.dart';
+import '../service/tutors_service.dart';
 
 class TutorItem extends StatelessWidget {
   final Tutor tutor;
   const TutorItem({super.key, required this.tutor});
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -59,9 +59,39 @@ class TutorItem extends StatelessWidget {
                     return Positioned(
                         right: 0,
                         top: 0,
-                        child: Icon(
-                          Icons.favorite,
-                          color: Colors.red,
+                        child: Consumer(
+                          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                            var favoriteTutors = ref.watch(favoriteTutorListProvider);
+                            bool isContain = false;
+                            for(var favoriteTutor in favoriteTutors){
+                              if(favoriteTutor.secondId == tutor.id){
+                                isContain = true;
+                                break;
+                              }
+                            }
+                            return isContain
+                              ? InkWell(
+                                child: const Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                ),
+                                onTap: () {
+                                  ref
+                                      .read(tutorServiceProvider)
+                                      .updateTutorInFavoriteList(tutor.id!);
+                                })
+                              : InkWell(
+                                child: const Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.red,
+                                ),
+                                onTap: () {
+                                  ref
+                                      .read(tutorServiceProvider)
+                                      .updateTutorInFavoriteList(tutor.id!);
+                                },
+                                );
+                          },
                         ));
                   },
                 ),
