@@ -1,19 +1,31 @@
+import 'dart:math';
+
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/tutors/data/tutor_repository.dart';
-import 'package:lettutor/app/tutors/domain/tutor.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
 import 'package:lettutor/core/constant.dart';
 
 import '../../../core/commom-widgets/highligh_text.dart';
+import '../domain/response/tutor.dart';
 import '../service/tutors_service.dart';
 
-class TutorItem extends StatelessWidget {
+class TutorItem extends StatefulWidget {
   final Tutor tutor;
   const TutorItem({super.key, required this.tutor});
+
+  @override
+  State<TutorItem> createState() => _TutorItemState();
+}
+
+class _TutorItemState extends State<TutorItem> {
+  var isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
+    // isFavorite = widget.tutor.isFavoriteTutor!;
+
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed('/tutor');
@@ -40,9 +52,9 @@ class TutorItem extends StatelessWidget {
                     Center(
                       child: CircleAvatar(
                         minRadius: 40,
-                        child: tutor.avatar != null ? ClipOval(
+                        child: widget.tutor.avatar != null ? ClipOval(
                           child: Image.network(
-                            tutor.avatar!,
+                            widget.tutor.avatar!,
                             fit: BoxFit.cover,
                             width: 80,
                             height: 80,
@@ -55,42 +67,29 @@ class TutorItem extends StatelessWidget {
                 ),
                 Consumer(
                   builder: (BuildContext context, WidgetRef ref, Widget? child) {
-
                     return Positioned(
                         right: 0,
                         top: 0,
-                        child: Consumer(
-                          builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                            var favoriteTutors = ref.watch(favoriteTutorListProvider);
-                            bool isContain = false;
-                            for(var favoriteTutor in favoriteTutors){
-                              if(favoriteTutor.secondId == tutor.id){
-                                isContain = true;
-                                break;
-                              }
-                            }
-                            return isContain
-                              ? InkWell(
-                                child: const Icon(
-                                  Icons.favorite,
+                        child: Builder(
+                          builder: (BuildContext context) {
+                            return InkWell(
+                                child: Icon(
+                                  widget.tutor.isFavoriteTutor == null
+                                      ? Icons.favorite_border
+                                      : widget.tutor.isFavoriteTutor!
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
                                   color: Colors.red,
                                 ),
                                 onTap: () {
+                                  setState(() {
+                                    widget.tutor.isFavoriteTutor ??= false;
+                                    widget.tutor.isFavoriteTutor = !widget.tutor.isFavoriteTutor!;
+                                  });
                                   ref
-                                      .read(tutorServiceProvider)
-                                      .updateTutorInFavoriteList(tutor.id!);
-                                })
-                              : InkWell(
-                                child: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.red,
-                                ),
-                                onTap: () {
-                                  ref
-                                      .read(tutorServiceProvider)
-                                      .updateTutorInFavoriteList(tutor.id!);
-                                },
-                                );
+                                      .watch(tutorServiceProvider)
+                                      .updateTutorInFavoriteList(widget.tutor.id!);
+                                });
                           },
                         ));
                   },
@@ -98,22 +97,22 @@ class TutorItem extends StatelessWidget {
               ],
             ),
             Text(
-              tutor.name!,
+              widget.tutor.name!,
               textAlign: TextAlign.start,
             ),
-            tutor.country != null ? Wrap(
+            widget.tutor.country != null ? Wrap(
               children: [
                 Flag.fromString(
-                  tutor.country!,
+                  widget.tutor.country!,
                   height: 20,
                   width: 20 * 4 / 3,
                   fit: BoxFit.scaleDown,
                   borderRadius: 8,
                 ),
-                  tutor.country != null
-                      ? Text(tutor.country!.length <= 2
-                        ? Countries.alpha2ToCountryName(tutor.country!)
-                        : tutor.country!)
+                  widget.tutor.country != null
+                      ? Text(widget.tutor.country!.length <= 2
+                        ? Countries.alpha2ToCountryName(widget.tutor.country!)
+                        : widget.tutor.country!)
                       : const Text(''),
               ],
             ) : const Text(''),
@@ -134,15 +133,15 @@ class TutorItem extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                if(tutor.specialties != null)
-                  for(var specialty in TutorUtils.extractSpecialties(tutor.specialties!)) HighlightText(text: specialty),
+                if(widget.tutor.specialties != null)
+                  for(var specialty in TutorUtils.extractSpecialties(widget.tutor.specialties!)) HighlightText(text: specialty),
               ],
             ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              tutor.bio != null ? tutor.bio! : 'Nothing to show',
+              widget.tutor.bio != null ? widget.tutor.bio! : 'Nothing to show',
               textAlign: TextAlign.justify,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
@@ -170,5 +169,10 @@ class TutorItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

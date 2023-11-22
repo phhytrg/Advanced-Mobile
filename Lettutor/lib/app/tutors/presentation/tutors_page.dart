@@ -10,26 +10,33 @@ import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/constant.dart';
 import '../../../core/commom-widgets/drawer.dart';
 import '../../../core/network/network_service.dart';
+import '../domain/payload/search_payload.dart';
+import '../domain/response/tutor_list.dart';
 import '../domain/tutorsList.dart';
 import '../service/tutors_service.dart';
 import 'tutor_item.dart';
 import 'upcoming-lesson.dart';
 
-class TutorsPage extends StatefulWidget {
+class TutorsPage extends ConsumerStatefulWidget {
   const TutorsPage({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<TutorsPage> createState() {
     return _TutorsPageState();
   }
 }
 
-class _TutorsPageState extends State<TutorsPage> {
+class _TutorsPageState extends ConsumerState<TutorsPage> {
+  final List<String> specialties = [];
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final textSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     print("build");
     return Scaffold(
       key: _scaffoldKey,
@@ -46,7 +53,7 @@ class _TutorsPageState extends State<TutorsPage> {
             SizedBox(
               height: 24,
             ),
-            TutorsSearchBox(),
+            _buildTutorsSearchBox(),
             SizedBox(
               height: 24,
             ),
@@ -55,61 +62,35 @@ class _TutorsPageState extends State<TutorsPage> {
               margin: EdgeInsets.only(left: 32),
               child: Text(
                 'Recommend Tutors',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .titleLarge,
               ),
             ),
             Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                final tutorsList = ref.watch(tutorsListFutureProvider);
-                return AsyncValueWidget<TutorsList?>(
-                  value: tutorsList,
-                  data: (tutorsList){
-                    return Container(
-                      margin: EdgeInsets.only(left: 32, right: 32),
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        spacing: 16,
-                        runSpacing: 12,
-                        children: [
-                          for (var tutor in tutorsList!.tutors!.rows!)
-                            TutorItem(
-                              tutor: tutor,
-                            ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-                // print("build");
-                // ref.watch(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
-                // return AsyncValueWidget<TutorsList?>(
-                //     value: ref.watch(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1),
-                //     data: data)
-                // final tutorsList = ref.watch(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
-                // tutorsList.then((value) => print(value));
-                // return FutureBuilder(
-                //   future: tutorsList,
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       return Container(
-                //         margin: EdgeInsets.only(left: 32, right: 32),
-                //         child: Wrap(
-                //           alignment: WrapAlignment.start,
-                //           spacing: 16,
-                //           runSpacing: 12,
-                //           children: [
-                //             for (var tutor in snapshot.data!.tutors!)
-                //               TutorItem(
-                //                 tutor: tutor,
-                //               ),
-                //           ],
-                //         ),
-                //       );
-                //     } else {
-                //       return Text("Failed to load data!");
-                //     }
-                //   });
-            }),
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsViewmodelProvider);
+                  return AsyncValueWidget<TutorList?>(
+                    value: tutorsState,
+                    data: (tutorsList) {
+                      return Container(
+                        margin: EdgeInsets.only(left: 32, right: 32),
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 16,
+                          runSpacing: 12,
+                          children: [
+                            for (var tutor in tutorsList!.rows!)
+                              TutorItem(
+                                tutor: tutor,
+                              )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
             const SizedBox(
               height: 108,
             ),
@@ -118,13 +99,8 @@ class _TutorsPageState extends State<TutorsPage> {
       ),
     );
   }
-}
 
-class TutorsSearchBox extends StatelessWidget {
-  const TutorsSearchBox({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTutorsSearchBox() {
     return Container(
       margin: EdgeInsets.only(left: 32, right: 32),
       child: Column(
@@ -132,17 +108,38 @@ class TutorsSearchBox extends StatelessWidget {
         children: [
           Text(
             'Find a tutor',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.black,
-                  fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700)
-                      .fontFamily,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(
+              color: Colors.black,
+              fontFamily: GoogleFonts
+                  .poppins(fontWeight: FontWeight.w700)
+                  .fontFamily,
+            ),
           ),
           TextField(
             decoration: const InputDecoration(
               hintText: 'Enter tutor name..',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall,
+            controller: textSearchController,
+            onSubmitted: (value) {
+              ref
+                  .watch(tutorsViewmodelProvider.notifier)
+                  .searchTutorsByFilters(SearchPayload(
+                page: "1",
+                perPage: 9,
+                search: textSearchController.text,
+                filters: Filters(
+                  specialties: specialties,
+                )
+              ));
+            }
           ),
           const SizedBox(
             height: 8,
@@ -151,24 +148,35 @@ class TutorsSearchBox extends StatelessWidget {
             decoration: const InputDecoration(
               hintText: 'Enter tutor native..',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall,
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
             'Select available tutoring time:',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Colors.black,
-                  fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600)
-                      .fontFamily,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(
+              color: Colors.black,
+              fontFamily: GoogleFonts
+                  .poppins(fontWeight: FontWeight.w600)
+                  .fontFamily,
+            ),
           ),
           TextField(
             decoration: const InputDecoration(
               hintText: 'This field for date picker',
             ),
-            style: Theme.of(context).textTheme.bodySmall!,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall!,
           ),
           const SizedBox(
             height: 8,
@@ -177,7 +185,10 @@ class TutorsSearchBox extends StatelessWidget {
             decoration: const InputDecoration(
               hintText: 'This field for start time and end time',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall,
           ),
           Container(
             margin: EdgeInsets.only(top: 16),
@@ -187,15 +198,138 @@ class TutorsSearchBox extends StatelessWidget {
               spacing: 16,
               runSpacing: 12,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text('All')),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       setState(() {
+                //         specialties.add('All');
+                //       });
+                //     },
+                //     style: ElevatedButton.styleFrom(
+                //       foregroundColor: specialties.contains('All')
+                //           ? Colors.blue
+                //           : Colors.grey,
+                //     ),
+                //     child: Text('All')),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       setState(() {
+                //         if (specialities.contains('english-for-kids')) {
+                //           specialities.remove('english-for-kids');
+                //         } else {
+                //           specialities.add('English for kids');
+                //         }
+                //       });
+                //     },
+                //     style: ElevatedButton.styleFrom(
+                //       foregroundColor: specialities.contains('english-for-kids')
+                //           ? Colors.blue
+                //           : Colors.grey,
+                //     ),
+                //     child: Text('English for kids')),
+                FilterButton(buttonKey: 'english-for-kids',
+                  text: "English for kids",
+                  specialities: specialties,
+                  onPressed: (){
+                    setState(() {
+                      if (specialties.contains('english-for-kids')) {
+                        specialties.remove('english-for-kids');
+                      } else {
+                        specialties.add('english-for-kids');
+                      }
+                    });
+                    // ref
+                    //   .watch(tutorsViewmodelProvider.notifier)
+                    //   .searchTutorsByFilters(SearchPayload(
+                    //     specialties: specialties,
+                    //   ));
+                    }
+                ),
                 ElevatedButton(
-                    onPressed: () {}, child: Text('English for kids')),
+                    onPressed: () {
+                      setState(() {
+                        if (specialties.contains('english-for-business')) {
+                          specialties.remove('english-for-business');
+                        } else {
+                          specialties.add('english-for-business');
+                        }
+                        // ref.read(tutorsViewmodelProvider.notifier)
+                        //     .searchTutorsByFilters(SearchPayload(
+                        //   specialties: specialties,
+                        // ));
+                        // ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor:
+                      specialties.contains('english-for-business')
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                    child: Text('English for Business')),
                 ElevatedButton(
-                    onPressed: () {}, child: Text('English for Business')),
-                ElevatedButton(onPressed: () {}, child: Text('Conversational')),
-                ElevatedButton(onPressed: () {}, child: Text('STARTERS')),
-                ElevatedButton(onPressed: () {}, child: Text('MOVERS')),
-                ElevatedButton(onPressed: () {}, child: Text('FLYERS')),
+                    onPressed: () {
+                      setState(() {
+                        if (specialties.contains('conversational')) {
+                          specialties.remove('conversational');
+                        } else {
+                          specialties.add('conversational');
+                        }
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: specialties.contains('conversational')
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                    child: Text('Conversational')),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        if (specialties.contains('starters')) {
+                          specialties.remove('starters');
+                        } else {
+                          specialties.add('starters');
+                        }
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: specialties.contains('starters')
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                    child: Text('STARTERS')),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        if (specialties.contains('movers')) {
+                          specialties.remove('movers');
+                        } else {
+                          specialties.add('movers');
+                        }
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: specialties.contains('movers')
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                    child: Text('MOVERS')),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        if (specialties.contains('flyers')) {
+                          specialties.remove('flyers');
+                        } else {
+                          specialties.add('flyers');
+                        }
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: specialties.contains('flyers')
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                    child: Text('FLYERS')),
               ],
             ),
           ),
@@ -203,11 +337,43 @@ class TutorsSearchBox extends StatelessWidget {
             height: 16,
           ),
           OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                specialties.clear();
+              });
+              ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
+            },
             child: const Text('Reset filters'),
-          )
+          ),
         ],
       ),
+    );
+  }
+}
+
+class FilterButton extends StatelessWidget {
+  final String buttonKey;
+  final String text;
+
+  const FilterButton({super.key,
+    required this.buttonKey,
+    required this.text,
+    required this.specialities,
+    required this.onPressed
+  });
+
+  final List<String> specialities;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor:
+        specialities.contains(buttonKey) ? Colors.blue : Colors.grey,
+      ),
+      child: Text(text)
     );
   }
 }
