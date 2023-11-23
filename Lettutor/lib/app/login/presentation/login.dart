@@ -233,7 +233,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     passwordController.text);
                             if (mounted && result != null) {
                               ref.read(authStateProvider.notifier).state =
-                                  const User(id: '1');
+                                  User(id: '1');
                             }
                           }
                         },

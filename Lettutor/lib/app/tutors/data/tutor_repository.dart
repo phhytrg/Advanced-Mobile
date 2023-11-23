@@ -7,6 +7,7 @@ import 'package:lettutor/core/network/network_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/favorite_tutor.dart';
+import '../domain/response/tutor.dart';
 import '../domain/response/tutor_list.dart';
 import '../domain/tutorsList.dart';
 
@@ -16,6 +17,8 @@ abstract class BaseTutorRepository {
   Future<List<FavoriteTutor>?> getFavoriteTutorList();
 
   Future<TutorList?> searchTutorsByFilters(SearchPayload filters);
+
+  Future<Tutor?> findTutorialById(String id);
 }
 
 class TutorRepository implements BaseTutorRepository {
@@ -24,13 +27,10 @@ class TutorRepository implements BaseTutorRepository {
 
   @override
   Future<TutorList?> fetchTutorsWithPagination(int perPage, int page) async {
-    final response = await dio.post(
-        '/tutor/search',
-        data: {
-          'perPage': perPage,
-          'page': page,
-        }
-    );
+    final response = await dio.post('/tutor/search', data: {
+      'perPage': perPage,
+      'page': page,
+    });
 
     TutorList tutorList = TutorList.fromJson(response.data);
     return tutorList;
@@ -53,23 +53,28 @@ class TutorRepository implements BaseTutorRepository {
 
   @override
   Future<TutorList?> searchTutorsByFilters(SearchPayload searchPayload) async {
-
     Map<String, dynamic> body = {
       "filters": {
         "specialties": ["english-for-kids"],
       },
-      "page": "1", "perPage": 9};
-    final response = await dio.post(
-        '/tutor/search',
-        data: searchPayload.toJson()
-    );
+      "page": "1",
+      "perPage": 9
+    };
+    final response =
+    await dio.post('/tutor/search', data: searchPayload.toJson());
     TutorList tutorList = TutorList.fromJson(response.data);
     print(tutorList);
     return tutorList;
   }
 
-    }
+  @override
+  Future<Tutor?> findTutorialById(String id) async{
+    final response = await dio.get('/tutor/$id');
+    Tutor tutor =  Tutor.fromJson(response.data);
+    return tutor;
+  }
+}
 
-    final tutorRepositoryProvider = Provider<BaseTutorRepository>((ref) {
-    return TutorRepository();
-    });
+final tutorRepositoryProvider = Provider<BaseTutorRepository>((ref) {
+  return TutorRepository();
+});

@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../data/tutor_repository.dart';
 import '../domain/payload/search_payload.dart';
+import '../domain/response/tutor.dart';
 import '../domain/response/tutor_list.dart';
 import '../domain/tutorsList.dart';
 
@@ -30,6 +31,12 @@ class TutorService{
 
   Future<TutorList?> searchTutorsByFilters(SearchPayload searchPayload) async {
     return await ref.read(tutorRepositoryProvider).searchTutorsByFilters(searchPayload);
+  }
+
+  Future<Tutor?> findTutorialById(String id) async {
+    final response =  await ref.read(tutorRepositoryProvider).findTutorialById(id);
+    // print(response?.toJson());
+    return response;
   }
 }
 

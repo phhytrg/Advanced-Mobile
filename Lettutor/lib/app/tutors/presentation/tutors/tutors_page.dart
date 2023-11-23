@@ -1,21 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/app/tutors/data/tutor_repository.dart';
-import 'package:lettutor/app/tutors/domain/tutors.dart';
-import 'package:lettutor/app/tutors/viewmodel/tutors_viewmodel.dart';
+import 'package:lettutor/app/tutors/presentation/tutors/tutor_item.dart';
+import 'package:lettutor/app/tutors/presentation/tutors/tutors_viewmodel.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
-import '../../../core/commom-widgets/appbar.dart';
-import '../../../core/constant.dart';
-import '../../../core/commom-widgets/drawer.dart';
-import '../../../core/network/network_service.dart';
-import '../domain/payload/search_payload.dart';
-import '../domain/response/tutor_list.dart';
-import '../domain/tutorsList.dart';
-import '../service/tutors_service.dart';
-import 'tutor_item.dart';
-import 'upcoming-lesson.dart';
+import '../../../../core/commom-widgets/appbar.dart';
+import '../../../../core/commom-widgets/drawer.dart';
+import '../../../../core/constant.dart';
+import '../../domain/payload/search_payload.dart';
+import '../../domain/response/tutor_list.dart';
+import '../upcoming-lesson.dart';
 
 class TutorsPage extends ConsumerStatefulWidget {
   const TutorsPage({super.key});
@@ -198,34 +192,6 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               spacing: 16,
               runSpacing: 12,
               children: [
-                // ElevatedButton(
-                //     onPressed: () {
-                //       setState(() {
-                //         specialties.add('All');
-                //       });
-                //     },
-                //     style: ElevatedButton.styleFrom(
-                //       foregroundColor: specialties.contains('All')
-                //           ? Colors.blue
-                //           : Colors.grey,
-                //     ),
-                //     child: Text('All')),
-                // ElevatedButton(
-                //     onPressed: () {
-                //       setState(() {
-                //         if (specialities.contains('english-for-kids')) {
-                //           specialities.remove('english-for-kids');
-                //         } else {
-                //           specialities.add('English for kids');
-                //         }
-                //       });
-                //     },
-                //     style: ElevatedButton.styleFrom(
-                //       foregroundColor: specialities.contains('english-for-kids')
-                //           ? Colors.blue
-                //           : Colors.grey,
-                //     ),
-                //     child: Text('English for kids')),
                 FilterButton(buttonKey: 'english-for-kids',
                   text: "English for kids",
                   specialities: specialties,
