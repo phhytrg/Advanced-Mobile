@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lettutor/app/signup/viewmodel/signup_viewmodel.dart';
+import 'package:lettutor/app/signup/viewmodel/signup_controller.dart';
 import 'package:lettutor/core/constant.dart';
 import '../../../core/commom-widgets/appbar.dart';
 
@@ -13,7 +13,7 @@ class SignupPage extends StatefulWidget {
   }
 }
 
-class _SignupPageState extends SignupViewModel {
+class _SignupPageState extends SignupController {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

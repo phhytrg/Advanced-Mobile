@@ -1,17 +1,15 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lettutor/app/login/viewmodel/login_viewmodel.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 
 import '../../../core/commom-widgets/appbar.dart';
 import '../domain/user.dart';
 import '../../../core/route/auth_provider.dart';
-import '../../../core/route/router.dart';
+import 'controller/login_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -92,9 +90,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget buildLoginForm() {
-    final AsyncValue<void> state = ref.watch(loginViewModelProvider);
+    final AsyncValue<void> state = ref.watch(loginControllerProvider);
 
-    ref.listen<AsyncValue>(loginViewModelProvider, (_, state) {
+    ref.listen<AsyncValue>(loginControllerProvider, (_, state) {
       state.showSnackBarOnError(context);
     });
 
@@ -228,7 +226,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       : () async {
                           if (_formKey.currentState!.validate()) {
                             var result = await ref
-                                .read(loginViewModelProvider.notifier)
+                                .read(loginControllerProvider.notifier)
                                 .login(emailController.text,
                                     passwordController.text);
                             if (mounted && result != null) {

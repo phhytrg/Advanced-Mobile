@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutor_item.dart';
-import 'package:lettutor/app/tutors/presentation/tutors/tutors_viewmodel.dart';
+import 'package:lettutor/app/tutors/presentation/tutors/controller/tutors_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import '../../../../core/commom-widgets/appbar.dart';
 import '../../../../core/commom-widgets/drawer.dart';
@@ -64,7 +64,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             ),
             Consumer(
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsViewmodelProvider);
+                  final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsControllerProvider);
                   return AsyncValueWidget<TutorList?>(
                     value: tutorsState,
                     data: (tutorsList) {
@@ -124,7 +124,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             controller: textSearchController,
             onSubmitted: (value) {
               ref
-                  .watch(tutorsViewmodelProvider.notifier)
+                  .watch(tutorsControllerProvider.notifier)
                   .searchTutorsByFilters(SearchPayload(
                 page: "1",
                 perPage: 9,
@@ -307,7 +307,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               setState(() {
                 specialties.clear();
               });
-              ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, "1");
+              ref.read(tutorsControllerProvider.notifier).getTutorsWithPagination(9, "1");
             },
             child: const Text('Reset filters'),
           ),

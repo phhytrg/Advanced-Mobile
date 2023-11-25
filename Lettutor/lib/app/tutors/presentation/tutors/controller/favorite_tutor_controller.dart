@@ -1,10 +1,10 @@
 
 import 'package:lettutor/app/tutors/service/tutors_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'favorite_tutor_viewmodel.g.dart';
+part 'favorite_tutor_controller.g.dart';
 
 @riverpod
-class FavoriteTutorViewModel extends _$FavoriteTutorViewModel{
+class FavoriteTutorController extends _$FavoriteTutorController{
 
   @override
   FutureOr<void> build(){

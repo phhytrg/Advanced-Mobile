@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tutors_viewmodel.dart';
+part of 'tutors_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tutorsViewmodelHash() => r'51f7a1c70b6712840aaf1b5eca5a22868cfad703';
+String _$tutorsControllerHash() => r'0d432de144d8ccdc81227077badb8b72173e203a';
 
-/// See also [TutorsViewmodel].
-@ProviderFor(TutorsViewmodel)
-final tutorsViewmodelProvider =
-    AutoDisposeAsyncNotifierProvider<TutorsViewmodel, TutorList?>.internal(
-  TutorsViewmodel.new,
-  name: r'tutorsViewmodelProvider',
+/// See also [TutorsController].
+@ProviderFor(TutorsController)
+final tutorsControllerProvider =
+    AutoDisposeAsyncNotifierProvider<TutorsController, TutorList?>.internal(
+  TutorsController.new,
+  name: r'tutorsControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$tutorsViewmodelHash,
+      : _$tutorsControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TutorsViewmodel = AutoDisposeAsyncNotifier<TutorList?>;
+typedef _$TutorsController = AutoDisposeAsyncNotifier<TutorList?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

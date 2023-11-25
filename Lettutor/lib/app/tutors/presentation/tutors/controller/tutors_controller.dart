@@ -3,14 +3,14 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/payload/search_payload.dart';
-import '../../domain/response/tutor_list.dart';
-import '../../service/tutors_service.dart';
+import '../../../domain/payload/search_payload.dart';
+import '../../../domain/response/tutor_list.dart';
+import '../../../service/tutors_service.dart';
 
-part 'tutors_viewmodel.g.dart';
+part 'tutors_controller.g.dart';
 
 @riverpod
-class TutorsViewmodel extends _$TutorsViewmodel{
+class TutorsController extends _$TutorsController{
 
   @override
   FutureOr<TutorList?> build() async{

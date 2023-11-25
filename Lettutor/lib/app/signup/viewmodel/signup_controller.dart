@@ -5,7 +5,7 @@ import 'package:lettutor/core/network/network_service.dart';
 
 import '../presentation/signup.dart';
 
-abstract class SignupViewModel extends State<SignupPage>{
+abstract class SignupController extends State<SignupPage>{
   late final Dio dio;
 
   Future<bool> signup(String email, String password){
