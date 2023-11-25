@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../core/domain/user.dart';
+import '../domain/user.dart';
 import '../data/auth_repository.dart';
 part 'login_viewmodel.g.dart';
 

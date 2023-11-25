@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
-import '../../../core/commom-widgets/button_widget.dart';
-import '../../../core/commom-widgets/page_header.dart';
-import '../../../core/commom-widgets/tutor_mini_item.dart';
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
+import '../../../../core/commom-widgets/button_widget.dart';
+import '../../../../core/commom-widgets/page_header.dart';
+import '../../../../core/commom-widgets/tutor_mini_item.dart';
+import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/constant.dart';
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});
 

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/login/data/auth_repository.dart';
 
-import '../../../core/domain/user.dart';
+import '../domain/user.dart';
 
 enum AuthPath {
   login,

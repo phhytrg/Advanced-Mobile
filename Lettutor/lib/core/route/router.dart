@@ -1,15 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lettutor/app/login/data/auth_repository.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
-import 'package:lettutor/app/tutors/domain/response/tutor.dart';
 import 'package:lettutor/core/presentation/advertising/advertising.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
-import 'package:lettutor/main.dart';
 
 import '../../app/login/presentation/login.dart';
-import '../../app/tutors/presentation/tutor/tutor_page.dart';
+import '../../app/tutors/presentation/tutor_standalone/tutor_page.dart';
 import '../../app/tutors/presentation/tutors/tutors_page.dart';
 
 enum AppRoute {

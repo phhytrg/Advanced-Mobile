@@ -1,7 +1,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../core/domain/user.dart';
+import '../../../login/domain/user.dart';
 
 part 'tutor.g.dart';
 

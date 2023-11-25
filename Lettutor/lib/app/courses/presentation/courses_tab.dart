@@ -112,21 +112,6 @@ class _CoursesNavigationState extends State<CoursesNavigation>
             ],
             index: _selectedTabIndex,
           )
-          // Builder(builder: (context){
-          //   return AnimatedSwitcher(
-          //     duration: const Duration(milliseconds: 0.),
-          //     transitionBuilder: (child, animation){
-          //       return SlideTransition(
-          //         position: Tween<Offset>(
-          //             begin: Offset(-1, 0),
-          //             end: Offset.zero)
-          //             .animate(animation),
-          //         child: animatedWidgets[_selectedTabIndex],
-          //       );
-          //     },
-          //     child: animatedWidgets[_selectedTabIndex],
-          //   );
-          // })
         ],
       ),
     );

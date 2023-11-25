@@ -307,7 +307,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               setState(() {
                 specialties.clear();
               });
-              ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
+              ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, "1");
             },
             child: const Text('Reset filters'),
           ),

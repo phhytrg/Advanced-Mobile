@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/commom-widgets/button_widget.dart';
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
-import '../../commom-widgets/drawer.dart';
+import '../../../../core/commom-widgets/button_widget.dart';
+import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/commom-widgets/drawer.dart';
+import '../../../core/constant.dart';
 
 class CourseInformationPage extends StatefulWidget {
   const CourseInformationPage({super.key});

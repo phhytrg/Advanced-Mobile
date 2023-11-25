@@ -18,7 +18,6 @@ class TutorViewmodel extends _$TutorViewmodel{
     state = const AsyncLoading();
     state = await AsyncValue.guard<Tutor?>(() =>
         tutorService.findTutorialById(id));
-    print(state.valueOrNull?.toJson());
     return state.valueOrNull;
   }
 

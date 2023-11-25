@@ -9,7 +9,7 @@ import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 
 import '../../../core/commom-widgets/appbar.dart';
-import '../../../core/domain/user.dart';
+import '../domain/user.dart';
 import '../../../core/route/auth_provider.dart';
 import '../../../core/route/router.dart';
 

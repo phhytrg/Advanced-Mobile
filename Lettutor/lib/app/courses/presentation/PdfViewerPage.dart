@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
-import '../../commom-widgets/drawer.dart';
+import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/commom-widgets/drawer.dart';
+import '../../../core/constant.dart';
 import 'pdf_viewer.dart';
 
 class PdfViewerPage extends StatefulWidget {

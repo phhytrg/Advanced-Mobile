@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../courses/domain/course.dart';
 part 'user.g.dart';
 
 @JsonSerializable()
@@ -13,6 +15,7 @@ class User{
   String? caredByStaffId;
   String? zaloUserId;
   String? studentGroupId;
+  List<Course>? courses;
 
   User({
       required this.id,
@@ -24,7 +27,8 @@ class User{
       this.isPublicRecord,
       this.caredByStaffId,
       this.zaloUserId,
-      this.studentGroupId
+      this.studentGroupId,
+      this.courses,
   });
 
 

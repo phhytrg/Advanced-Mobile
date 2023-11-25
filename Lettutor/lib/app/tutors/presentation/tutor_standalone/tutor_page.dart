@@ -2,16 +2,15 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/app/tutors/domain/response/tutor.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
-import 'package:lettutor/app/tutors/presentation/tutor/tutor_viewmodel.dart';
-import 'package:lettutor/app/tutors/presentation/tutors/tutors_viewmodel.dart';
+import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_viewmodel.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 
 import '../../../../core/commom-widgets/appbar.dart';
 import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/commom-widgets/text_widget.dart';
 import '../../../../core/constant.dart';
+import 'tutor_schedule/tutor_schedule.dart';
 
 class TutorPage extends StatelessWidget {
   TutorPage({super.key, required this.tutorId});
@@ -36,7 +35,7 @@ class TutorPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraint){
-            if(constraint.maxWidth <= mobileWidth){
+            if(constraint.maxWidth <= mobileWidth * 2){
               //This is for mobile
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -49,7 +48,7 @@ class TutorPage extends StatelessWidget {
                     )),
                     _TutorDetailMobileBody(
                       tutorDetailInfo: _buildTutorDetail(context),
-                      schedule: Container(),
+                      schedule: BookingSchedule(tutorId: tutorId,),
                     )
                   ],
                 ),
@@ -58,7 +57,7 @@ class TutorPage extends StatelessWidget {
             else{
               //This this for desktop
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
                 child: Column(
                   children: [
                     _TutorInfoDesktopBody(_buildTutorBriefIntro(context), Container(
@@ -66,7 +65,7 @@ class TutorPage extends StatelessWidget {
                       width: double.infinity,
                       height: 300,
                     )),
-                    _TutorDetailDesktopBody(tutorDetailInfo: _buildTutorDetail(context), schedule: Container())
+                    _TutorDetailDesktopBody(tutorDetailInfo: _buildTutorDetail(context), schedule:  BookingSchedule(tutorId: tutorId,))
                   ],
                 ),
               );
@@ -89,7 +88,7 @@ class TutorPage extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      minRadius: 48,
+                      minRadius: 64,
                       backgroundImage: tutor?.user?.avatar != null ? NetworkImage(tutor!.user!.avatar!) : null,
                       child: tutor?.user?.avatar == null ? const Icon(Icons.portrait) : null,
                     ),
@@ -99,7 +98,9 @@ class TutorPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(tutor!.user!.name!),
+                        Text(tutor!.user!.name!, style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),),
                         Row(
                           children: [
                             Icon(Icons.star),
@@ -190,32 +191,40 @@ class TutorPage extends StatelessWidget {
                     runSpacing: 8,
                     spacing: 8,
                     children: [
-                      // OutlinedText(text:'English for business'),
-                      // OutlinedText(text: 'Conversational'),
-                      // OutlinedText(text: 'English for kids'),
-                      // OutlinedText(text: 'IELTS'),
-                      // OutlinedText(text: 'STARTERS'),
-                      // OutlinedText(text: 'MOVERS'),
                       for(var value in TutorUtils.extractSpecialties(tutor?.specialties ?? '')) OutlinedText(text: value),
                     ],
                   ),
                   partTitle: 'Specialties',
                 ),
                 _PartInfo(
-                    partTitle: 'Suggested Courses',
-                    partDescription: Wrap(
-                      children: [
-
-                      ],
-                    )
+                  partTitle: 'Suggested Courses',
+                  partDescription: tutor?.user?.courses != null
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var course in tutor!.user!.courses!)
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                child: FilledButton(
+                                  onPressed: () {},
+                                  child: Text(course.name!),
+                                ),
+                              ),
+                          ],
+                        )
+                      : Container(),
                 ),
                 _PartInfo(
                   partTitle: 'Interests',
-                  partDescription: Text('I loved the weather, the scenery and the laid-back lifestyle of the locals.'),
+                  partDescription: tutor?.interests != null
+                    ? Text(tutor!.interests!)
+                    : Text('No data'),
                 ),
                 _PartInfo(
                   partTitle: 'Teaching experiences',
-                  partDescription: Text(''),
+                  partDescription: tutor?.experience != null
+                      ? Text(tutor!.experience!)
+                      : const Text('No data'),
                 ),
                 _PartInfo(
                   partTitle: 'Others review',
@@ -264,11 +273,12 @@ class _TutorInfoDesktopBody extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(child: tutorBriefIntro),
-        const SizedBox(width: 16,),
-        Expanded(child: tutorIntroVideo),
+        tutorBriefIntro,
+        const SizedBox(height: 16,),
+        tutorIntroVideo,
+        const SizedBox(height: 16,),
       ],
     );
   }
@@ -302,8 +312,9 @@ class _TutorDetailDesktopBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(flex: 2,child: tutorDetailInfo,),
+        Expanded(flex: 1,child: tutorDetailInfo,),
         Expanded(flex: 3,child: schedule,),
       ],
     );
@@ -321,13 +332,14 @@ class _PartInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(partTitle, style: Theme.of(context).textTheme.titleLarge,),
+        Text(partTitle, style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),),
         partDescription,
         const SizedBox(height: 16,)
       ],
     );
   }
 }
-
 
 

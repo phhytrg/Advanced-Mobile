@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/domain/user.dart';
+import '../domain/user.dart';
 
 abstract class AuthRepository{
   Future<User?> login(String email, String password);

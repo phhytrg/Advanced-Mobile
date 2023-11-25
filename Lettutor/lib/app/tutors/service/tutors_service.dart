@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/login/data/user_repository.dart';
+import 'package:lettutor/app/schedule/data/schedule_repository.dart';
+import 'package:lettutor/app/schedule/domain/tutor_schedule/tutor_schedule_response.dart';
 import 'package:lettutor/app/tutors/domain/favorite_tutor.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,7 +17,7 @@ class TutorService{
   TutorService(this.ref);
   final Ref ref;
 
-  Future<TutorList?> getTutorsWithPagination(int perPage, int page) async {
+  Future<TutorList?> getTutorsWithPagination(int perPage, String page) async {
     return await ref.read(tutorRepositoryProvider).fetchTutorsWithPagination(perPage, page);
   }
 
@@ -24,18 +26,17 @@ class TutorService{
     // _setFavoriteTutorList();
   }
 
-  // Future<void> _setFavoriteTutorList() async{
-  //   final favoriteList =  await ref.read(tutorRepositoryProvider).getFavoriteTutorList();
-  //   ref.read(favoriteTutorListProvider.notifier).state = favoriteList ?? [];
-  // }
-
   Future<TutorList?> searchTutorsByFilters(SearchPayload searchPayload) async {
     return await ref.read(tutorRepositoryProvider).searchTutorsByFilters(searchPayload);
   }
 
   Future<Tutor?> findTutorialById(String id) async {
     final response =  await ref.read(tutorRepositoryProvider).findTutorialById(id);
-    // print(response?.toJson());
+    return response;
+  }
+
+  Future<List<ScheduleOfTutor>?> getTutorSchedule(String tutorId, int page) async{
+    final response = await ref.read(scheduleRepositoryProvider).getScheduleOfTutor(tutorId, page);
     return response;
   }
 }

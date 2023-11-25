@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
-import '../../../core/commom-widgets/search.dart';
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
-import '../../commom-widgets/drawer.dart';
+import '../../../../core/commom-widgets/search.dart';
+import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/commom-widgets/drawer.dart';
+import '../../../core/constant.dart';
 import 'courses_tab.dart';
 
 class CoursesPage extends StatelessWidget {

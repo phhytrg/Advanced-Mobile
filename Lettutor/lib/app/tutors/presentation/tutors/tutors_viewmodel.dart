@@ -13,16 +13,16 @@ part 'tutors_viewmodel.g.dart';
 class TutorsViewmodel extends _$TutorsViewmodel{
 
   @override
-  FutureOr<TutorList?> build() {
-    return getTutorsWithPagination(9, 1);
+  FutureOr<TutorList?> build() async{
+    // return await searchTutorsByFilters(SearchPayload(filters: new Filters(), page: "1", perPage: 9));
+    return await getTutorsWithPagination(9, "1");
   }
 
-  Future<TutorList?> getTutorsWithPagination(int perPage, int page) async {
+  Future<TutorList?> getTutorsWithPagination(int perPage, String page) async {
     final tutorsService = ref.read(tutorServiceProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard<TutorList?>(() =>
         tutorsService.getTutorsWithPagination(perPage, page));
-    print(state.valueOrNull);
     return state.valueOrNull;
   }
 

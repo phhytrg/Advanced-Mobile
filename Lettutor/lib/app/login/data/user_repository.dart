@@ -5,7 +5,7 @@ import 'package:lettutor/app/tutors/domain/favorite_tutor.dart';
 import 'package:lettutor/core/network/network_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/domain/user.dart';
+import '../domain/user.dart';
 
 abstract class BaseUserRepository{
   Future<void> updateTutorInFavoriteList(String tutorId);

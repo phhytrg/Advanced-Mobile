@@ -2,7 +2,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/login/data/auth_repository.dart';
-import 'package:lettutor/core/domain/user.dart';
+import 'package:lettutor/app/login/domain/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 class AuthState{

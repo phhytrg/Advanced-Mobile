@@ -6,7 +6,7 @@ part of 'tutors_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tutorsViewmodelHash() => r'8b6b2a01d168654f886aeccfd94b88d65a07c396';
+String _$tutorsViewmodelHash() => r'51f7a1c70b6712840aaf1b5eca5a22868cfad703';
 
 /// See also [TutorsViewmodel].
 @ProviderFor(TutorsViewmodel)
