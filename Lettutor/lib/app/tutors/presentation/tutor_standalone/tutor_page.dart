@@ -10,6 +10,7 @@ import '../../../../core/commom-widgets/appbar.dart';
 import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/commom-widgets/text_widget.dart';
 import '../../../../core/constant.dart';
+import 'tutor_feedbacks/tutor_feedback.dart';
 import 'tutor_schedule/tutor_schedule.dart';
 
 class TutorPage extends StatelessWidget {
@@ -49,6 +50,10 @@ class TutorPage extends StatelessWidget {
                     _TutorDetailMobileBody(
                       tutorDetailInfo: _buildTutorDetail(context),
                       schedule: BookingSchedule(tutorId: tutorId,),
+                    ),
+                    _PartInfo(
+                      partTitle: 'Others review',
+                      partDescription: TutorFeedback(tutorId: tutorId,),
                     )
                   ],
                 ),
@@ -60,12 +65,22 @@ class TutorPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
                 child: Column(
                   children: [
-                    _TutorInfoDesktopBody(_buildTutorBriefIntro(context), Container(
-                      color: Colors.black12,
-                      width: double.infinity,
-                      height: 300,
-                    )),
-                    _TutorDetailDesktopBody(tutorDetailInfo: _buildTutorDetail(context), schedule:  BookingSchedule(tutorId: tutorId,))
+                    _TutorInfoDesktopBody(
+                      _buildTutorBriefIntro(context),
+                      Container(
+                        color: Colors.black12,
+                        width: double.infinity,
+                        height: 300,
+                      )),
+                    _TutorDetailDesktopBody(
+                      tutorDetailInfo: _buildTutorDetail(context),
+                      schedule: BookingSchedule(
+                        tutorId: tutorId,
+                      )),
+                    _PartInfo(
+                      partTitle: 'Others review',
+                      partDescription: TutorFeedback(tutorId: tutorId,),
+                    )
                   ],
                 ),
               );
@@ -226,10 +241,6 @@ class TutorPage extends StatelessWidget {
                       ? Text(tutor!.experience!)
                       : const Text('No data'),
                 ),
-                _PartInfo(
-                  partTitle: 'Others review',
-                  partDescription: Text('This field for review'),
-                )
               ],
             );
           },

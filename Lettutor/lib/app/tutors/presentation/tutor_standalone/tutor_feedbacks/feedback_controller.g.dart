@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tutor_schedule_controller.dart';
+part of 'feedback_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tutorScheduleControllerHash() =>
-    r'd55bca23964d6402b5c5a7de00eacb7b594990fb';
+String _$feedbacksControllerHash() =>
+    r'8e20f49915e2c1d3403e7777d4a8ab1bed084b09';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,45 +30,49 @@ class _SystemHash {
   }
 }
 
-abstract class _$TutorScheduleController
-    extends BuildlessAutoDisposeAsyncNotifier<List<ScheduleOfTutor>?> {
+abstract class _$FeedbacksController
+    extends BuildlessAutoDisposeAsyncNotifier<FeedbackList?> {
   late final String tutorId;
   late final int page;
+  late final int perPage;
 
-  FutureOr<List<ScheduleOfTutor>?> build(
+  FutureOr<FeedbackList?> build(
     String tutorId,
     int page,
+    int perPage,
   );
 }
 
-/// See also [TutorScheduleController].
-@ProviderFor(TutorScheduleController)
-const tutorScheduleControllerProvider = TutorScheduleControllerFamily();
+/// See also [FeedbacksController].
+@ProviderFor(FeedbacksController)
+const feedbacksControllerProvider = FeedbacksControllerFamily();
 
-/// See also [TutorScheduleController].
-class TutorScheduleControllerFamily
-    extends Family<AsyncValue<List<ScheduleOfTutor>?>> {
-  /// See also [TutorScheduleController].
-  const TutorScheduleControllerFamily();
+/// See also [FeedbacksController].
+class FeedbacksControllerFamily extends Family<AsyncValue<FeedbackList?>> {
+  /// See also [FeedbacksController].
+  const FeedbacksControllerFamily();
 
-  /// See also [TutorScheduleController].
-  TutorScheduleControllerProvider call(
+  /// See also [FeedbacksController].
+  FeedbacksControllerProvider call(
     String tutorId,
     int page,
+    int perPage,
   ) {
-    return TutorScheduleControllerProvider(
+    return FeedbacksControllerProvider(
       tutorId,
       page,
+      perPage,
     );
   }
 
   @override
-  TutorScheduleControllerProvider getProviderOverride(
-    covariant TutorScheduleControllerProvider provider,
+  FeedbacksControllerProvider getProviderOverride(
+    covariant FeedbacksControllerProvider provider,
   ) {
     return call(
       provider.tutorId,
       provider.page,
+      provider.perPage,
     );
   }
 
@@ -84,35 +88,37 @@ class TutorScheduleControllerFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'tutorScheduleControllerProvider';
+  String? get name => r'feedbacksControllerProvider';
 }
 
-/// See also [TutorScheduleController].
-class TutorScheduleControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<TutorScheduleController,
-        List<ScheduleOfTutor>?> {
-  /// See also [TutorScheduleController].
-  TutorScheduleControllerProvider(
+/// See also [FeedbacksController].
+class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    FeedbacksController, FeedbackList?> {
+  /// See also [FeedbacksController].
+  FeedbacksControllerProvider(
     String tutorId,
     int page,
+    int perPage,
   ) : this._internal(
-          () => TutorScheduleController()
+          () => FeedbacksController()
             ..tutorId = tutorId
-            ..page = page,
-          from: tutorScheduleControllerProvider,
-          name: r'tutorScheduleControllerProvider',
+            ..page = page
+            ..perPage = perPage,
+          from: feedbacksControllerProvider,
+          name: r'feedbacksControllerProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$tutorScheduleControllerHash,
-          dependencies: TutorScheduleControllerFamily._dependencies,
+                  : _$feedbacksControllerHash,
+          dependencies: FeedbacksControllerFamily._dependencies,
           allTransitiveDependencies:
-              TutorScheduleControllerFamily._allTransitiveDependencies,
+              FeedbacksControllerFamily._allTransitiveDependencies,
           tutorId: tutorId,
           page: page,
+          perPage: perPage,
         );
 
-  TutorScheduleControllerProvider._internal(
+  FeedbacksControllerProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -121,29 +127,33 @@ class TutorScheduleControllerProvider
     required super.from,
     required this.tutorId,
     required this.page,
+    required this.perPage,
   }) : super.internal();
 
   final String tutorId;
   final int page;
+  final int perPage;
 
   @override
-  FutureOr<List<ScheduleOfTutor>?> runNotifierBuild(
-    covariant TutorScheduleController notifier,
+  FutureOr<FeedbackList?> runNotifierBuild(
+    covariant FeedbacksController notifier,
   ) {
     return notifier.build(
       tutorId,
       page,
+      perPage,
     );
   }
 
   @override
-  Override overrideWith(TutorScheduleController Function() create) {
+  Override overrideWith(FeedbacksController Function() create) {
     return ProviderOverride(
       origin: this,
-      override: TutorScheduleControllerProvider._internal(
+      override: FeedbacksControllerProvider._internal(
         () => create()
           ..tutorId = tutorId
-          ..page = page,
+          ..page = page
+          ..perPage = perPage,
         from: from,
         name: null,
         dependencies: null,
@@ -151,21 +161,23 @@ class TutorScheduleControllerProvider
         debugGetCreateSourceHash: null,
         tutorId: tutorId,
         page: page,
+        perPage: perPage,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<TutorScheduleController,
-      List<ScheduleOfTutor>?> createElement() {
-    return _TutorScheduleControllerProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<FeedbacksController, FeedbackList?>
+      createElement() {
+    return _FeedbacksControllerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TutorScheduleControllerProvider &&
+    return other is FeedbacksControllerProvider &&
         other.tutorId == tutorId &&
-        other.page == page;
+        other.page == page &&
+        other.perPage == perPage;
   }
 
   @override
@@ -173,29 +185,35 @@ class TutorScheduleControllerProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, tutorId.hashCode);
     hash = _SystemHash.combine(hash, page.hashCode);
+    hash = _SystemHash.combine(hash, perPage.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin TutorScheduleControllerRef
-    on AutoDisposeAsyncNotifierProviderRef<List<ScheduleOfTutor>?> {
+mixin FeedbacksControllerRef
+    on AutoDisposeAsyncNotifierProviderRef<FeedbackList?> {
   /// The parameter `tutorId` of this provider.
   String get tutorId;
 
   /// The parameter `page` of this provider.
   int get page;
+
+  /// The parameter `perPage` of this provider.
+  int get perPage;
 }
 
-class _TutorScheduleControllerProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<TutorScheduleController,
-        List<ScheduleOfTutor>?> with TutorScheduleControllerRef {
-  _TutorScheduleControllerProviderElement(super.provider);
+class _FeedbacksControllerProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<FeedbacksController,
+        FeedbackList?> with FeedbacksControllerRef {
+  _FeedbacksControllerProviderElement(super.provider);
 
   @override
-  String get tutorId => (origin as TutorScheduleControllerProvider).tutorId;
+  String get tutorId => (origin as FeedbacksControllerProvider).tutorId;
   @override
-  int get page => (origin as TutorScheduleControllerProvider).page;
+  int get page => (origin as FeedbacksControllerProvider).page;
+  @override
+  int get perPage => (origin as FeedbacksControllerProvider).perPage;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

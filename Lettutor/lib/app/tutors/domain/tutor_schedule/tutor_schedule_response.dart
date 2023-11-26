@@ -22,9 +22,9 @@ class ScheduleOfTutor{
   int? endTimestamp;
   String? createAt;
   bool? isBooked;
-  List<ScheduleDetail>? scheduleDetail;
+  List<ScheduleDetail>? scheduleDetails;
 
-  ScheduleOfTutor({this.id, this.tutorId, this.startTime, this.startTimestamp, this.endTimestamp, this.createAt, this.isBooked, this.scheduleDetail});
+  ScheduleOfTutor({this.id, this.tutorId, this.startTime, this.startTimestamp, this.endTimestamp, this.createAt, this.isBooked, this.scheduleDetails});
 
   factory ScheduleOfTutor.fromJson(Map<String, dynamic> json) => _$ScheduleOfTutorFromJson(json);
   Map<String, dynamic> toJson() => _$ScheduleOfTutorToJson(this);

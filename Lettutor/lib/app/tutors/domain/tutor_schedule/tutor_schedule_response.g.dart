@@ -31,7 +31,7 @@ ScheduleOfTutor _$ScheduleOfTutorFromJson(Map<String, dynamic> json) =>
       endTimestamp: json['endTimestamp'] as int?,
       createAt: json['createAt'] as String?,
       isBooked: json['isBooked'] as bool?,
-      scheduleDetail: (json['scheduleDetail'] as List<dynamic>?)
+      scheduleDetails: (json['scheduleDetails'] as List<dynamic>?)
           ?.map((e) => ScheduleDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -45,7 +45,7 @@ Map<String, dynamic> _$ScheduleOfTutorToJson(ScheduleOfTutor instance) =>
       'endTimestamp': instance.endTimestamp,
       'createAt': instance.createAt,
       'isBooked': instance.isBooked,
-      'scheduleDetail': instance.scheduleDetail,
+      'scheduleDetails': instance.scheduleDetails,
     };
 
 ScheduleDetail _$ScheduleDetailFromJson(Map<String, dynamic> json) =>
