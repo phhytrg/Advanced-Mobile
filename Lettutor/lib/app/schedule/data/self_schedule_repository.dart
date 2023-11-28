@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/core/network/network_service.dart';
 
+import '../domain/booking_list_reponse/booking_list_response.dart';
+
 class SelfScheduleRepository{
   Dio dio = NetworkService.instance.dio;
   String baseUrl = "/booking";
@@ -27,6 +29,11 @@ class SelfScheduleRepository{
     }
     return false;
   }
+
+  Future<BookingList?> getBookingList({required int page, required int perPage, String? orderBy = "meeting", String? sortBy = "asc"}){
+
+  }
+
 }
 
 final selfScheduleRepositoryProvider = Provider<SelfScheduleRepository>((ref) {

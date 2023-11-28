@@ -9,7 +9,7 @@ static final NetworkService instance = NetworkService._internal();
     headers: {
       "Content-Type": "application/json",
       // Hard code token
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNTY5YzIwMi03YmJmLTQ2MjAtYWY3Ny1lY2MxNDE5YTZiMjgiLCJpYXQiOjE3MDEwMTQyODYsImV4cCI6MTcwMTEwMDY4NiwidHlwZSI6ImFjY2VzcyJ9.Xy-9J3uhGNfdpYk3MTJCsOQtrVbQuEgdwmdx7iv7Xig",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNTY5YzIwMi03YmJmLTQ2MjAtYWY3Ny1lY2MxNDE5YTZiMjgiLCJpYXQiOjE3MDExODgxNTEsImV4cCI6MTcwMTI3NDU1MSwidHlwZSI6ImFjY2VzcyJ9.ELnrucb9fp-AjzC63akC_FYEE3R8cfCMQXyIhOjN7bs",
     },
   ));
 }
