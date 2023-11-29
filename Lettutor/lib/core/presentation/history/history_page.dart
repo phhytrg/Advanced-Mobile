@@ -111,7 +111,7 @@ class HistoryItem extends StatelessWidget {
             Text('19 hours ago'),
           ],
         ),
-        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN'),
+        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN', tutorAvatar: '',),
       ],
     );
   }

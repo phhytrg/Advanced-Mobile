@@ -90,6 +90,12 @@ class MyDateUtils{
     return '';
   }
 
+  static String getWeekDayMonthYear(DateTime dateTime){
+    String weekDay = getWeekDay(dateTime);
+    String dayMonthYear = getDayMonthYear(dateTime);
+    return '$weekDay, $dayMonthYear';
+  }
+
   static isSameDay(DateTime dateTime1, DateTime dateTime2){
     // print(dateTime1);
     // print(dateTime2);

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
+import 'package:lettutor/app/tutors/domain/tutor_schedule/tutor_schedule_response.dart';
+import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/utils/date_untils.dart';
 
 import '../../../../core/commom-widgets/button_widget.dart';
 import '../../../../core/commom-widgets/page_header.dart';
 import '../../../../core/commom-widgets/tutor_mini_item.dart';
 import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/constant.dart';
+import 'booking_controller.dart';
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});
 
@@ -29,7 +35,7 @@ class BookingStudentPage extends StatelessWidget {
               const SizedBox(
                 height: 32,
               ),
-              _buildBookingBody(context),
+              BookingListWidget(),
             ],
           ),
         ),
@@ -116,6 +122,40 @@ class BookingStudentPage extends StatelessWidget {
       ],
     );
   }
+}
+
+class BookingListWidget extends ConsumerWidget {
+  const BookingListWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookingList = ref.watch(bookingControllerProvider);
+
+    return AsyncValueWidget<BookingList?>(
+      value: bookingList,
+      data: (bookingList){
+        return bookingList == null ? const Text("No data") : ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: bookingList.rows?.length,
+          itemBuilder: (context, index){
+            return BookingItem(bookingData: bookingList.rows![index],);
+          },
+        );
+      },
+    );
+  }
+}
+
+class BookingItem extends StatelessWidget {
+  const BookingItem({super.key, required this.bookingData});
+
+  final BookingData bookingData;
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBookingBody(context);
+  }
 
   Widget _buildLessonLine(BuildContext context){
     return Container(
@@ -129,7 +169,11 @@ class BookingStudentPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text('00:00 - 00:25'),
+                child: Text('${MyDateUtils.getHourMinute(
+                        DateTime.fromMillisecondsSinceEpoch(bookingData
+                            .scheduleDetailInfo!.startPeriodTimestamp!))} - ${MyDateUtils.getHourMinute(
+                        DateTime.fromMillisecondsSinceEpoch(bookingData
+                            .scheduleDetailInfo!.endPeriodTimestamp!))}'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -178,7 +222,15 @@ class BookingStudentPage extends StatelessWidget {
                       color: Colors.white,
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text('Currently there are no requests for this class. Please write down any requests for the teacher.')
+                    child: bookingData.studentRequest == null
+                        ? Text(
+                            'Currently there are no requests for this class. '
+                                'Please write down any requests for the teacher.',
+                      style: TextStyle(
+                        color: Colors.grey.shade400,
+                      ),
+                    )
+                        : Text(bookingData.studentRequest!),
                   )
                 ],
               ),
@@ -203,6 +255,7 @@ class BookingStudentPage extends StatelessWidget {
     return LayoutBuilder(builder: (context, constrainst){
       if(constrainst.maxWidth <= mobileWidth * 2){
         return Container(
+          margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.grey.shade200,
@@ -217,6 +270,7 @@ class BookingStudentPage extends StatelessWidget {
       }
       else{
         return Container(
+          margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.grey.shade200,
@@ -243,7 +297,7 @@ class BookingStudentPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Thu, 26 Oct 23',
+              Text(MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!)),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 ),
               ),
@@ -251,12 +305,11 @@ class BookingStudentPage extends StatelessWidget {
             ],
           ),
         ),
-        TutorMiniItem(tutorName: 'Keegan', tutorCountry: 'TN')
+        TutorMiniItem(tutorName: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!, tutorCountry: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!, tutorAvatar: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
       ],
     );
   }
 }
-
 
 
 

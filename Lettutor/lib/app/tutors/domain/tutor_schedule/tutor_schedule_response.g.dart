@@ -62,6 +62,9 @@ ScheduleDetail _$ScheduleDetailFromJson(Map<String, dynamic> json) =>
           ?.map((e) => BookingInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
       isBooked: json['isBooked'] as bool?,
+      scheduleInfo: json['scheduleInfo'] == null
+          ? null
+          : ScheduleInfo.fromJson(json['scheduleInfo'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ScheduleDetailToJson(ScheduleDetail instance) =>
@@ -76,6 +79,7 @@ Map<String, dynamic> _$ScheduleDetailToJson(ScheduleDetail instance) =>
       'updateAt': instance.updateAt,
       'bookingInfo': instance.bookingInfo,
       'isBooked': instance.isBooked,
+      'scheduleInfo': instance.scheduleInfo,
     };
 
 BookingInfo _$BookingInfoFromJson(Map<String, dynamic> json) => BookingInfo(
@@ -101,4 +105,27 @@ Map<String, dynamic> _$BookingInfoToJson(BookingInfo instance) =>
       'updatedAt': instance.updatedAt,
       'cancelReasonId': instance.cancelReasonId,
       'userId': instance.userId,
+    };
+
+ScheduleInfo _$ScheduleInfoFromJson(Map<String, dynamic> json) => ScheduleInfo(
+      id: json['id'] as String?,
+      tutorId: json['tutorId'] as String?,
+      startTime: json['startTime'] as String?,
+      startTimestamp: json['startTimestamp'] as int?,
+      endTimestamp: json['endTimestamp'] as int?,
+      createAt: json['createAt'] as String?,
+      tutorInfo: json['tutorInfo'] == null
+          ? null
+          : Tutor.fromJson(json['tutorInfo'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ScheduleInfoToJson(ScheduleInfo instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'tutorId': instance.tutorId,
+      'startTime': instance.startTime,
+      'startTimestamp': instance.startTimestamp,
+      'endTimestamp': instance.endTimestamp,
+      'createAt': instance.createAt,
+      'tutorInfo': instance.tutorInfo,
     };

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
 import 'package:lettutor/core/presentation/advertising/advertising.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
@@ -79,7 +80,12 @@ final goRouterProvider = Provider<GoRouter>((ref){
           builder: (context, state) => TutorPage(
             tutorId: state.pathParameters['id'] ?? '',
           ),
-        )
+        ),
+        GoRoute(
+          path: AppRoute.bookingStudents.getString(),
+          name: AppRoute.bookingStudents.name,
+          builder: (context, state) => BookingStudentPage(),
+        ),
       ],
       // redirect: (context, state) {
       //   if(authState == null) {
