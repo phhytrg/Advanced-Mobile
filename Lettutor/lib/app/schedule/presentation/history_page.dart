@@ -9,7 +9,6 @@ import 'package:lettutor/core/commom-widgets/drawer.dart';
 import 'package:lettutor/core/commom-widgets/rating.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
-import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 
 import '../../../../core/commom-widgets/button_widget.dart';
 import '../../../../core/commom-widgets/page_header.dart';

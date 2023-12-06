@@ -4,7 +4,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 
 import '../../data/self_schedule_repository.dart';
 
