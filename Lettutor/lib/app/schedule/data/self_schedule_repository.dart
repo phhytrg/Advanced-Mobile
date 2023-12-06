@@ -1,5 +1,8 @@
 
 
+import 'dart:convert';
+import 'dart:js_interop';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/core/network/network_service.dart';
@@ -61,6 +64,22 @@ class SelfScheduleRepository{
     // return null;
   }
 
+  Future<List<BookingData>> fetchNextBooking() async{
+    final response = await dio.get(
+      '$baseUrl/next',
+    );
+    Map responseData = response.data;
+    final list = responseData["data"].map<BookingData>((e) => BookingData.fromJson(e)).toList();
+    return list;
+  }
+
+  Future<int> fetchTotalHours() async{
+    Response response = await dio.get(
+      '/call/total',
+    );
+    Map responseData = response.data;
+    return responseData["total"];
+  }
 }
 
 final selfScheduleRepositoryProvider = Provider<SelfScheduleRepository>((ref) {

@@ -8,10 +8,8 @@ part of 'booking_list_response.dart';
 
 BookingListResponse _$BookingListResponseFromJson(Map<String, dynamic> json) =>
     BookingListResponse(
-      message: json['message'] as String?,
-      data: json['data'] == null
-          ? null
-          : BookingList.fromJson(json['data'] as Map<String, dynamic>),
+      message: json['message'] as String,
+      data: BookingList.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BookingListResponseToJson(

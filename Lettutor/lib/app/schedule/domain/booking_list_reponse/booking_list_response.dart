@@ -9,10 +9,10 @@ part 'booking_list_response.g.dart';
 
 @JsonSerializable()
 class BookingListResponse{
-  String? message;
-  BookingList? data;
+  String message;
+  BookingList data;
 
-  BookingListResponse({this.message, this.data});
+  BookingListResponse({required this.message, required this.data});
 
   factory BookingListResponse.fromJson(Map<String, dynamic> json) => _$BookingListResponseFromJson(json);
   Map<String, dynamic> toJson() => _$BookingListResponseToJson(this);
