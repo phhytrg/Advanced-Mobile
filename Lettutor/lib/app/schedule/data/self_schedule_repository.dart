@@ -56,12 +56,8 @@ class SelfScheduleRepository{
       return null;
     }
 
-
-    // if (response.statusCode == 200) {
-      final bookingListResponse = BookingListResponse.fromJson(response.data);
-      return bookingListResponse.data;
-    // }
-    // return null;
+    final bookingListResponse = BookingListResponse.fromJson(response.data);
+    return bookingListResponse.data;
   }
 
   Future<List<BookingData>> fetchNextBooking() async{

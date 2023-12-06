@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lettutor/app/tutors/domain/tutor_schedule/tutor_schedule_response.dart';
 
@@ -8,13 +6,15 @@ import '../../../tutors/domain/response/tutor.dart';
 part 'booking_list_response.g.dart';
 
 @JsonSerializable()
-class BookingListResponse{
+class BookingListResponse {
   String message;
   BookingList data;
 
   BookingListResponse({required this.message, required this.data});
 
-  factory BookingListResponse.fromJson(Map<String, dynamic> json) => _$BookingListResponseFromJson(json);
+  factory BookingListResponse.fromJson(Map<String, dynamic> json) =>
+      _$BookingListResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$BookingListResponseToJson(this);
 }
 
@@ -25,7 +25,9 @@ class BookingList {
 
   BookingList({required this.count, required this.rows});
 
-  factory BookingList.fromJson(Map<String, dynamic> json) => _$BookingListFromJson(json);
+  factory BookingList.fromJson(Map<String, dynamic> json) =>
+      _$BookingListFromJson(json);
+
   Map<String, dynamic> toJson() => _$BookingListToJson(this);
 }
 
@@ -38,12 +40,12 @@ class BookingData {
   int? convertedLesson;
   String? createdAt;
   int? createdAtTimestamp;
-  List<String>? feedbacks;
+  List<Map<String, dynamic>>? feedbacks;
   String? googleMeetLink;
   String? id;
   bool? isDeleted;
   bool? isTrial;
-  String? lessonPlanId;
+  // String? lessonPlanId;
   String? recordUrl;
   String? scheduleDetailId;
   ScheduleDetail? scheduleDetailInfo;
@@ -58,6 +60,7 @@ class BookingData {
   String? updatedAt;
   int? updatedAtTimeStamp;
   String? userId;
+  ClassReview? classReview;
 
   BookingData(
       {this.calendarId,
@@ -72,7 +75,7 @@ class BookingData {
       this.id,
       this.isDeleted,
       this.isTrial,
-      this.lessonPlanId,
+      // this.lessonPlanId,
       this.recordUrl,
       this.scheduleDetailId,
       this.scheduleDetailInfo,
@@ -86,9 +89,57 @@ class BookingData {
       this.tutorReview,
       this.updatedAt,
       this.updatedAtTimeStamp,
-      this.userId
-  });
+      this.userId,
+      this.classReview,
+      });
 
-  factory BookingData.fromJson(Map<String, dynamic> json) => _$BookingDataFromJson(json);
+  factory BookingData.fromJson(Map<String, dynamic> json) =>
+      _$BookingDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$BookingDataToJson(this);
+}
+
+@JsonSerializable()
+class ClassReview {
+  String? behaviorComment;
+  int? behaviorRating;
+  String? book;
+  String? homeworkComment;
+  int? listeningRating;
+  String? listeningComment;
+  int? speakingRating;
+  String? speakingComment;
+  int? vocabularyRating;
+  String? vocabularyComment;
+  String? overallComment;
+  LessonStatus? lessonStatus;
+
+  ClassReview(
+      {this.behaviorComment,
+      this.behaviorRating,
+      this.book,
+      this.homeworkComment,
+      this.listeningRating,
+      this.listeningComment,
+      this.speakingRating,
+      this.speakingComment,
+      this.vocabularyRating,
+      this.vocabularyComment,
+      this.overallComment,
+      this.lessonStatus});
+
+  factory ClassReview.fromJson(Map<String, dynamic> json) =>
+      _$ClassReviewFromJson(json);
+  Map<String, dynamic> toJson() => _$ClassReviewToJson(this);
+}
+
+@JsonSerializable()
+class LessonStatus{
+  String? status;
+
+  LessonStatus({this.status});
+
+  factory LessonStatus.fromJson(Map<String, dynamic> json) =>
+      _$LessonStatusFromJson(json);
+  Map<String, dynamic> toJson() => _$LessonStatusToJson(this);
 }

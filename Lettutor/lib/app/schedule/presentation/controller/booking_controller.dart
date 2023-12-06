@@ -12,7 +12,7 @@ class BookingController extends _$BookingController{
   @override
   Future<BookingList?> build() async{
     final bookingRepository = ref.read(selfScheduleRepositoryProvider);
-    state = AsyncLoading();
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() => bookingRepository.getBookingList(page: 1, perPage: 10, inFuture: 1));
 
     return state.valueOrNull;

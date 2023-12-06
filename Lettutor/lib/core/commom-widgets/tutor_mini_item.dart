@@ -21,9 +21,9 @@ class TutorMiniItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CircleAvatar(
-          child: Icon(Icons.portrait),
           backgroundImage: NetworkImage(tutorAvatar),
           minRadius: 48,
+          child: tutorAvatar == "" ? const Icon(Icons.portrait) : null,
         ),
         const SizedBox(
           width: 16,
