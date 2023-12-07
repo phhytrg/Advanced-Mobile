@@ -31,7 +31,6 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
         .of(context)
         .size
         .width;
-    print("build");
     return Scaffold(
       key: _scaffoldKey,
       appBar: LettutorAppbar(
