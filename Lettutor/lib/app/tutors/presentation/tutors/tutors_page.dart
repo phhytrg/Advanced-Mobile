@@ -9,7 +9,7 @@ import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/constant.dart';
 import '../../domain/payload/search_payload.dart';
 import '../../domain/response/tutor_list.dart';
-import '../upcoming-lesson.dart';
+import '../upcoming_lesson.dart';
 
 class TutorsPage extends ConsumerStatefulWidget {
   const TutorsPage({super.key});
@@ -68,7 +68,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
                     value: tutorsState,
                     data: (tutorsList) {
                       return Container(
-                        margin: EdgeInsets.only(left: 32, right: 32),
+                        margin: const EdgeInsets.only(left: 32, right: 32),
                         child: Wrap(
                           alignment: WrapAlignment.start,
                           spacing: 16,

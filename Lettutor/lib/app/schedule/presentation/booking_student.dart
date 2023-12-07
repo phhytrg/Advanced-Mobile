@@ -10,7 +10,7 @@ import '../../../../core/commom-widgets/page_header.dart';
 import '../../../../core/commom-widgets/tutor_mini_item.dart';
 import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/constant.dart';
-import 'booking_controller.dart';
+import 'controller/booking_controller.dart';
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});
 

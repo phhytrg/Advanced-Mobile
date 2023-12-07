@@ -60,6 +60,67 @@ class MyDateUtils{
     }
   }
 
+  static String getShortMonth(int month){
+    switch(month){
+      case 1:
+        return 'Jan';
+      case 2:
+        return 'Feb';
+      case 3:
+        return 'Mar';
+      case 4:
+        return 'Apr';
+      case 5:
+        return 'May';
+      case 6:
+        return 'Jun';
+      case 7:
+        return 'Jul';
+      case 8:
+        return 'Aug';
+      case 9:
+        return 'Sep';
+      case 10:
+        return 'Oct';
+      case 11:
+        return 'Nov';
+      default:
+        return 'Dec';
+    }
+  }
+
+  static String getShortWeekDay(DateTime dateTime){
+    switch(dateTime.weekday){
+      case 1:
+        return 'Mon';
+      case 2:
+        return 'Tue';
+      case 3:
+        return 'Wed';
+      case 4:
+        return 'Thu';
+      case 5:
+        return 'Fri';
+      case 6:
+        return 'Sat';
+      default:
+        return 'Sun';
+    }
+  }
+
+  static String getShortWeekDayMonthYear(DateTime dateTime){
+    String weekDay = getShortWeekDay(dateTime);
+    String dayMonthYear = getShortDayMonthYear(dateTime);
+    return '$weekDay, $dayMonthYear';
+  }
+
+  static String getShortDayMonthYear(DateTime dateTime){
+    String day = dateTime.day.toString().padLeft(2, '0');
+    String month = getShortMonth(dateTime.month);
+    String year = dateTime.year.toString();
+    return '$day $month $year';
+  }
+
   static bool isMorning(DateTime dateTime){
     return dateTime.hour >= 6 && dateTime.hour < 12;
   }
@@ -100,6 +161,21 @@ class MyDateUtils{
     // print(dateTime1);
     // print(dateTime2);
     return dateTime1.year == dateTime2.year && dateTime1.month == dateTime2.month && dateTime1.day == dateTime2.day;
+  }
+
+  static String getTimeAgo(DateTime dateTime) {
+    Duration duration = DateTime.now().difference(dateTime);
+    if (duration.inDays > 0) {
+      return '${duration.inDays} days ago';
+    } else if (duration.inHours > 0) {
+      return '${duration.inHours} hours ago';
+    } else if (duration.inMinutes > 0) {
+      return '${duration.inMinutes} minutes ago';
+    } else if (duration.inSeconds > 0) {
+      return '${duration.inSeconds} seconds ago';
+    } else {
+      return 'Just now';
+    }
   }
 
 }

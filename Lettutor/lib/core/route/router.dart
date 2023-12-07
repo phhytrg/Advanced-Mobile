@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
 import 'package:lettutor/core/presentation/advertising/advertising.dart';
@@ -85,6 +86,11 @@ final goRouterProvider = Provider<GoRouter>((ref){
           path: AppRoute.bookingStudents.getString(),
           name: AppRoute.bookingStudents.name,
           builder: (context, state) => BookingStudentPage(),
+        ),
+        GoRoute(
+          path: AppRoute.history.getString(),
+          name: AppRoute.history.name,
+          builder: (context, state) => HistoryPage(),
         ),
       ],
       // redirect: (context, state) {
