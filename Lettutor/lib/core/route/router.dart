@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
+import 'package:lettutor/app/login/presentation/reset_password.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
+import 'package:lettutor/app/user_profile/presentation/user_profile_page.dart';
+import 'package:lettutor/core/commom-widgets/appbar.dart';
+import 'package:lettutor/core/commom-widgets/common_scaffold.dart';
 import 'package:lettutor/core/presentation/advertising/advertising.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 
@@ -22,9 +27,10 @@ enum AppRoute {
   courseDetail,
   login,
   signup,
+  profile,
   resetPassword;
 
-  String getString() {
+  String getPath() {
     switch (this) {
       case AppRoute.bookingStudents:
         return '/booking-student';
@@ -46,6 +52,8 @@ enum AppRoute {
         return '/signup';
       case AppRoute.resetPassword:
         return '/reset-password';
+      case AppRoute.profile:
+        return '/profile';
       default:
         return '/';
     }
@@ -54,7 +62,11 @@ enum AppRoute {
 
 final goRouterProvider = Provider<GoRouter>((ref){
   final authState = ref.watch(authStateProvider);
+  final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final shellNavigatorKey = GlobalKey<NavigatorState>();
+
   return GoRouter(
+      navigatorKey: rootNavigatorKey,
       initialLocation: '/',
       routes: [
         GoRoute(
@@ -73,6 +85,7 @@ final goRouterProvider = Provider<GoRouter>((ref){
           builder: (context, state) => SignupPage(),
         ),
         GoRoute(
+          parentNavigatorKey: rootNavigatorKey,
           path: '/tutors',
           name: AppRoute.tutorsList.name,
           builder: (context, state) => TutorsPage(),
@@ -85,17 +98,17 @@ final goRouterProvider = Provider<GoRouter>((ref){
           ),
         ),
         GoRoute(
-          path: AppRoute.bookingStudents.getString(),
+          path: AppRoute.bookingStudents.getPath(),
           name: AppRoute.bookingStudents.name,
           builder: (context, state) => BookingStudentPage(),
         ),
         GoRoute(
-          path: AppRoute.history.getString(),
+          path: AppRoute.history.getPath(),
           name: AppRoute.history.name,
           builder: (context, state) => HistoryPage(),
         ),
         GoRoute(
-          path: AppRoute.courses.getString(),
+          path: AppRoute.courses.getPath(),
           name: AppRoute.courses.name,
           builder: (context, state){
             if(state.uri.queryParameters['id'] != null){
@@ -109,25 +122,58 @@ final goRouterProvider = Provider<GoRouter>((ref){
           }
         ),
         GoRoute(
-          path: AppRoute.courseInfo.getString(),
+          path: AppRoute.courseInfo.getPath(),
           name: AppRoute.courseInfo.name,
           builder: (context, state) => CourseStandalonePage(
             courseId: state.pathParameters['id'] ?? '',
           ),
         ),
+        GoRoute(
+          path: AppRoute.resetPassword.getPath(),
+          name: AppRoute.resetPassword.name,
+          builder: (context, state) => ResetPasswordPage(),
+        ),
+        GoRoute(
+          path: AppRoute.profile.getPath(),
+          name: AppRoute.profile.name,
+          builder: (context, state) => UserProfilePage(),
+        ),
+        // GoRoute(
+        //   parentNavigatorKey: rootNavigatorKey,
+        //   path: AppRoute.profile.getPath(),
+        //   name: AppRoute.profile.name,
+        //   builder: (context, state) => UserProfilePage(),
+        // ),
+        // ShellRoute(
+        //   navigatorKey: shellNavigatorKey,
+        //   builder: (context, state, child) {
+        //     return LettutorAppbar();
+        //   },
+        //   routes: [
+        //     GoRoute(
+        //       parentNavigatorKey: shellNavigatorKey,
+        //       path: AppRoute.profile.getPath(),
+        //       name: AppRoute.profile.name,
+        //       builder: (context, state) => UserProfilePage(),
+        //     ),
+        //   ],
+        // )
       ],
       // redirect: (context, state) {
       //   if(authState == null) {
-      //     if(state.matchedLocation != RoutePath.login.getString() && state.matchedLocation != '/'){
-      //       return RoutePath.login.getString();
+      //     if (state.matchedLocation != AppRoute.login.getPath() &&
+      //         state.matchedLocation != AppRoute.signup.getPath() &&
+      //         state.matchedLocation != AppRoute.resetPassword.getPath() &&
+      //         state.matchedLocation != '/') {
+      //       return AppRoute.login.getPath();
       //     }
       //     else{
       //       return null;
       //     }
       //   }
       //   else{
-      //     if(state.matchedLocation == RoutePath.login.getString() || state.matchedLocation == '/'){
-      //       return AppRoute.tutorsList.getString();
+      //     if(state.matchedLocation == AppRoute.login.getPath() || state.matchedLocation == '/'){
+      //       return AppRoute.tutorsList.getPath();
       //     }
       //     else{
       //       return null;

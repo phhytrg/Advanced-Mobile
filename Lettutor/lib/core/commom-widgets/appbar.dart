@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
 
 import '../constant.dart';
@@ -19,6 +22,7 @@ class LettutorAppbar extends StatefulWidget implements PreferredSizeWidget {
 
 class _LettutorAppbarState extends State<LettutorAppbar> {
   List _hoverNavBar = [false, false, false, false, false];
+  bool showAvatarButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +63,34 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             return IconButton(
                 onPressed: widget.onMenuIconPressed, icon: Icon(Icons.menu));
           } else {
-            return CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage('assets/images/course-image.png'),
+            return MouseRegion(
+              onEnter: (value) {
+                setState(() {
+                  showAvatarButton = true;
+                });
+              },
+              onExit: (value) {
+                setState(() {
+                  showAvatarButton = false;
+                });
+              },
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  return InkWell(
+                    onTap: () {
+                      // ref.read(goRouterProvider).pushNamed(AppRoute.profile.getPath());
+                      // context.pushNamed(AppRoute.profile.getPath());
+                      print(GoRouter.of(context).pushNamed('/profile'));
+                    },
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/course-image.png'),
+                    ),
+                  );
+                },
+              ),
             );
           }
-          ;
         }),
         const SizedBox(
           width: 16,
