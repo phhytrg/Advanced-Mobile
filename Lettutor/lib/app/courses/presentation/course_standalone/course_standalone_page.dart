@@ -1,20 +1,27 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/commom-widgets/button_widget.dart';
-import '../../../core/commom-widgets/appbar.dart';
-import '../../../core/commom-widgets/drawer.dart';
-import '../../../core/constant.dart';
+import 'package:lettutor/app/courses/domain/course.dart';
+import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
+import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import '../../../../../core/commom-widgets/button_widget.dart';
+import '../../../../core/commom-widgets/appbar.dart';
+import '../../../../core/commom-widgets/drawer.dart';
+import '../../../../core/constant.dart';
+import '../controller/courses_controller.dart';
 
-class CourseInformationPage extends StatefulWidget {
-  const CourseInformationPage({super.key});
+class CourseStandalonePage extends ConsumerStatefulWidget {
+  final String courseId;
+
+  const CourseStandalonePage({super.key, required this.courseId});
 
   @override
-  State<CourseInformationPage> createState() => _CourseInformationPageState();
+  ConsumerState<CourseStandalonePage> createState() => _CourseInformationPageState();
 }
 
-class _CourseInformationPageState extends State<CourseInformationPage> {
+class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -22,6 +29,8 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
+
+    final courseState = ref.watch(courseControllerProvider(widget.courseId));
 
     return Scaffold(
       key: _scaffoldKey,
@@ -33,34 +42,42 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
       endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
       body: SingleChildScrollView(
         child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: LayoutBuilder(
-              builder: (context, constraints){
-                if(constraints.maxWidth <= mobileWidth * 1.5){
-                  return Column(
-                    children: [
-                      _buildCourseCard(context),
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      _buildCourseInfo(context)
-                    ],
-                  );
-                }else{
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: _buildCourseCard(context),
-                        flex: 3,
-                      ),
-                      const SizedBox(
-                        width: 32,
-                      ),
-                      Expanded(child: _buildCourseInfo(context), flex: 7,)
-                    ],
-                  );
-                }
+            padding: const EdgeInsets.all(16.0),
+            child: AsyncValueWidget(
+              value: courseState,
+              data: (course) {
+                return course == null ? const Text('No data') : LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth <= mobileWidth * 1.5) {
+                      return Column(
+                        children: [
+                          _buildCourseCard(context, course),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          _buildCourseInfo(context, course)
+                        ],
+                      );
+                    } else {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _buildCourseCard(context, course),
+                            flex: 3,
+                          ),
+                          const SizedBox(
+                            width: 32,
+                          ),
+                          Expanded(
+                            child: _buildCourseInfo(context, course),
+                            flex: 7,
+                          )
+                        ],
+                      );
+                    }
+                  },
+                );
               },
             )
         ),
@@ -68,7 +85,7 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
     );
   }
 
-  Widget _buildCourseCard(BuildContext context){
+  Widget _buildCourseCard(BuildContext context, Course course){
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -91,26 +108,26 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Image.asset('images/course-image.png', width: double.infinity, fit: BoxFit.scaleDown, )
+              child: Image.network(course.imageUrl, width: double.infinity, fit: BoxFit.scaleDown, )
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Text('Basic Conversation Topics', style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Text(course.name, style: Theme.of(context).textTheme.titleLarge!.copyWith(
               fontWeight: FontWeight.w900,
             ),),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Text('Gain confidence speaking about familiar topics'),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Text(course.description),
           ),
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
               onPressed: (){
-                Navigator.of(context).pushNamed('/course-detail');
+                // Navigator.of(context).pushNamed('/course-detail');
               },
-              child: Text('Discover'),
+              child: const Text('Discover'),
             ),
           )
         ],
@@ -118,12 +135,12 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
     );
   }
 
-  Widget _buildCourseInfo(BuildContext context){
+  Widget _buildCourseInfo(BuildContext context, Course course){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTitleText(context, 'Overview'),
-        Divider(),
+        const Divider(),
         RichText(
           text: TextSpan(
             children: [
@@ -134,7 +151,7 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(sampleText, textAlign: TextAlign.justify),
+          child: Text(course.reason, textAlign: TextAlign.justify),
         ),
         const SizedBox(
           height: 16,
@@ -149,7 +166,7 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(sampleText, textAlign: TextAlign.justify),
+          child: Text(course.purpose, textAlign: TextAlign.justify),
         ),
         const SizedBox(
           height: 32,
@@ -160,7 +177,7 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
             text: TextSpan(
                 children: [
                   WidgetSpan(child: Icon(Icons.group_add, color: Colors.blue,), alignment: PlaceholderAlignment.middle),
-                  TextSpan(text: '  '),
+                  const TextSpan(text: '  '),
                   TextSpan(text: 'Beginner', style: Theme.of(context).textTheme.titleSmall!)
                 ]
             )
@@ -173,8 +190,8 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
         RichText(
             text: TextSpan(
                 children: [
-                  WidgetSpan(child: Icon(Icons.library_books, color: Colors.blue,), alignment: PlaceholderAlignment.middle),
-                  TextSpan(text: '  '),
+                  const WidgetSpan(child: Icon(Icons.library_books, color: Colors.blue,), alignment: PlaceholderAlignment.middle),
+                  const TextSpan(text: '  '),
                   TextSpan(text: '10 topics', style: Theme.of(context).textTheme.titleSmall!)
                 ]
             )
@@ -189,11 +206,8 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
           if(constraints.maxWidth <= 600){
             return Column(
               children: [
-                _buildTopicCard(context, '1. Foods you love'),
-                _buildTopicCard(context, '2. Your jobs'),
-                _buildTopicCard(context, '3. Playing and watching sports'),
-                _buildTopicCard(context, '4. The Best Pet'),
-                _buildTopicCard(context, '5. Having fun in your free time'),
+                for(int i = 0; i < course.topics.length; i++)
+                  _buildTopicCard(context, '${i+1}. ${course.topics[i].name}')
               ],
             );
           }
@@ -206,13 +220,15 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
                 mainAxisSpacing: 10,
                 mainAxisExtent: 150, // here set custom Height You Want
               ),
-              itemCount: 10,
+              itemCount: course.topics.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                   borderRadius: BorderRadius.circular(8.0),
                   hoverColor: Colors.grey.shade300,
-                  child: _buildTopicCard(context, '1. Colors')
+                  child: _buildTopicCard(context, '${index+1}. ${course.topics[index].name}')
                 );
               },
             );
@@ -222,8 +238,8 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
           height: 32,
         ),
         _buildTitleText(context, 'Suggested Tutors'),
-        Divider(),
-        Row(
+        const Divider(),
+        const Row(
           children: [
             Text('Keegan'),
             MyTextButton(child: Text('More info')),
@@ -246,7 +262,7 @@ class _CourseInformationPageState extends State<CourseInformationPage> {
 
   Widget _buildTopicCard(BuildContext context, String text){
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),

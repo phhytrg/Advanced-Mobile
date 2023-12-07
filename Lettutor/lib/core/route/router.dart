@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
+import 'package:lettutor/app/courses/presentation/courses_page.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
@@ -91,6 +93,27 @@ final goRouterProvider = Provider<GoRouter>((ref){
           path: AppRoute.history.getString(),
           name: AppRoute.history.name,
           builder: (context, state) => HistoryPage(),
+        ),
+        GoRoute(
+          path: AppRoute.courses.getString(),
+          name: AppRoute.courses.name,
+          builder: (context, state){
+            if(state.uri.queryParameters['id'] != null){
+              return CourseStandalonePage(
+                courseId: state.uri.queryParameters['id'] ?? '',
+              );
+            }
+            else{
+              return CoursesPage();
+            }
+          }
+        ),
+        GoRoute(
+          path: AppRoute.courseInfo.getString(),
+          name: AppRoute.courseInfo.name,
+          builder: (context, state) => CourseStandalonePage(
+            courseId: state.pathParameters['id'] ?? '',
+          ),
         ),
       ],
       // redirect: (context, state) {
