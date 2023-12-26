@@ -22,106 +22,60 @@ class CourseStandalonePage extends ConsumerStatefulWidget {
 }
 
 class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth <= mobileWidth * 1.5) {
-                return Column(
-                  children: [
-                    _buildCourseCard(context),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    _buildCourseInfo(context)
-                  ],
-                );
-              } else {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _buildCourseCard(context),
-                      flex: 3,
-                    ),
-                    const SizedBox(
-                      width: 32,
-                    ),
-                    Expanded(
-                      child: _buildCourseInfo(context),
-                      flex: 7,
-                    )
-                  ],
-                );
-              }
-            },
-          )),
-
     double width = MediaQuery.of(context).size.width;
 
     final courseState = ref.watch(courseControllerProvider(widget.courseId));
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: LettutorAppbar(
-        onMenuIconPressed: (){
-          _scaffoldKey.currentState?.openEndDrawer();
-        },
-      ),
-      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
-      body: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: AsyncValueWidget(
-              value: courseState,
-              data: (course) {
-                return course == null ? const Text('No data') : LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (constraints.maxWidth <= mobileWidth * 1.5) {
-                      return Column(
-                        children: [
-                          _buildCourseCard(context, course),
-                          const SizedBox(
-                            height: 32,
-                          ),
-                          _buildCourseInfo(context, course)
-                        ],
-                      );
-                    } else {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: _buildCourseCard(context, course),
-                            flex: 3,
-                          ),
-                          const SizedBox(
-                            width: 32,
-                          ),
-                          Expanded(
-                            child: _buildCourseInfo(context, course),
-                            flex: 7,
-                          )
-                        ],
-                      );
-                    }
-                  },
-                );
-              },
-            )
-        ),
-      ),
+    return SingleChildScrollView(
+      child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: AsyncValueWidget(
+            value: courseState,
+            data: (course) {
+              return course == null
+                  ? const Text('No data')
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth <= mobileWidth * 1.5) {
+                          return Column(
+                            children: [
+                              _buildCourseCard(context, course),
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              _buildCourseInfo(context, course)
+                            ],
+                          );
+                        } else {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildCourseCard(context, course),
+                                flex: 3,
+                              ),
+                              const SizedBox(
+                                width: 32,
+                              ),
+                              Expanded(
+                                child: _buildCourseInfo(context, course),
+                                flex: 7,
+                              )
+                            ],
+                          );
+                        }
+                      },
+                    );
+            },
+          )),
     );
   }
 
-  Widget _buildCourseCard(BuildContext context) {
-  Widget _buildCourseCard(BuildContext context, Course course){
+  Widget _buildCourseCard(BuildContext context, Course course) {
     return Container(
       decoration: BoxDecoration(
           boxShadow: [
@@ -141,21 +95,15 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Image.network(course.imageUrl, width: double.infinity, fit: BoxFit.scaleDown, )
-          ),
-              child: Image.asset(
-                'images/course-image.png',
+              child: Image.network(
+                course.imageUrl,
                 width: double.infinity,
                 fit: BoxFit.scaleDown,
               )),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Text(course.name, style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontWeight: FontWeight.w900,
-            ),),
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: Text(
-              'Basic Conversation Topics',
+              course.name,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.w900,
                   ),
@@ -169,10 +117,8 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
-              onPressed: (){
-                // Navigator.of(context).pushNamed('/course-detail');
               onPressed: () {
-                Navigator.of(context).pushNamed('/course-detail');
+                // Navigator.of(context).pushNamed('/course-detail');
               },
               child: const Text('Discover'),
             ),
@@ -182,20 +128,22 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
     );
   }
 
-  Widget _buildCourseInfo(BuildContext context, Course course){
+  Widget _buildCourseInfo(BuildContext context, Course course) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTitleText(context, 'Overview'),
         const Divider(),
         RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(child: Icon(Icons.help_outline, color: Colors.red.shade700,), alignment: PlaceholderAlignment.middle),
-              TextSpan(text: 'Why take this course', style: Theme.of(context).textTheme.titleSmall!)
-            ]
-          )
-        ),
+            text: TextSpan(children: [
+          WidgetSpan(
+              child: Icon(
+                Icons.help_outline,
+                color: Colors.red.shade700,
+              ),
+              alignment: PlaceholderAlignment.middle),
+          TextSpan(text: 'Why take this course', style: Theme.of(context).textTheme.titleSmall!)
+        ])),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(course.reason, textAlign: TextAlign.justify),
@@ -204,13 +152,15 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
           height: 16,
         ),
         RichText(
-            text: TextSpan(
-                children: [
-                  WidgetSpan(child: Icon(Icons.help_outline, color: Colors.red.shade700,), alignment: PlaceholderAlignment.middle),
-                  TextSpan(text: 'What will you be able to do', style: Theme.of(context).textTheme.titleSmall!)
-                ]
-            )
-        ),
+            text: TextSpan(children: [
+          WidgetSpan(
+              child: Icon(
+                Icons.help_outline,
+                color: Colors.red.shade700,
+              ),
+              alignment: PlaceholderAlignment.middle),
+          TextSpan(text: 'What will you be able to do', style: Theme.of(context).textTheme.titleSmall!)
+        ])),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(course.purpose, textAlign: TextAlign.justify),
@@ -221,44 +171,46 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
         _buildTitleText(context, 'Experience Level'),
         Divider(),
         RichText(
-            text: TextSpan(
-                children: [
-                  WidgetSpan(child: Icon(Icons.group_add, color: Colors.blue,), alignment: PlaceholderAlignment.middle),
-                  const TextSpan(text: '  '),
-                  TextSpan(text: 'Beginner', style: Theme.of(context).textTheme.titleSmall!)
-                ]
-            )
-        ),
+            text: TextSpan(children: [
+          WidgetSpan(
+              child: Icon(
+                Icons.group_add,
+                color: Colors.blue,
+              ),
+              alignment: PlaceholderAlignment.middle),
+          const TextSpan(text: '  '),
+          TextSpan(text: 'Beginner', style: Theme.of(context).textTheme.titleSmall!)
+        ])),
         const SizedBox(
           height: 32,
         ),
         _buildTitleText(context, 'Course length'),
         Divider(),
         RichText(
-            text: TextSpan(
-                children: [
-                  const WidgetSpan(child: Icon(Icons.library_books, color: Colors.blue,), alignment: PlaceholderAlignment.middle),
-                  const TextSpan(text: '  '),
-                  TextSpan(text: '10 topics', style: Theme.of(context).textTheme.titleSmall!)
-                ]
-            )
-        ),
-
+            text: TextSpan(children: [
+          const WidgetSpan(
+              child: Icon(
+                Icons.library_books,
+                color: Colors.blue,
+              ),
+              alignment: PlaceholderAlignment.middle),
+          const TextSpan(text: '  '),
+          TextSpan(text: '10 topics', style: Theme.of(context).textTheme.titleSmall!)
+        ])),
         const SizedBox(
           height: 32,
         ),
         _buildTitleText(context, 'List Topics'),
         Divider(),
-        LayoutBuilder(builder: (context, constraints){
-          if(constraints.maxWidth <= 600){
+        LayoutBuilder(builder: (context, constraints) {
+          if (constraints.maxWidth <= 600) {
             return Column(
               children: [
-                for(int i = 0; i < course.topics.length; i++)
-                  _buildTopicCard(context, '${i+1}. ${course.topics[i].name}')
+                for (int i = 0; i < course.topics.length; i++)
+                  _buildTopicCard(context, '${i + 1}. ${course.topics[i].name}')
               ],
             );
-          }
-          else{
+          } else {
             return GridView.builder(
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -270,13 +222,10 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
               itemCount: course.topics.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  onTap: (){
-
-                  },
-                  borderRadius: BorderRadius.circular(8.0),
-                  hoverColor: Colors.grey.shade300,
-                  child: _buildTopicCard(context, '${index+1}. ${course.topics[index].name}')
-                );
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(8.0),
+                    hoverColor: Colors.grey.shade300,
+                    child: _buildTopicCard(context, '${index + 1}. ${course.topics[index].name}'));
               },
             );
           }
@@ -296,30 +245,27 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
     );
   }
 
-  Widget _buildTitleText(BuildContext context, String text){
+  Widget _buildTitleText(BuildContext context, String text) {
     return Text(text,
         // Directly set font weight inside TextStyle or Theme.copyWith() will not work
         // Try passing fontWeight to GoogleFonts constructor
         style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w800,
-            fontSize: Theme.of(context).textTheme.titleLarge!.fontSize
-        )
-    );
+            fontWeight: FontWeight.w800, fontSize: Theme.of(context).textTheme.titleLarge!.fontSize));
   }
 
-  Widget _buildTopicCard(BuildContext context, String text){
+  Widget _buildTopicCard(BuildContext context, String text) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.transparent,
-        border: Border.all(
-          color: Colors.grey.shade300
-        ),
-
+        border: Border.all(color: Colors.grey.shade300),
       ),
-      child: Text(text, overflow: TextOverflow.fade,),
+      child: Text(
+        text,
+        overflow: TextOverflow.fade,
+      ),
     );
   }
 }

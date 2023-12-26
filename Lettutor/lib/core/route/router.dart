@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/advertising/advertising.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
-import 'package:lettutor/core/presentation/advertising/advertising.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 
 import '../../app/login/presentation/login.dart';
