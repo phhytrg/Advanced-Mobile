@@ -6,7 +6,7 @@ import '../../../../core/commom-widgets/search.dart';
 import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/commom-widgets/drawer.dart';
 import '../../../core/constant.dart';
-import 'courses_tab.dart';
+import 'common/courses_tab.dart';
 
 class CoursesPage extends StatelessWidget {
   const CoursesPage({super.key});
