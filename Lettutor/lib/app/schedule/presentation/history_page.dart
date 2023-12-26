@@ -23,10 +23,7 @@ class HistoryPage extends ConsumerStatefulWidget {
 }
 
 class _HistoryPageState extends ConsumerState<HistoryPage> {
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   late final _scrollController;
-
 
   @override
   void initState() {
@@ -48,61 +45,50 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
   @override
   Widget build(BuildContext context) {
 
-    double width = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: LettutorAppbar(
-        onMenuIconPressed: (){
-          _scaffoldKey.currentState?.openEndDrawer();
-        },
-      ),
-      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          child: Column(
-            children: [
-              PageHeader(
-                svgIconPath: 'icons/history.svg',
-                pageDescription: sampleText,
-                pageName: 'History',),
-              const SizedBox(
-                height: 32,
-              ),
-              Consumer(builder: (context, ref, child) {
-                final bookingHistoryController =
-                    ref.watch(bookingHistoryControllerProvider);
-                return AsyncValueWidget(
-                  value: bookingHistoryController,
-                  data: (historyBookingList) {
-                    return historyBookingList == null ? const Text("No data") : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: historyBookingList.rows?.length,
-                      itemBuilder: (context, index){
-                        return HistoryItem(booking: historyBookingList.rows![index],);
-                      },
-                    );
-                  },
-                );
-                // return RiverPagedBuilder<int, BookingData>(
-                //
-                //     provider: bookingProvider,
-                //     pagedBuilder: (controller, builder) => PagedListView(
-                //         shrinkWrap: true,
-                //         pagingController: controller,
-                //         builderDelegate: builder),
-                //     itemBuilder: (context, item, index) {
-                //       return HistoryItem(
-                //         booking: item,
-                //       );
-                //     },
-                //     firstPageKey: 1);
-              }),
-            ],
-          ),
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        child: Column(
+          children: [
+            PageHeader(
+              svgIconPath: 'icons/history.svg',
+              pageDescription: sampleText,
+              pageName: 'History',),
+            const SizedBox(
+              height: 32,
+            ),
+            Consumer(builder: (context, ref, child) {
+              final bookingHistoryController =
+              ref.watch(bookingHistoryControllerProvider);
+              return AsyncValueWidget(
+                value: bookingHistoryController,
+                data: (historyBookingList) {
+                  return historyBookingList == null ? const Text("No data") : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: historyBookingList.rows?.length,
+                    itemBuilder: (context, index){
+                      return HistoryItem(booking: historyBookingList.rows![index],);
+                    },
+                  );
+                },
+              );
+              // return RiverPagedBuilder<int, BookingData>(
+              //
+              //     provider: bookingProvider,
+              //     pagedBuilder: (controller, builder) => PagedListView(
+              //         shrinkWrap: true,
+              //         pagingController: controller,
+              //         builderDelegate: builder),
+              //     itemBuilder: (context, item, index) {
+              //       return HistoryItem(
+              //         booking: item,
+              //       );
+              //     },
+              //     firstPageKey: 1);
+            }),
+          ],
         ),
       ),
     );

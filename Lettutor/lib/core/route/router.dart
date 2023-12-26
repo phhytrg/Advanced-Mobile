@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/advertising/advertising.dart';
+import 'package:lettutor/app/courses/presentation/courses_page.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
-import 'package:lettutor/core/presentation/advertising/advertising.dart';
+import 'package:lettutor/core/commom-widgets/app_scaffold.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 
 import '../../app/login/presentation/login.dart';
@@ -51,46 +54,64 @@ enum AppRoute {
 }
 
 final goRouterProvider = Provider<GoRouter>((ref){
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  final _shellNavigatorKey = GlobalKey<NavigatorState>();
   final authState = ref.watch(authStateProvider);
   return GoRouter(
+      navigatorKey: _rootNavigatorKey,
       initialLocation: '/',
       routes: [
+        ShellRoute(
+          routes: [
+            GoRoute(
+              path: '/login',
+              name: AppRoute.login.name,
+              builder: (context, state) => LoginPage(),
+            ),
+            GoRoute(
+              path: '/signup',
+              name: AppRoute.signup.name,
+              builder: (context, state) => SignupPage(),
+            ),
+            GoRoute(
+              path: '/tutors',
+              name: AppRoute.tutorsList.name,
+              builder: (context, state) => TutorsPage(),
+            ),
+            GoRoute(
+              path: '/tutor/:id',
+              name: AppRoute.tutor.name,
+              builder: (context, state) => TutorPage(
+                tutorId: state.pathParameters['id'] ?? '',
+              ),
+            ),
+            GoRoute(
+              path: AppRoute.bookingStudents.getString(),
+              name: AppRoute.bookingStudents.name,
+              builder: (context, state) => BookingStudentPage(),
+            ),
+            GoRoute(
+              path: AppRoute.history.getString(),
+              name: AppRoute.history.name,
+              builder: (context, state) => const HistoryPage(),
+            ),
+            GoRoute(
+              path: AppRoute.courses.getString(),
+              name: AppRoute.courses.name,
+              builder: (context, state) => const CoursesPage(),
+            ),
+          ],
+          navigatorKey: _shellNavigatorKey,
+          builder: (context, state, child) {
+            return AppScaffold(
+              child: child,
+            );
+          }
+        ),
         GoRoute(
           path: '/',
           name: 'advertising',
           builder: (context, state) => AdvertisingPage(),
-        ),
-        GoRoute(
-          path: '/login',
-          name: AppRoute.login.name,
-          builder: (context, state) => LoginPage(),
-        ),
-        GoRoute(
-          path: '/signup',
-          name: AppRoute.signup.name,
-          builder: (context, state) => SignupPage(),
-        ),
-        GoRoute(
-          path: '/tutors',
-          name: AppRoute.tutorsList.name,
-          builder: (context, state) => TutorsPage(),
-        ),
-        GoRoute(
-          path: '/tutor/:id',
-          name: AppRoute.tutor.name,
-          builder: (context, state) => TutorPage(
-            tutorId: state.pathParameters['id'] ?? '',
-          ),
-        ),
-        GoRoute(
-          path: AppRoute.bookingStudents.getString(),
-          name: AppRoute.bookingStudents.name,
-          builder: (context, state) => BookingStudentPage(),
-        ),
-        GoRoute(
-          path: AppRoute.history.getString(),
-          name: AppRoute.history.name,
-          builder: (context, state) => HistoryPage(),
         ),
       ],
       // redirect: (context, state) {

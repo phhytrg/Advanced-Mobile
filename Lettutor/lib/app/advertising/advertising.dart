@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/core/commom-widgets/appbar.dart';
+import 'package:lettutor/core/constant.dart';
+import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
-
-import '../../commom-widgets/appbar.dart';
-import '../../constant.dart';
-import '../../route/router.dart';
 
 
 class AdvertisingPage extends ConsumerWidget {
@@ -90,7 +89,7 @@ class AdvertisingPage extends ConsumerWidget {
                         child: Column(
                           children: [
                             Image(
-                              image: Image.asset('images/communication.jpg').image,
+                              image: Image.asset('assets/images/communication.jpg').image,
                               height: MediaQuery.of(context).size.width / 2,
                               fit: BoxFit.fill,
                             ),
@@ -136,7 +135,7 @@ class AdvertisingPage extends ConsumerWidget {
                           children: [
                             Image(
                               image:
-                                  Image.asset('images/communication.jpg').image,
+                                  Image.asset('assets/images/communication.jpg').image,
                               width: MediaQuery.of(context).size.width / 2.5,
                               fit: BoxFit.fitWidth,
                             ),

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
@@ -11,32 +9,18 @@ import '../../../core/constant.dart';
 import 'courses_tab.dart';
 
 class CoursesPage extends StatelessWidget {
-  CoursesPage({super.key});
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  const CoursesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    double width = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: LettutorAppbar(
-        onMenuIconPressed: (){
-          _scaffoldKey.currentState?.openEndDrawer();
-        },
-      ),
-      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              CoursesHeader(),
-              CoursesNavigation(),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            CoursesHeader(),
+            CoursesNavigation(),
+          ],
         ),
       ),
     );
@@ -44,14 +28,11 @@ class CoursesPage extends StatelessWidget {
 }
 
 class CoursesHeader extends StatelessWidget {
-  final levelsDropdownMenu = <DropdownMenuEntry<String>>[
-  ];
+  final levelsDropdownMenu = <DropdownMenuEntry<String>>[];
 
-  final categoriesDropdownMenu = <DropdownMenuEntry<String>>[
-  ];
+  final categoriesDropdownMenu = <DropdownMenuEntry<String>>[];
 
-  final sortDropdownMenu = <DropdownMenuEntry<String>>[
-  ];
+  final sortDropdownMenu = <DropdownMenuEntry<String>>[];
 
   CoursesHeader({super.key});
 
@@ -64,7 +45,11 @@ class CoursesHeader extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              SvgPicture.asset('icons/course.svg', width: 96, fit: BoxFit.scaleDown,),
+              SvgPicture.asset(
+                'icons/course.svg',
+                width: 96,
+                fit: BoxFit.scaleDown,
+              ),
               const SizedBox(
                 width: 16,
               ),
@@ -72,9 +57,12 @@ class CoursesHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Discover Courses', style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),),
+                    Text(
+                      'Discover Courses',
+                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
+                    ),
                     const SizedBox(
                       height: 8,
                     ),
@@ -92,21 +80,17 @@ class CoursesHeader extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('LiveTutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.'),
+          child: Text(
+              'LiveTutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.'),
         ),
-        LayoutBuilder(builder: (context, constraints){
-          if(constraints.maxWidth > mobileWidth){
+        LayoutBuilder(builder: (context, constraints) {
+          if (constraints.maxWidth > mobileWidth) {
             return Row(
               children: [
                 Expanded(
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: _buildMultiSelectDropdownButton(
-                          context,
-                          [],
-                          'Select level'
-                      )
-                  ),
+                      child: _buildMultiSelectDropdownButton(context, [], 'Select level')),
                 ),
                 Expanded(
                   child: Padding(
@@ -115,8 +99,7 @@ class CoursesHeader extends StatelessWidget {
                         context,
                         [],
                         'Select category',
-                      )
-                  ),
+                      )),
                 ),
                 Expanded(
                   child: Padding(
@@ -126,8 +109,7 @@ class CoursesHeader extends StatelessWidget {
                 ),
               ],
             );
-          }
-          else{
+          } else {
             return Column(
               children: [
                 Padding(
@@ -150,12 +132,12 @@ class CoursesHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildMultiSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText){
+  Widget _buildMultiSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText) {
     return Theme(
       data: ThemeData(
         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-          isDense: true,
-        ),
+              isDense: true,
+            ),
       ),
       child: MultiSelectDropDown(
         showClearIcon: true,
@@ -173,7 +155,6 @@ class CoursesHeader extends StatelessWidget {
           radius: 8,
           backgroundColor: Colors.grey.shade300,
           deleteIconColor: Colors.grey.shade600,
-
         ),
         borderRadius: 8,
         optionTextStyle: Theme.of(context).textTheme.bodySmall!,
@@ -185,17 +166,15 @@ class CoursesHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildSingleSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText){
+  Widget _buildSingleSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText) {
     return Theme(
       data: ThemeData(
         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-          isDense: true,
-        ),
+              isDense: true,
+            ),
       ),
       child: MultiSelectDropDown(
-        onOptionSelected: (options) {
-
-        },
+        onOptionSelected: (options) {},
         options: valueItems,
         selectionType: SelectionType.single,
         borderRadius: 8,
@@ -209,5 +188,3 @@ class CoursesHeader extends StatelessWidget {
     );
   }
 }
-
-

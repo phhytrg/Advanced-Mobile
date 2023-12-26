@@ -1,4 +1,3 @@
-
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,80 +13,74 @@ import 'tutor_feedbacks/tutor_feedback.dart';
 import 'tutor_schedule/tutor_schedule.dart';
 
 class TutorPage extends StatelessWidget {
-  TutorPage({super.key, required this.tutorId});
+  const TutorPage({super.key, required this.tutorId});
 
   final String tutorId;
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
 
-    double width = MediaQuery.of(context).size.width;
-    
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: LettutorAppbar(
-        onMenuIconPressed: (){
-          _scaffoldKey.currentState?.openEndDrawer();
-        },
-      ),
-      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraint){
-            if(constraint.maxWidth <= mobileWidth * 2){
-              //This is for mobile
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                child: Column(
-                  children: [
-                    _TutorInfoMobileBody(_buildTutorBriefIntro(context), Container(
-                      color: Colors.black12,
-                      width: double.infinity,
-                      height: 300,
-                    )),
-                    _TutorDetailMobileBody(
-                      tutorDetailInfo: _buildTutorDetail(context),
-                      schedule: BookingSchedule(tutorId: tutorId,),
-                    ),
-                    _PartInfo(
-                      partTitle: 'Others review',
-                      partDescription: TutorFeedback(tutorId: tutorId,),
-                    )
-                  ],
-                ),
-              );
-            }
-            else{
-              //This this for desktop
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
-                child: Column(
-                  children: [
-                    _TutorInfoDesktopBody(
+    return SingleChildScrollView(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraint) {
+          if (constraint.maxWidth <= mobileWidth * 2) {
+            //This is for mobile
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Column(
+                children: [
+                  _TutorInfoMobileBody(
                       _buildTutorBriefIntro(context),
                       Container(
                         color: Colors.black12,
                         width: double.infinity,
                         height: 300,
                       )),
-                    _TutorDetailDesktopBody(
+                  _TutorDetailMobileBody(
+                    tutorDetailInfo: _buildTutorDetail(context),
+                    schedule: BookingSchedule(
+                      tutorId: tutorId,
+                    ),
+                  ),
+                  _PartInfo(
+                    partTitle: 'Others review',
+                    partDescription: TutorFeedback(
+                      tutorId: tutorId,
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else {
+            //This this for desktop
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
+              child: Column(
+                children: [
+                  _TutorInfoDesktopBody(
+                      _buildTutorBriefIntro(context),
+                      Container(
+                        color: Colors.black12,
+                        width: double.infinity,
+                        height: 300,
+                      )),
+                  _TutorDetailDesktopBody(
                       tutorDetailInfo: _buildTutorDetail(context),
                       schedule: BookingSchedule(
                         tutorId: tutorId,
                       )),
-                    _PartInfo(
-                      partTitle: 'Others review',
-                      partDescription: TutorFeedback(tutorId: tutorId,),
-                    )
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      )
+                  _PartInfo(
+                    partTitle: 'Others review',
+                    partDescription: TutorFeedback(
+                      tutorId: tutorId,
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -113,9 +106,12 @@ class TutorPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(tutor!.user!.name!, style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),),
+                        Text(
+                          tutor!.user!.name!,
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                         Row(
                           children: [
                             Icon(Icons.star),
@@ -206,7 +202,8 @@ class TutorPage extends StatelessWidget {
                     runSpacing: 8,
                     spacing: 8,
                     children: [
-                      for(var value in TutorUtils.extractSpecialties(tutor?.specialties ?? '')) OutlinedText(text: value),
+                      for (var value in TutorUtils.extractSpecialties(tutor?.specialties ?? ''))
+                        OutlinedText(text: value),
                     ],
                   ),
                   partTitle: 'Specialties',
@@ -231,15 +228,11 @@ class TutorPage extends StatelessWidget {
                 ),
                 _PartInfo(
                   partTitle: 'Interests',
-                  partDescription: tutor?.interests != null
-                    ? Text(tutor!.interests!)
-                    : Text('No data'),
+                  partDescription: tutor?.interests != null ? Text(tutor!.interests!) : Text('No data'),
                 ),
                 _PartInfo(
                   partTitle: 'Teaching experiences',
-                  partDescription: tutor?.experience != null
-                      ? Text(tutor!.experience!)
-                      : const Text('No data'),
+                  partDescription: tutor?.experience != null ? Text(tutor!.experience!) : const Text('No data'),
                 ),
               ],
             );
@@ -250,10 +243,7 @@ class TutorPage extends StatelessWidget {
   }
 }
 
-
-
-class _TutorInfoMobileBody extends StatelessWidget{
-
+class _TutorInfoMobileBody extends StatelessWidget {
   final Widget tutorBriefIntro;
 
   final Widget tutorIntroVideo;
@@ -274,8 +264,7 @@ class _TutorInfoMobileBody extends StatelessWidget{
   }
 }
 
-class _TutorInfoDesktopBody extends StatelessWidget{
-
+class _TutorInfoDesktopBody extends StatelessWidget {
   final Widget tutorBriefIntro;
 
   final Widget tutorIntroVideo;
@@ -287,20 +276,23 @@ class _TutorInfoDesktopBody extends StatelessWidget{
     return Column(
       children: [
         tutorBriefIntro,
-        const SizedBox(height: 16,),
+        const SizedBox(
+          height: 16,
+        ),
         tutorIntroVideo,
-        const SizedBox(height: 16,),
+        const SizedBox(
+          height: 16,
+        ),
       ],
     );
   }
 }
 
-
 class _TutorDetailMobileBody extends StatelessWidget {
   final Widget tutorDetailInfo;
   final Widget schedule;
 
-  const _TutorDetailMobileBody({super.key,required this.tutorDetailInfo,required this.schedule});
+  const _TutorDetailMobileBody({super.key, required this.tutorDetailInfo, required this.schedule});
 
   @override
   Widget build(BuildContext context) {
@@ -315,9 +307,9 @@ class _TutorDetailMobileBody extends StatelessWidget {
 }
 
 class _TutorDetailDesktopBody extends StatelessWidget {
-
   final Widget tutorDetailInfo;
   final Widget schedule;
+
   const _TutorDetailDesktopBody({super.key, required this.tutorDetailInfo, required this.schedule});
 
   @override
@@ -325,17 +317,23 @@ class _TutorDetailDesktopBody extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(flex: 1,child: tutorDetailInfo,),
-        Expanded(flex: 3,child: schedule,),
+        Expanded(
+          flex: 1,
+          child: tutorDetailInfo,
+        ),
+        Expanded(
+          flex: 3,
+          child: schedule,
+        ),
       ],
     );
   }
 }
 
 class _PartInfo extends StatelessWidget {
-
   final String partTitle;
   final Widget partDescription;
+
   const _PartInfo({super.key, required this.partTitle, required this.partDescription});
 
   @override
@@ -343,14 +341,17 @@ class _PartInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(partTitle, style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),),
+        Text(
+          partTitle,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
         partDescription,
-        const SizedBox(height: 16,)
+        const SizedBox(
+          height: 16,
+        )
       ],
     );
   }
 }
-
-

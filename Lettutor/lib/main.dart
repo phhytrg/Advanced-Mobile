@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'configure_nonweb.dart';
 import 'core/route/auth_provider.dart';
 import 'core/route/router.dart';
 
+import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
+
 void main() {
-  configureApp();
+  configureUrl();
   runApp(
     ProviderScope(child: MyApp()),
   );

@@ -1,8 +1,5 @@
 
 
-import 'dart:convert';
-import 'dart:js_interop';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/core/network/network_service.dart';

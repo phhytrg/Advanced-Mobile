@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -49,50 +48,54 @@ class _UpcomingLessonState extends ConsumerState<UpcomingLesson> {
               Expanded(
                 child: AsyncValueWidget(
                   value: upcomingLessonController,
-                  data: (upcomingLesson) { return Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      Builder(
-                        builder: (BuildContext context) {
-                          return Text(
-                            textAlign: TextAlign.center,
-                              MyDateUtils.getWeekDayMonthYear(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      upcomingLesson![0]
-                                          .scheduleDetailInfo!
-                                          .startPeriodTimestamp!)),
+                  data: (upcomingLesson) {
+                    return Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        Builder(
+                          builder: (BuildContext context) {
+                            return Text(
+                              textAlign: TextAlign.center,
+                              MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(
+                                  upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp!)),
                               style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          );
-                        },
-                      ),
-                      Builder(
-                        builder: (context) {
-                          timeLeft = upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp! - DateTime.now().millisecondsSinceEpoch;
-                          Timer.periodic(Duration(seconds: 1), (timer) {setState(() {
-                            timeLeft -= 1000;
-                          }); });
-                          int minutes = timeLeft ~/ 60000 % 60;
-                          int seconds = (timeLeft % 60000) ~/ 1000;
-                          int hours = timeLeft ~/ 3600000;
-                          return Text(
-                            textAlign: TextAlign.center,
-                            '(starts in ${hours < 10 ? 0 : ''}$hours:${minutes < 10 ? 0 : ''}$minutes:${seconds < 10 ? 0 : ''}$seconds)',
-                            style: TextStyle(
-                              color: Colors.yellow[300],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ); },
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            );
+                          },
+                        ),
+                        Builder(
+                          builder: (context) {
+                            timeLeft = upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp! -
+                                DateTime.now().millisecondsSinceEpoch;
+                            Timer.periodic(const Duration(seconds: 1), (timer) {
+                              if(mounted){
+                                setState(() {
+                                  timeLeft -= 1000;
+                                });
+                              }
+                            });
+                            int minutes = timeLeft ~/ 60000 % 60;
+                            int seconds = (timeLeft % 60000) ~/ 1000;
+                            int hours = timeLeft ~/ 3600000;
+                            return Text(
+                              textAlign: TextAlign.center,
+                              '(starts in ${hours < 10 ? 0 : ''}$hours:${minutes < 10 ? 0 : ''}$minutes:${seconds < 10 ? 0 : ''}$seconds)',
+                              style: TextStyle(
+                                color: Colors.yellow[300],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   child: Text(
                     'Enter lesson room',
                   ),
@@ -104,17 +107,17 @@ class _UpcomingLessonState extends ConsumerState<UpcomingLesson> {
             height: 16,
           ),
           AsyncValueWidget(
-            value: totalHoursController,
-            data: (totalHours) {
-              int hours = totalHours ~/ 60;
-              int minutes = totalHours % 60;
-              return Text(
-                'Total lesson time is $hours hours $minutes minutes',
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              );
-            }),
+              value: totalHoursController,
+              data: (totalHours) {
+                int hours = totalHours ~/ 60;
+                int minutes = totalHours % 60;
+                return Text(
+                  'Total lesson time is $hours hours $minutes minutes',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                );
+              }),
         ],
       ),
     );

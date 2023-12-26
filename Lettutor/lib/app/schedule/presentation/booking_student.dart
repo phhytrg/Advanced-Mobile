@@ -11,48 +11,47 @@ import '../../../../core/commom-widgets/tutor_mini_item.dart';
 import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/constant.dart';
 import 'controller/booking_controller.dart';
+
 class BookingStudentPage extends StatelessWidget {
   const BookingStudentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: LettutorAppbar(),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          child: Column(
-            children: [
-              PageHeader(
-                svgIconPath: 'icons/calendar-check.svg',
-                pageDescription: sampleText,
-                pageName: 'Schedule',
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              _buildLatestBook(context),
-              const SizedBox(
-                height: 32,
-              ),
-              BookingListWidget(),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        child: Column(
+          children: [
+            PageHeader(
+              svgIconPath: 'icons/calendar-check.svg',
+              pageDescription: sampleText,
+              pageName: 'Schedule',
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            _buildLatestBook(context),
+            const SizedBox(
+              height: 32,
+            ),
+            BookingListWidget(),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildLatestBook(BuildContext context){
+  Widget _buildLatestBook(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Latest Book',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontWeight: FontWeight.w900
-          ),
+        Text(
+          'Latest Book',
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w900),
         ),
-        SizedBox(height: 16,),
+        SizedBox(
+          height: 16,
+        ),
         Table(
           columnWidths: const {
             0: FlexColumnWidth(1),
@@ -63,44 +62,36 @@ class BookingStudentPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           children: [
-            TableRow(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(8)),
+            TableRow(children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8)),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Name'),
+              ),
+              Table(
+                  defaultColumnWidth: IntrinsicColumnWidth(),
+                  border: TableBorder.symmetric(
+                    inside: BorderSide(
+                      color: Colors.black12,
                     ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text('Name'),
                   ),
-                  Table(
-                      defaultColumnWidth: IntrinsicColumnWidth(),
-                      border: TableBorder.symmetric(
-                        inside: BorderSide(
-                          color: Colors.black12,
-                        ),
-                      ),
-                      children: [
-                        TableRow(
-                            children: [
-                              const Padding(padding: EdgeInsets.all(16.0),
-                                  child: Text('sample.pdf')),
-                              Container(
-                                  padding: const EdgeInsets.all(16.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
-                                  ),
-                                  child: const Text('Page')
-                              ),
-                              Padding(padding: EdgeInsets.all(16.0),
-                                  child: Text('0')),
-                            ]
-                        ),
-                      ]
-                  ),
-                ]
-            ),
+                  children: [
+                    TableRow(children: [
+                      const Padding(padding: EdgeInsets.all(16.0), child: Text('sample.pdf')),
+                      Container(
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
+                          ),
+                          child: const Text('Page')),
+                      Padding(padding: EdgeInsets.all(16.0), child: Text('0')),
+                    ]),
+                  ]),
+            ]),
             TableRow(
               children: [
                 Container(
@@ -133,15 +124,19 @@ class BookingListWidget extends ConsumerWidget {
 
     return AsyncValueWidget<BookingList?>(
       value: bookingList,
-      data: (bookingList){
-        return bookingList == null ? const Text("No data") : ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: bookingList.rows?.length,
-          itemBuilder: (context, index){
-            return BookingItem(bookingData: bookingList.rows![index],);
-          },
-        );
+      data: (bookingList) {
+        return bookingList == null
+            ? const Text("No data")
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: bookingList.rows?.length,
+                itemBuilder: (context, index) {
+                  return BookingItem(
+                    bookingData: bookingList.rows![index],
+                  );
+                },
+              );
       },
     );
   }
@@ -157,7 +152,7 @@ class BookingItem extends StatelessWidget {
     return _buildBookingBody(context);
   }
 
-  Widget _buildLessonLine(BuildContext context){
+  Widget _buildLessonLine(BuildContext context) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.all(8.0),
@@ -169,29 +164,20 @@ class BookingItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text('${MyDateUtils.getHourMinute(
-                        DateTime.fromMillisecondsSinceEpoch(bookingData
-                            .scheduleDetailInfo!.startPeriodTimestamp!))} - ${MyDateUtils.getHourMinute(
-                        DateTime.fromMillisecondsSinceEpoch(bookingData
-                            .scheduleDetailInfo!.endPeriodTimestamp!))}'),
+                child: Text(
+                    '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!))} - ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.endPeriodTimestamp!))}'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
-                    onPressed: (){},
-                    style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        side: BorderSide(
-                            color: Colors.red
-                        )
-                    ),
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(foregroundColor: Colors.red, side: BorderSide(color: Colors.red)),
                     child: Row(
                       children: [
                         Icon(Icons.cancel),
                         Text('Cancel'),
                       ],
-                    )
-                ),
+                    )),
               ),
             ],
           ),
@@ -211,25 +197,22 @@ class BookingItem extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Request for lesson'),
-                    MyTextButton(child: Text('Edit Request'))
-                  ],
+                  children: [Text('Request for lesson'), MyTextButton(child: Text('Edit Request'))],
                 ),
                 expandedAlignment: Alignment.centerLeft,
                 children: [
                   Container(
-                      color: Colors.white,
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    color: Colors.white,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: bookingData.studentRequest == null
                         ? Text(
                             'Currently there are no requests for this class. '
-                                'Please write down any requests for the teacher.',
-                      style: TextStyle(
-                        color: Colors.grey.shade400,
-                      ),
-                    )
+                            'Please write down any requests for the teacher.',
+                            style: TextStyle(
+                              color: Colors.grey.shade400,
+                            ),
+                          )
                         : Text(bookingData.studentRequest!),
                   )
                 ],
@@ -241,7 +224,7 @@ class BookingItem extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomRight,
               child: OutlinedButton(
-                onPressed: () {  },
+                onPressed: () {},
                 child: Text('Go to meeting'),
               ),
             ),
@@ -251,9 +234,9 @@ class BookingItem extends StatelessWidget {
     );
   }
 
-  Widget _buildBookingBody(BuildContext context){
-    return LayoutBuilder(builder: (context, constrainst){
-      if(constrainst.maxWidth <= mobileWidth * 2){
+  Widget _buildBookingBody(BuildContext context) {
+    return LayoutBuilder(builder: (context, constrainst) {
+      if (constrainst.maxWidth <= mobileWidth * 2) {
         return Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -262,13 +245,15 @@ class BookingItem extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Container(child: _buildBookingItemHeader(context), width: double.infinity,),
+              Container(
+                child: _buildBookingItemHeader(context),
+                width: double.infinity,
+              ),
               _buildLessonLine(context),
             ],
           ),
         );
-      }
-      else{
+      } else {
         return Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -286,7 +271,7 @@ class BookingItem extends StatelessWidget {
     });
   }
 
-  Widget _buildBookingItemHeader(BuildContext context){
+  Widget _buildBookingItemHeader(BuildContext context) {
     return Wrap(
       alignment: WrapAlignment.spaceAround,
       crossAxisAlignment: WrapCrossAlignment.start,
@@ -297,19 +282,20 @@ class BookingItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!)),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                ),
+              Text(
+                MyDateUtils.getWeekDayMonthYear(
+                    DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!)),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(),
               ),
               Text('1 lesson'),
             ],
           ),
         ),
-        TutorMiniItem(tutorName: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!, tutorCountry: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!, tutorAvatar: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
+        TutorMiniItem(
+            tutorName: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!,
+            tutorCountry: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!,
+            tutorAvatar: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
       ],
     );
   }
 }
-
-
-

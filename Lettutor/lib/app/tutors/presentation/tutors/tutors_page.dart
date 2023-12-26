@@ -22,74 +22,61 @@ class TutorsPage extends ConsumerStatefulWidget {
 
 class _TutorsPageState extends ConsumerState<TutorsPage> {
   final List<String> specialties = [];
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final textSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: LettutorAppbar(
-        onMenuIconPressed: () {
-          _scaffoldKey.currentState!.openEndDrawer();
-        },
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          UpcomingLesson(),
+          SizedBox(
+            height: 24,
+          ),
+          _buildTutorsSearchBox(),
+          SizedBox(
+            height: 24,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.only(left: 32),
+            child: Text(
+              'Recommend Tutors',
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .titleLarge,
+            ),
+          ),
+          Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsControllerProvider);
+                return AsyncValueWidget<TutorList?>(
+                  value: tutorsState,
+                  data: (tutorsList) {
+                    return Container(
+                      margin: const EdgeInsets.only(left: 32, right: 32),
+                      child: Wrap(
+                        alignment: WrapAlignment.start,
+                        spacing: 16,
+                        runSpacing: 12,
+                        children: [
+                          for (var tutor in tutorsList!.rows!)
+                            TutorItem(
+                              tutor: tutor,
+                            )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }),
+          const SizedBox(
+            height: 108,
+          ),
+        ],
       ),
-      endDrawer: width - 40 <= titleWidth ? LettutorDrawer() : null,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            UpcomingLesson(),
-            SizedBox(
-              height: 24,
-            ),
-            _buildTutorsSearchBox(),
-            SizedBox(
-              height: 24,
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 32),
-              child: Text(
-                'Recommend Tutors',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge,
-              ),
-            ),
-            Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsControllerProvider);
-                  return AsyncValueWidget<TutorList?>(
-                    value: tutorsState,
-                    data: (tutorsList) {
-                      return Container(
-                        margin: const EdgeInsets.only(left: 32, right: 32),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          spacing: 16,
-                          runSpacing: 12,
-                          children: [
-                            for (var tutor in tutorsList!.rows!)
-                              TutorItem(
-                                tutor: tutor,
-                              )
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }),
-            const SizedBox(
-              height: 108,
-            ),
-          ],
-        ),
-      ),
+
     );
   }
 
