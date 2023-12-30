@@ -1,23 +1,24 @@
 
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/app/login/data/auth_repository.dart';
-import 'package:lettutor/app/login/domain/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:lettutor/app/auth/data/token_repository.dart';
 
-class AuthState{
+final authStateProvider = ChangeNotifierProvider<AuthState>((ref) {
+  return AuthState();
+});
 
-  bool isAuthenticated = false;
-  @override
-  FutureOr<bool?> build() {
-    return null;
+
+class AuthState extends ChangeNotifier {
+  bool loggedIn = false;
+
+  void login() {
+    loggedIn = true;
+    notifyListeners();
   }
 
-  void setAuthenticated(bool isAuthenticated){
-    this.isAuthenticated = isAuthenticated;
+  void logout() {
+    loggedIn = false;
+    notifyListeners();
   }
 }
-
-final authStateProvider = StateProvider<User?>((ref) {
-  return null;
-});

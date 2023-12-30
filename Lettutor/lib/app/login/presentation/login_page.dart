@@ -3,8 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
+import 'package:lettutor/core/route/router.dart';
 
 import '../../../core/commom-widgets/appbar.dart';
 import '../domain/user.dart';
@@ -30,14 +32,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void onForgotPasswordClick() {
-    Navigator.pushNamed(context, '/reset-password');
+    context.go(AppRoute.resetPassword.getPath());
   }
 
   void onSignupClick() {
-    // Navigator.pushNamed(
-    //     context,
-    //     '/signup'
-    // );
+    context.go(AppRoute.signup.getPath());
   }
 
   @override
@@ -230,8 +229,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 .login(emailController.text,
                                     passwordController.text);
                             if (mounted && result != null) {
-                              ref.read(authStateProvider.notifier).state =
-                                  User(id: '1');
+                              ref.read(authStateProvider).login();
+                              context.go('/tutors');
                             }
                           }
                         },
@@ -248,14 +247,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
-            Text(
+            const Text(
               "Or continue with",
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Row(

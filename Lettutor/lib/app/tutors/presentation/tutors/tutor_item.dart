@@ -26,7 +26,6 @@ class _TutorItemState extends State<TutorItem> {
 
   @override
   Widget build(BuildContext context) {
-    // isFavorite = widget.tutor.isFavoriteTutor!;
 
     return InkWell(
       onTap: () {

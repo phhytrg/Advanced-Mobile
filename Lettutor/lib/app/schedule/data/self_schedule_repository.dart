@@ -2,13 +2,17 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/core/network/network_service.dart';
+import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
+import 'package:lettutor/core/dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../domain/booking_list_reponse/booking_list_response.dart';
+part 'self_schedule_repository.g.dart';
 
 class SelfScheduleRepository{
-  Dio dio = NetworkService.instance.dio;
+  final Dio dio;
   String baseUrl = "/booking";
+
+  SelfScheduleRepository({required this.dio});
 
   Future<bool> bookSchedule(String scheduleDetailId, String note) async{
     Response response;
@@ -75,6 +79,7 @@ class SelfScheduleRepository{
   }
 }
 
-final selfScheduleRepositoryProvider = Provider<SelfScheduleRepository>((ref) {
-  return SelfScheduleRepository();
-});
+@Riverpod(keepAlive: true)
+SelfScheduleRepository selfScheduleRepository(SelfScheduleRepositoryRef ref){
+  return SelfScheduleRepository(dio: ref.read(dioProvider));
+}

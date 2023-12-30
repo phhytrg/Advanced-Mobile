@@ -119,7 +119,7 @@ class AdvertisingPage extends ConsumerWidget {
                             ),
                             FilledButton(
                                 onPressed: () {
-                                  ref.read(goRouterProvider).goNamed(RoutePath.login.name);
+                                  ref.read(routerGeneratorProvider).goNamed(RoutePath.login.name);
                                 },
                                 child: Text("Get Started"),
                                 style: FilledButton.styleFrom(
@@ -172,12 +172,12 @@ class AdvertisingPage extends ConsumerWidget {
                                   ),
                                   FilledButton(
                                       onPressed: () {
-                                        ref.read(goRouterProvider).goNamed(RoutePath.login.name);
+                                        context.pushReplacement(RoutePath.login.getString());
                                       },
-                                      child: Text("Get Started"),
                                       style: FilledButton.styleFrom(
                                         backgroundColor: Colors.orange.shade900,
-                                      )),
+                                      ),
+                                      child: const Text("Get Started")),
                                 ],
                               ),
                             ),

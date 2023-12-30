@@ -1,15 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/app/login/data/user_repository.dart';
 import 'package:lettutor/app/tutors/domain/payload/search_payload.dart';
-import 'package:lettutor/app/tutors/domain/tutors.dart';
-import 'package:lettutor/core/network/network_service.dart';
+import 'package:lettutor/core/dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:lettutor/app/tutors/domain/response/tutor.dart';
+import 'package:lettutor/app/tutors/domain/response/tutor_list.dart';
 
-import '../domain/favorite_tutor.dart';
-import '../domain/response/tutor.dart';
-import '../domain/response/tutor_list.dart';
-import '../domain/tutorsList.dart';
+part 'tutor_repository.g.dart';
 
 abstract class BaseTutorRepository {
   Future<TutorList?> fetchTutorsWithPagination(int perPage, String page);
@@ -20,8 +16,10 @@ abstract class BaseTutorRepository {
 }
 
 class TutorRepository implements BaseTutorRepository {
-  Dio dio = NetworkService.instance.dio;
+  final Dio dio;
   final String path = "/tutor";
+
+  TutorRepository({required this.dio});
 
   @override
   Future<TutorList?> fetchTutorsWithPagination(int perPage, String page) async {
@@ -53,6 +51,7 @@ class TutorRepository implements BaseTutorRepository {
   }
 }
 
-final tutorRepositoryProvider = Provider<BaseTutorRepository>((ref) {
-  return TutorRepository();
-});
+@Riverpod(keepAlive: true)
+TutorRepository tutorRepository(TutorRepositoryRef ref) {
+  return TutorRepository(dio: ref.read(dioProvider));
+}

@@ -55,6 +55,8 @@ dependencies:
   omni_datetime_picker: ^1.0.9
   easy_date_timeline: ^1.0.2
   infinite_scroll_pagination: ^4.0.0
+  flutter_secure_storage: ^9.0.0
+  jwt_decoder: ^2.0.1
 
   # Paid Packet
 #  syncfusion_flutter_pdfviewer: ^23.1.42

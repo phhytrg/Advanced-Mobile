@@ -1,9 +1,5 @@
 
-
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/user_profile/domain/user.dart';
-import 'package:lettutor/core/network/network_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/user_repository.dart';

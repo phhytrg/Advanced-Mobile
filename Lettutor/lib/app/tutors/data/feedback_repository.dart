@@ -1,14 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../core/network/network_service.dart';
+import 'package:lettutor/core/dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../domain/feedback/feedback.dart';
+
+part 'feedback_repository.g.dart';
 
 class FeedbackRepository {
 
-  final Dio dio = NetworkService.instance.dio;
+  final Dio dio;
   final String baseUrl = "/feedback/v2";
+
+  FeedbackRepository({required this.dio});
 
   Future<FeedbackList?> getFeedback(String tutorId, int page, int perPage) async {
     Response response = await dio.get(
@@ -23,6 +25,7 @@ class FeedbackRepository {
   }
 }
 
-final feedbackRepositoryProvider = Provider<FeedbackRepository>((ref) {
-  return FeedbackRepository();
-});
+@Riverpod(keepAlive: true)
+FeedbackRepository feedbackRepository(FeedbackRepositoryRef ref) {
+  return FeedbackRepository(dio: ref.read(dioProvider));
+}

@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:lettutor/app/auth/data/auth_repository.dart';
+import 'package:lettutor/app/login/domain/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/user.dart';
-import '../../data/auth_repository.dart';
 part 'login_controller.g.dart';
 
 

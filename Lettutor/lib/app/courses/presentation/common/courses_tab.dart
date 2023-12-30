@@ -188,7 +188,7 @@ class CourseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        GoRouter.of(context).pushNamed(AppRoute.courses.name, queryParameters: {
+        context.goNamed(AppRoute.courseInfo.name, pathParameters: {
           'id': course.id.toString(),
         });
       },

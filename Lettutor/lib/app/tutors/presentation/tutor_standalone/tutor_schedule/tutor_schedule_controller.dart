@@ -19,7 +19,6 @@ class TutorScheduleController extends _$TutorScheduleController{
     state = const AsyncLoading();
     state = await AsyncValue.guard<List<ScheduleOfTutor>?>(() =>
         tutorService.getTutorSchedule(tutorId, page));
-
     return state.valueOrNull;
   }
 

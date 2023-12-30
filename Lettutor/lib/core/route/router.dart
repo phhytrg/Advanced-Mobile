@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/advertising/advertising.dart';
+import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
+import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
+import 'package:lettutor/app/courses/presentation/pdf_viewer_page.dart';
+import 'package:lettutor/app/login/presentation/reset_password.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
 import 'package:lettutor/core/commom-widgets/app_scaffold.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../app/login/presentation/login.dart';
+import '../../app/login/presentation/login_page.dart';
 import '../../app/tutors/presentation/tutor_standalone/tutor_page.dart';
 import '../../app/tutors/presentation/tutors/tutors_page.dart';
+
+part 'router.g.dart';
 
 enum AppRoute {
   bookingStudents,
@@ -23,9 +30,12 @@ enum AppRoute {
   courseDetail,
   login,
   signup,
+  courseTopics,
+  pdfViewer,
+  advertising,
   resetPassword;
 
-  String getString() {
+  String getPath() {
     switch (this) {
       case AppRoute.bookingStudents:
         return '/booking-student';
@@ -47,22 +57,47 @@ enum AppRoute {
         return '/signup';
       case AppRoute.resetPassword:
         return '/reset-password';
-      default:
+      case AppRoute.courseTopics:
+        return '/course-topics';
+      case AppRoute.pdfViewer:
+        return '/pdf-viewer';
+      case AppRoute.advertising:
         return '/';
     }
   }
 }
 
-final goRouterProvider = Provider<GoRouter>((ref) {
-  final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _shellNavigatorKey = GlobalKey<NavigatorState>();
+@Riverpod(keepAlive: true)
+GoRouter routerGenerator(RouterGeneratorRef ref) {
+  final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final shellNavigatorKey = GlobalKey<NavigatorState>();
   final authState = ref.watch(authStateProvider);
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
+    refreshListenable: authState,
+    redirect: (context, state) {
+      List<String>unAuthoredRoutes = [
+        AppRoute.login.getPath(),
+        AppRoute.signup.getPath(),
+        AppRoute.resetPassword.getPath(),
+        AppRoute.advertising.getPath(),
+      ];
+      if (authState.loggedIn == false) {
+        if (!unAuthoredRoutes.contains(state.matchedLocation)) {
+          return AppRoute.login.getPath();
+        }
+        return null;
+      } else {
+        if (unAuthoredRoutes.contains(state.matchedLocation)) {
+          return AppRoute.tutorsList.getPath();
+        }
+        return null;
+      }
+    },
     routes: [
       ShellRoute(
-          navigatorKey: _shellNavigatorKey,
+          navigatorKey: shellNavigatorKey,
           routes: [
             GoRoute(
               path: '/tutors',
@@ -77,27 +112,53 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               ),
             ),
             GoRoute(
-              path: AppRoute.bookingStudents.getString(),
+              path: AppRoute.bookingStudents.getPath(),
               name: AppRoute.bookingStudents.name,
               builder: (context, state) => BookingStudentPage(),
             ),
             GoRoute(
-              path: AppRoute.history.getString(),
+              path: AppRoute.history.getPath(),
               name: AppRoute.history.name,
               builder: (context, state) => HistoryPage(),
             ),
             GoRoute(
-              path: AppRoute.courses.getString(),
+              path: AppRoute.courses.getPath(),
               name: AppRoute.courses.name,
-              builder: (context, state) => CoursesPage(),
-            )
+              builder: (context, state) {
+                return CoursesPage();
+              },
+            ),
+            GoRoute(
+              path: AppRoute.pdfViewer.getPath(),
+              name: AppRoute.pdfViewer.name,
+              builder: (context, state) {
+                return PdfViewerPage();
+              },
+            ),
+            GoRoute(
+                path: '/course-info/:id',
+                name: AppRoute.courseInfo.name,
+                builder: (context, state) => CourseStandalonePage(
+                      courseId: state.pathParameters['id'] ?? '',
+                    )
+            ),
+            // GoRoute(
+            //   path: AppRoute.courseDetail.getString(),
+            //   name: AppRoute.courseDetail.name,
+            //   builder: (context, state) => CourseDetailPage(),
+            // ),
+            GoRoute(
+              path: AppRoute.courseTopics.getPath(),
+              name: AppRoute.courseTopics.name,
+              builder: (context, state) => CourseTopicsPage(),
+            ),
           ],
           builder: (context, state, child) {
             return AppScaffold(child: child);
           }),
       GoRoute(
-        path: '/',
-        name: 'advertising',
+        path: AppRoute.advertising.getPath(),
+        name: AppRoute.advertising.name,
         builder: (context, state) => AdvertisingPage(),
       ),
       GoRoute(
@@ -110,25 +171,43 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoute.signup.name,
         builder: (context, state) => SignupPage(),
       ),
+      GoRoute(
+        path: '/reset-password',
+        name: AppRoute.resetPassword.name,
+        builder: (context, state) => ResetPasswordPage(),
+      ),
     ],
     // redirect: (context, state) {
-    //   if(authState == null) {
-    //     if(state.matchedLocation != RoutePath.login.getString() && state.matchedLocation != '/'){
-    //       return RoutePath.login.getString();
+    //   authState.whenData((isAuthenticated) {
+    //     if (isAuthenticated == false) {
+    //       if (state.matchedLocation != AppRoute.login.getString() && state.matchedLocation != '/') {
+    //         GoRouter.of(context).pushReplacement(AppRoute.login.getString());
+    //       }
+    //     } else {
+    //       if (state.matchedLocation == AppRoute.login.getString() || state.matchedLocation == '/') {
+    //         context.pushReplacement(AppRoute.tutorsList.getString());
+    //       }
     //     }
-    //     else{
-    //       return null;
-    //     }
-    //   }
-    //   else{
-    //     if(state.matchedLocation == RoutePath.login.getString() || state.matchedLocation == '/'){
-    //       return AppRoute.tutorsList.getString();
-    //     }
-    //     else{
-    //       return null;
-    //     }
-    //   }
+    //   });
     //   return null;
+    // },
+    //   return null;
+    //   // if(authState == null) {
+    //   //   if(state.matchedLocation != AppRoute.login.getString() && state.matchedLocation != '/'){
+    //   //     return AppRoute.login.getString();
+    //   //   }
+    //   //   else{
+    //   //     return null;
+    //   //   }
+    //   // }
+    //   // else{
+    //   //   if(state.matchedLocation == AppRoute.login.getString() || state.matchedLocation == '/'){
+    //   //     return AppRoute.tutorsList.getString();
+    //   //   }
+    //   //   else{
+    //   //     return null;
+    //   //   }
+    //   // }
     // }
   );
-});
+}

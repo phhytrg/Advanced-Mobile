@@ -1,14 +1,17 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/courses/domain/ebook.dart';
-import 'package:lettutor/core/network/network_service.dart';
+import 'package:lettutor/core/dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'ebook_repository.g.dart';
 
 class EbookRepository{
   String baseUrl = "/e-book";
+  final Dio dio;
 
-  final dio = NetworkService.instance.dio;
+  EbookRepository({required this.dio});
 
   Future<EbookList> fetchEbook(int page, int perPage) async {
     Response response = await dio.get(
@@ -24,6 +27,7 @@ class EbookRepository{
   }
 }
 
-final ebookRepositoryProvider = Provider<EbookRepository>((ref) {
-  return EbookRepository();
-});
+@Riverpod(keepAlive: true)
+EbookRepository ebookRepository(EbookRepositoryRef ref) {
+  return EbookRepository(dio: ref.read(dioProvider));
+}

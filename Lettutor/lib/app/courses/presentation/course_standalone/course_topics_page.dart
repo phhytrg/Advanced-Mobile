@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/courses/presentation/common/pdf_viewer.dart';
 import 'package:lettutor/app/courses/presentation/pdf_viewer_page.dart';
 import 'package:lettutor/core/commom-widgets/appbar.dart';
 import 'package:lettutor/core/commom-widgets/drawer.dart';
 import 'package:lettutor/core/constant.dart';
+import 'package:lettutor/core/route/router.dart';
 
-class CourseDetailPage extends StatefulWidget {
-  const CourseDetailPage({super.key});
+class CourseTopicsPage extends StatefulWidget {
+  const CourseTopicsPage({super.key});
 
   @override
-  State<CourseDetailPage> createState() => _CourseDetailPageState();
+  State<CourseTopicsPage> createState() => _CourseTopicsPageState();
 }
 
-class _CourseDetailPageState extends State<CourseDetailPage> {
+class _CourseTopicsPageState extends State<CourseTopicsPage> {
 
   var _selectedIndex;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -116,13 +118,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       });
 
                       if(MediaQuery.of(context).size.width <= mobileWidth){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const PdfViewerPage()),
-                        );
+                        context.goNamed(AppRoute.courseTopics.name);
                       }
                       else{
-
+                        context.goNamed(AppRoute.pdfViewer.name);
                       }
                     },
                   );

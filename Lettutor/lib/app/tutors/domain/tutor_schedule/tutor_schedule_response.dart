@@ -24,7 +24,7 @@ class ScheduleOfTutor {
   String? startTime;
   int? startTimestamp;
   int? endTimestamp;
-  String? createAt;
+  String? createdAt;
   bool? isBooked;
   List<ScheduleDetail>? scheduleDetails;
 
@@ -34,7 +34,7 @@ class ScheduleOfTutor {
       this.startTime,
       this.startTimestamp,
       this.endTimestamp,
-      this.createAt,
+      this.createdAt,
       this.isBooked,
       this.scheduleDetails});
 
@@ -52,8 +52,8 @@ class ScheduleDetail {
   String? scheduleId;
   String? startPeriod;
   String? endPeriod;
-  String? createAt;
-  String? updateAt;
+  String? createdAt;
+  String? updatedAt;
   List<BookingInfo>? bookingInfo;
   bool? isBooked;
 
@@ -66,8 +66,8 @@ class ScheduleDetail {
       this.scheduleId,
       this.startPeriod,
       this.endPeriod,
-      this.createAt,
-      this.updateAt,
+      this.createdAt,
+      this.updatedAt,
       this.bookingInfo,
       this.isBooked,
       this.scheduleInfo});
@@ -84,10 +84,10 @@ class BookingInfo {
   int? updatedAtTimestamp;
   String? id;
   bool? isDeleted;
-  String? createAt;
+  String? createdAt;
   String? scheduleDetailId;
   String? updatedAt;
-  String? cancelReasonId;
+  int? cancelReasonId;
   String? userId;
 
   BookingInfo(
@@ -95,7 +95,7 @@ class BookingInfo {
       this.updatedAtTimestamp,
       this.id,
       this.isDeleted,
-      this.createAt,
+      this.createdAt,
       this.scheduleDetailId,
       this.updatedAt,
       this.cancelReasonId,
@@ -114,7 +114,7 @@ class ScheduleInfo {
   String? startTime;
   int? startTimestamp;
   int? endTimestamp;
-  String? createAt;
+  String? createdAt;
   Tutor? tutorInfo;
 
   ScheduleInfo(
@@ -123,7 +123,7 @@ class ScheduleInfo {
       this.startTime,
       this.startTimestamp,
       this.endTimestamp,
-      this.createAt,
+      this.createdAt,
       this.tutorInfo});
 
   factory ScheduleInfo.fromJson(Map<String, dynamic> json) =>

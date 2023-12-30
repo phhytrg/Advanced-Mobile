@@ -2,33 +2,23 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/route/router.dart';
 import '../../../../../core/commom-widgets/button_widget.dart';
-import '../../../../core/commom-widgets/appbar.dart';
-import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/constant.dart';
-import '../controller/courses_controller.dart';
 
-class CourseStandalonePage extends ConsumerStatefulWidget {
+class CourseStandalonePage extends ConsumerWidget {
   final String courseId;
 
   const CourseStandalonePage({super.key, required this.courseId});
 
   @override
-  ConsumerState<CourseStandalonePage> createState() => _CourseInformationPageState();
-}
-
-class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
-    final courseState = ref.watch(courseControllerProvider(widget.courseId));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final courseState = ref.watch(courseControllerProvider(courseId));
 
     return SingleChildScrollView(
       child: Padding(
@@ -118,7 +108,7 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
               onPressed: () {
-                // Navigator.of(context).pushNamed('/course-detail');
+                context.goNamed(AppRoute.pdfViewer.name);
               },
               child: const Text('Discover'),
             ),
@@ -222,7 +212,9 @@ class _CourseInformationPageState extends ConsumerState<CourseStandalonePage> {
               itemCount: course.topics.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRoute.courseDetail.name, pathParameters: {'id': course.id});
+                    },
                     borderRadius: BorderRadius.circular(8.0),
                     hoverColor: Colors.grey.shade300,
                     child: _buildTopicCard(context, '${index + 1}. ${course.topics[index].name}'));

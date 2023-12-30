@@ -1,11 +1,10 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:lettutor/app/tutors/domain/favorite_tutor.dart';
-import 'package:lettutor/core/network/network_service.dart';
+import 'package:lettutor/core/dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../domain/user.dart';
+part 'user_repository.g.dart';
 
 abstract class BaseUserRepository{
   Future<void> updateTutorInFavoriteList(String tutorId);
@@ -13,19 +12,22 @@ abstract class BaseUserRepository{
 
 class UserRepository extends BaseUserRepository{
   final String baseUrl = '/user';
-  final Dio dio = NetworkService.instance.dio;
+  final Dio dio;
+
+  UserRepository({required this.dio});
 
   @override
   Future<void> updateTutorInFavoriteList(String tutorId) async {
     final response = await dio.post(
-      baseUrl + "/manageFavoriteTutor",
+      "/manageFavoriteTutor",
       data: {
         "tutorId": tutorId,
       }
     );
   }
-
-
 }
 
-final userRepositoryProvider = Provider((ref) => UserRepository());
+@Riverpod(keepAlive: true)
+UserRepository userRepository(UserRepositoryRef ref){
+  return UserRepository(dio: ref.read(dioProvider));
+}

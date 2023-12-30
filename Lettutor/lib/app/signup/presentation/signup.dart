@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lettutor/app/signup/viewmodel/signup_controller.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/auth/data/auth_repository.dart';
 import 'package:lettutor/core/constant.dart';
+import 'package:lettutor/core/route/router.dart';
 import '../../../core/commom-widgets/appbar.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _SignupPageState();
   }
 }
 
-class _SignupPageState extends SignupController {
+class _SignupPageState extends ConsumerState<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -57,11 +60,9 @@ class _SignupPageState extends SignupController {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Image(
-                              image:
-                                  Image.asset('images/login-image.png').image,
+                              image: Image.asset('images/login-image.png').image,
                               fit: BoxFit.scaleDown,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.8,
                             ),
                           ),
                         ),
@@ -137,7 +138,7 @@ class _SignupPageState extends SignupController {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
-                if(!emailValidator.hasMatch(value)){
+                if (!emailValidator.hasMatch(value)) {
                   return 'Please enter valid email';
                 }
                 return null;
@@ -248,17 +249,15 @@ class _SignupPageState extends SignupController {
                 OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.blue),
-                        shape: const CircleBorder()),
+                        side: const BorderSide(color: Colors.blue), shape: const CircleBorder()),
                     child: const Icon(
                       Icons.facebook,
                       color: Colors.blue,
                     )),
                 OutlinedButton(
                   onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.blue),
-                      shape: const CircleBorder()),
+                  style:
+                      OutlinedButton.styleFrom(side: const BorderSide(color: Colors.blue), shape: const CircleBorder()),
                   child: SvgPicture.asset(
                     '/icons/google.svg',
                     height: 24,
@@ -267,8 +266,7 @@ class _SignupPageState extends SignupController {
                 OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.blue),
-                        shape: const CircleBorder()),
+                        side: const BorderSide(color: Colors.blue), shape: const CircleBorder()),
                     child: const Icon(
                       Icons.phone_android,
                       color: Colors.blue,
@@ -286,14 +284,27 @@ class _SignupPageState extends SignupController {
 
   void handleOnSignupClicked() async {
     if (_formKey.currentState!.validate()) {
-      if (await signup(emailController.text, passwordController.text)) {
+      final result = await ref.read(authRepositoryProvider).signUp(emailController.text, passwordController.text);
+      if (result == true) {
         if (!mounted) {
           return;
         }
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Sign up successful. Please check your email to verify the account')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Sign up successful. Please check your email to verify the account')));
+        context.go(AppRoute.login.getPath());
       }
+      // final state = ref.watch(signupProvider(emailController.text, passwordController.text));
+      // state.whenData((value){
+      //   print(value);
+      //   if (value == true) {
+      //     if (!mounted) {
+      //       return;
+      //     }
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //         const SnackBar(content: Text('Sign up successful. Please check your email to verify the account')));
+      //     context.go(AppRoute.login.getPath());
+      //   }
+      // });
     }
   }
 }

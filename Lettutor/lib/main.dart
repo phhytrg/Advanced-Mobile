@@ -58,13 +58,10 @@ enum RoutePath {
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
-  final _authProvider = AuthState();
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final appRouter = AppRouter(_authProvider);
-    final goRouter = ref.watch(goRouterProvider);
+    final goRouter = ref.watch(routerGeneratorProvider);
 
     return MaterialApp.router(
       title: 'Flutter Demo',

@@ -1,13 +1,17 @@
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
-import 'package:lettutor/core/network/network_service.dart';
+import 'package:lettutor/core/dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'course_repository.g.dart';
 
 class CourseRepository {
 
-  final Dio dio = NetworkService.instance.dio;
+  final Dio dio;
   final String baseUrl = "/course";
+
+  CourseRepository({required this.dio});
 
   Future<CourseList> fetchCourse(int page, int perPage) async {
     Response response = await dio.get(
@@ -35,6 +39,7 @@ class CourseRepository {
 
 }
 
-final courseRepositoryProvider = Provider<CourseRepository>((ref) {
-  return CourseRepository();
-});
+@Riverpod(keepAlive: true)
+CourseRepository courseRepository(CourseRepositoryRef ref) {
+  return CourseRepository(dio: ref.read(dioProvider));
+}
