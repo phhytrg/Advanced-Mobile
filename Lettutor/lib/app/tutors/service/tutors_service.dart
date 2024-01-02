@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/app/login/data/user_repository.dart';
+import 'package:lettutor/app/auth/data/user_repository.dart';
 import 'package:lettutor/app/schedule/data/self_schedule_repository.dart';
 import 'package:lettutor/app/tutors/domain/favorite_tutor.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -3,60 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'core/route/auth_provider.dart';
 import 'core/route/router.dart';
-
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
 void main() {
   configureUrl();
   runApp(
-    ProviderScope(child: MyApp()),
+    const ProviderScope(child: MyApp()),
   );
 }
 
-enum RoutePath {
-  bookingStudents,
-  tutor,
-  tutorsList,
-  history,
-  courses,
-  courseInfo,
-  courseDetail,
-  login,
-  signup,
-  resetPassword;
-
-  String getString() {
-    switch (this) {
-      case RoutePath.bookingStudents:
-        return '/booking-student';
-      case RoutePath.history:
-        return '/history';
-      case RoutePath.courses:
-        return '/courses';
-      case RoutePath.courseInfo:
-        return '/course-info';
-      case RoutePath.courseDetail:
-        return '/course-detail';
-      case RoutePath.tutor:
-        return '/tutor';
-      case RoutePath.tutorsList:
-        return '/tutors';
-      case RoutePath.login:
-        return '/login';
-      case RoutePath.signup:
-        return '/signup';
-      case RoutePath.resetPassword:
-        return '/reset-password';
-      default:
-        return '/';
-    }
-  }
-}
-
 class MyApp extends ConsumerWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override

@@ -122,7 +122,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            context.go(RoutePath.tutorsList.getString());
+            context.go(AppRoute.tutorsList.getPath());
           },
           onHover: (value) {
             setState(() {
@@ -135,7 +135,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               'TUTOR',
               style: TextStyle(
                 color: _hoverNavBar[0]
-                    || currentRoutePath.toString() == RoutePath.tutorsList.getString()
+                    || currentRoutePath.toString() == AppRoute.tutorsList.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -150,7 +150,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            context.go(RoutePath.bookingStudents.getString());
+            context.go(AppRoute.bookingStudents.getPath());
           },
           onHover: (value) {
             setState(() {
@@ -163,7 +163,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               'SCHEDULE',
               style: TextStyle(
                 color: _hoverNavBar[1]
-                    || currentRoutePath.toString() == RoutePath.bookingStudents.getString()
+                    || currentRoutePath.toString() == AppRoute.bookingStudents.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -178,7 +178,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            context.go(RoutePath.history.getString());
+            context.go(AppRoute.history.getPath());
           },
           onHover: (value) {
             setState(() {
@@ -191,7 +191,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               'HISTORY',
               style: TextStyle(
                 color: _hoverNavBar[2]
-                    || currentRoutePath.toString() == RoutePath.history.getString()
+                    || currentRoutePath.toString() == AppRoute.history.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -206,7 +206,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            context.go(RoutePath.courses.getString());
+            context.go(AppRoute.courses.getPath());
           },
           onHover: (value) {
             setState(() {
@@ -219,7 +219,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               'COURSES',
               style: TextStyle(
                 color: _hoverNavBar[3]
-                    || currentRoutePath.toString() == RoutePath.courses.getString()
+                    || currentRoutePath.toString() == AppRoute.courses.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -234,7 +234,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           borderRadius: BorderRadius.circular(8.0),
           splashColor: Colors.blue.shade50,
           onTap: () {
-            context.go(RoutePath.courses.getString());
+            context.go(AppRoute.courses.getPath());
             // Not yet implement
           },
           onHover: (value) {

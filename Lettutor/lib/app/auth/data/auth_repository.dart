@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lettutor/app/auth/data/token_repository.dart';
-import 'package:lettutor/app/login/domain/user.dart';
+import 'package:lettutor/app/auth/domain/user.dart';
 import 'package:lettutor/core/config/auth_config.dart';
 import 'package:lettutor/core/data/local/local_secure_storage.dart';
 import 'package:lettutor/core/dio/dio.dart';

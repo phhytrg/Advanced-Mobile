@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/app/advertising/advertising.dart';
+import 'package:lettutor/app/advertising/advertising_page.dart';
+import 'package:lettutor/app/auth/presentation/login_page.dart';
+import 'package:lettutor/app/auth/presentation/reset_password.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
 import 'package:lettutor/app/courses/presentation/pdf_viewer_page.dart';
-import 'package:lettutor/app/login/presentation/reset_password.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
+import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_page.dart';
+import 'package:lettutor/app/tutors/presentation/tutors/tutors_page.dart';
 import 'package:lettutor/core/commom-widgets/app_scaffold.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../app/login/presentation/login_page.dart';
-import '../../app/tutors/presentation/tutor_standalone/tutor_page.dart';
-import '../../app/tutors/presentation/tutors/tutors_page.dart';
 
 part 'router.g.dart';
 

@@ -66,7 +66,7 @@ class AdvertisingPage extends ConsumerWidget {
                       ),
                       FilledButton(
                           onPressed: () {
-                            GoRouter.of(context).goNamed(RoutePath.login.name);
+                            GoRouter.of(context).goNamed(AppRoute.login.name);
                           },
                           child: Text("JOIN NOW"),
                           style: FilledButton.styleFrom(
@@ -119,7 +119,7 @@ class AdvertisingPage extends ConsumerWidget {
                             ),
                             FilledButton(
                                 onPressed: () {
-                                  ref.read(routerGeneratorProvider).goNamed(RoutePath.login.name);
+                                  ref.read(routerGeneratorProvider).goNamed(AppRoute.login.name);
                                 },
                                 child: Text("Get Started"),
                                 style: FilledButton.styleFrom(
@@ -172,7 +172,7 @@ class AdvertisingPage extends ConsumerWidget {
                                   ),
                                   FilledButton(
                                       onPressed: () {
-                                        context.pushReplacement(RoutePath.login.getString());
+                                        context.pushReplacement(AppRoute.login.getPath());
                                       },
                                       style: FilledButton.styleFrom(
                                         backgroundColor: Colors.orange.shade900,
