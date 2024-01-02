@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lettutor/app/auth/data/token_repository.dart';
+import 'package:lettutor/app/auth/domain/login_response.dart';
 import 'package:lettutor/app/auth/domain/user.dart';
 import 'package:lettutor/core/config/auth_config.dart';
 import 'package:lettutor/core/data/local/local_secure_storage.dart';
@@ -20,7 +21,7 @@ class AuthRepository {
   AuthRepository(
       {required this.authConfig, required this.secureStorage, required this.dio, required this.tokenRepository});
 
-  Future<User?> login(String email, String password) async {
+  Future<LoginResponse?> login(String email, String password) async {
     final response = await dio.post(
       '/auth/login',
       data: {
@@ -33,7 +34,7 @@ class AuthRepository {
     }
     tokenRepository.saveAccessToken(response.data['tokens']['access']['token']);
     tokenRepository.saveRefreshToken(response.data['tokens']['refresh']['token']);
-    return User.fromJson(response.data['user']);
+    return LoginResponse.fromJson(response.data);
   }
 
   Future<bool> signUp(String email, String password) async {

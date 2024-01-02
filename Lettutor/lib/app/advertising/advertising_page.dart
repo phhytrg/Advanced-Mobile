@@ -119,7 +119,7 @@ class AdvertisingPage extends ConsumerWidget {
                             ),
                             FilledButton(
                                 onPressed: () {
-                                  ref.read(routerGeneratorProvider).goNamed(AppRoute.login.name);
+                                  context.go(AppRoute.login.getPath());
                                 },
                                 child: Text("Get Started"),
                                 style: FilledButton.styleFrom(

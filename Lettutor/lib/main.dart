@@ -3,23 +3,33 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/core/route/auth_provider.dart';
 import 'core/route/router.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
-void main() {
+void main() async {
+  final AuthState authState = AuthState();
+  await authState.init();
   configureUrl();
   runApp(
-    const ProviderScope(child: MyApp()),
+    ProviderScope(child: MyApp(authState: authState)),
   );
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class MyApp extends ConsumerStatefulWidget {
+  final AuthState authState;
 
+  const MyApp({super.key, required this.authState});
+
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final goRouter = ref.watch(routerGeneratorProvider);
+  Widget build(BuildContext context) {
+    final goRouter = ref.watch(routerGeneratorProvider(widget.authState));
 
     return MaterialApp.router(
       title: 'Flutter Demo',

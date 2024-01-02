@@ -32,38 +32,38 @@ class AuthenticationInterceptor extends QueuedInterceptorsWrapper {
       if (!tokenRepository.tokenHasExpired(refreshToken)) {
         return handler.next(err);
       }
-      try {
-        String newAccessToken = await authRepository.refreshToken();
-        tokenRepository.saveAccessToken(newAccessToken);
-        final RequestOptions requestOptions = err.response!.requestOptions;
-        requestOptions.headers['Authorization'] =
-        'Bearer $newAccessToken';
-        final options = Options(
-          method: requestOptions.method,
-          headers: requestOptions.headers,
-        );
-        final Dio dioRefresh = Dio(
-          BaseOptions(
-            baseUrl: requestOptions.baseUrl,
-            headers: <String, String>{
-              'accept': 'application/json',
-            },
-          ),
-        );
-        final response = await dioRefresh.request<dynamic>(
-          requestOptions.path,
-          data: requestOptions.data,
-          queryParameters: requestOptions.queryParameters,
-          options: options,
-        );
-        return handler.resolve(response);
-      } on DioException catch (e) {
-        if (e.response?.statusCode == 401) {
-          await authRepository.signOut();
-          return handler.reject(e);
-        }
-      }
-      handler.next(err);
+    //   try {
+    //     String newAccessToken = await authRepository.refreshToken();
+    //     tokenRepository.saveAccessToken(newAccessToken);
+    //     final RequestOptions requestOptions = err.response!.requestOptions;
+    //     requestOptions.headers['Authorization'] =
+    //     'Bearer $newAccessToken';
+    //     final options = Options(
+    //       method: requestOptions.method,
+    //       headers: requestOptions.headers,
+    //     );
+    //     final Dio dioRefresh = Dio(
+    //       BaseOptions(
+    //         baseUrl: requestOptions.baseUrl,
+    //         headers: <String, String>{
+    //           'accept': 'application/json',
+    //         },
+    //       ),
+    //     );
+    //     final response = await dioRefresh.request<dynamic>(
+    //       requestOptions.path,
+    //       data: requestOptions.data,
+    //       queryParameters: requestOptions.queryParameters,
+    //       options: options,
+    //     );
+    //     return handler.resolve(response);
+    //   } on DioException catch (e) {
+    //     if (e.response?.statusCode == 401) {
+    //       await authRepository.signOut();
+    //       return handler.reject(e);
+    //     }
+    //   }
+    //   handler.next(err);
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lettutor/core/data/local/local_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,25 +12,17 @@ class LocalAuthRepository{
   LocalAuthRepository(this.secureStorage);
 
   Future<String?> getAccessToken () async {
-    return await secureStorage.read(key: 'accessToken') ?? '';
-  }
-
-  Future<void> setAccessToken(String? accessToken) async {
-    if(accessToken == null){
-      return await secureStorage.delete(key: 'accessToken');
-    }
-    await secureStorage.write(key: 'accessToken', value: accessToken);
+    final localToken = await secureStorage.read(key: 'token');
+    if(localToken == null) return null;
+    final accessToken = jsonDecode(localToken)['access']['token'];
+    return accessToken;
   }
 
   Future<String?> getRefreshToken() async {
-    return await secureStorage.read(key: 'refreshToken') ?? '';
-  }
-
-  Future<void> setRefreshToken(String? refreshToken) async {
-    if(refreshToken == null){
-      return await secureStorage.delete(key: 'refreshToken');
-    }
-    return await secureStorage.write(key: 'refreshToken', value: refreshToken);
+    final localToken = await secureStorage.read(key: 'token');
+    if(localToken == null) return null;
+    final refreshToken = jsonDecode(localToken)['refresh']['token'];
+    return refreshToken;
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/auth/data/token_repository.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 import 'package:lettutor/core/route/router.dart';
@@ -14,7 +15,8 @@ import '../../../core/route/auth_provider.dart';
 import 'controller/login_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, required this.authState});
+  final AuthState authState;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -229,7 +231,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 .login(emailController.text,
                                     passwordController.text);
                             if (mounted && result != null) {
-                              ref.read(authStateProvider).login();
+                              widget.authState.login(result.tokens);
                               context.go('/tutors');
                             }
                           }

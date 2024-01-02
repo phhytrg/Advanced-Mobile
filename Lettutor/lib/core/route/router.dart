@@ -66,10 +66,9 @@ enum AppRoute {
 }
 
 @Riverpod(keepAlive: true)
-GoRouter routerGenerator(RouterGeneratorRef ref) {
+GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
   final rootNavigatorKey = GlobalKey<NavigatorState>();
   final shellNavigatorKey = GlobalKey<NavigatorState>();
-  final authState = ref.watch(authStateProvider);
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
@@ -162,7 +161,7 @@ GoRouter routerGenerator(RouterGeneratorRef ref) {
       GoRoute(
         path: '/login',
         name: AppRoute.login.name,
-        builder: (context, state) => LoginPage(),
+        builder: (context, state) => LoginPage(authState: authState,),
       ),
       GoRoute(
         path: '/signup',
@@ -175,37 +174,5 @@ GoRouter routerGenerator(RouterGeneratorRef ref) {
         builder: (context, state) => ResetPasswordPage(),
       ),
     ],
-    // redirect: (context, state) {
-    //   authState.whenData((isAuthenticated) {
-    //     if (isAuthenticated == false) {
-    //       if (state.matchedLocation != AppRoute.login.getString() && state.matchedLocation != '/') {
-    //         GoRouter.of(context).pushReplacement(AppRoute.login.getString());
-    //       }
-    //     } else {
-    //       if (state.matchedLocation == AppRoute.login.getString() || state.matchedLocation == '/') {
-    //         context.pushReplacement(AppRoute.tutorsList.getString());
-    //       }
-    //     }
-    //   });
-    //   return null;
-    // },
-    //   return null;
-    //   // if(authState == null) {
-    //   //   if(state.matchedLocation != AppRoute.login.getString() && state.matchedLocation != '/'){
-    //   //     return AppRoute.login.getString();
-    //   //   }
-    //   //   else{
-    //   //     return null;
-    //   //   }
-    //   // }
-    //   // else{
-    //   //   if(state.matchedLocation == AppRoute.login.getString() || state.matchedLocation == '/'){
-    //   //     return AppRoute.tutorsList.getString();
-    //   //   }
-    //   //   else{
-    //   //     return null;
-    //   //   }
-    //   // }
-    // }
   );
 }
