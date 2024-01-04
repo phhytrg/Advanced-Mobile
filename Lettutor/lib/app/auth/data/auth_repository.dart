@@ -29,7 +29,7 @@ class AuthRepository {
         'password': password,
       },
     );
-    if(response.statusCode != 200){
+    if (response.statusCode != 200) {
       return null;
     }
     tokenRepository.saveAccessToken(response.data['tokens']['access']['token']);
@@ -45,7 +45,7 @@ class AuthRepository {
         'password': password,
       },
     );
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       return true;
     }
     return false;
@@ -71,6 +71,21 @@ class AuthRepository {
     );
     return response.data['tokens']['access'];
   }
+
+  Future<String> forgotPassword(String email) async {
+    late Response response;
+    try {
+      response = await dio.post(
+        '/auth/forgotPassword',
+        data: {
+          'email': email,
+        },
+      );
+    } on DioException catch (e) {
+      return e.response!.data['message'] == 'Not found' ? 'Email not found' : e.response!.data['message'];
+    }
+    return response.data['message'];
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -86,4 +101,10 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 Future<bool> signup(SignupRef ref, String email, String password) async {
   final authRepository = ref.read(authRepositoryProvider);
   return await authRepository.signUp(email, password);
+}
+
+@riverpod
+Future<String> forgotPassword(ForgotPasswordRef ref, String email) async {
+  final authRepository = ref.read(authRepositoryProvider);
+  return await authRepository.forgotPassword(email);
 }

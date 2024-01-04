@@ -185,5 +185,133 @@ class _SignupProviderElement extends AutoDisposeFutureProviderElement<bool>
   @override
   String get password => (origin as SignupProvider).password;
 }
+
+String _$forgotPasswordHash() => r'44213dac42dcd26507810b4dcf84683a19c37eb3';
+
+/// See also [forgotPassword].
+@ProviderFor(forgotPassword)
+const forgotPasswordProvider = ForgotPasswordFamily();
+
+/// See also [forgotPassword].
+class ForgotPasswordFamily extends Family<AsyncValue<String>> {
+  /// See also [forgotPassword].
+  const ForgotPasswordFamily();
+
+  /// See also [forgotPassword].
+  ForgotPasswordProvider call(
+    String email,
+  ) {
+    return ForgotPasswordProvider(
+      email,
+    );
+  }
+
+  @override
+  ForgotPasswordProvider getProviderOverride(
+    covariant ForgotPasswordProvider provider,
+  ) {
+    return call(
+      provider.email,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'forgotPasswordProvider';
+}
+
+/// See also [forgotPassword].
+class ForgotPasswordProvider extends AutoDisposeFutureProvider<String> {
+  /// See also [forgotPassword].
+  ForgotPasswordProvider(
+    String email,
+  ) : this._internal(
+          (ref) => forgotPassword(
+            ref as ForgotPasswordRef,
+            email,
+          ),
+          from: forgotPasswordProvider,
+          name: r'forgotPasswordProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$forgotPasswordHash,
+          dependencies: ForgotPasswordFamily._dependencies,
+          allTransitiveDependencies:
+              ForgotPasswordFamily._allTransitiveDependencies,
+          email: email,
+        );
+
+  ForgotPasswordProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.email,
+  }) : super.internal();
+
+  final String email;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(ForgotPasswordRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ForgotPasswordProvider._internal(
+        (ref) => create(ref as ForgotPasswordRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        email: email,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _ForgotPasswordProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ForgotPasswordProvider && other.email == email;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, email.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ForgotPasswordRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `email` of this provider.
+  String get email;
+}
+
+class _ForgotPasswordProviderElement
+    extends AutoDisposeFutureProviderElement<String> with ForgotPasswordRef {
+  _ForgotPasswordProviderElement(super.provider);
+
+  @override
+  String get email => (origin as ForgotPasswordProvider).email;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

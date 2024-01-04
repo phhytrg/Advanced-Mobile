@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutor_item.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/controller/tutors_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '../../../../core/commom-widgets/appbar.dart';
 import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/constant.dart';
@@ -23,6 +24,31 @@ class TutorsPage extends ConsumerStatefulWidget {
 class _TutorsPageState extends ConsumerState<TutorsPage> {
   final List<String> specialties = [];
   final textSearchController = TextEditingController();
+  final MultiSelectController nationalitiesController = MultiSelectController();
+  final List<ValueItem> nationalities= [
+    const ValueItem(label: 'Foreign Tutor', value: 'foreign'),
+    const ValueItem(label: 'Vietnamese Tutor', value: 'vietnam'),
+    const ValueItem(label: 'Native English tutor', value: 'native'),
+  ];
+
+  void handleOnSearchChange() {
+    ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
+      page: "1",
+      perPage: 9,
+      search: textSearchController.text,
+      filters: Filters(
+        specialties: specialties,
+      ),
+      nationality: nationalitiesController.options.isNotEmpty
+          ? Nationality(
+        isNative: nationalitiesController.options
+            .contains(nationalities.where((element) => element.value == 'native').first),
+        isVietnamese: nationalitiesController.options
+            .contains(nationalities.where((element) => element.value == 'vietnam').first),
+      )
+          : null,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,121 +68,121 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             margin: EdgeInsets.only(left: 32),
             child: Text(
               'Recommend Tutors',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleLarge,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsControllerProvider);
-                return AsyncValueWidget<TutorList?>(
-                  value: tutorsState,
-                  data: (tutorsList) {
-                    return Container(
-                      margin: const EdgeInsets.only(left: 32, right: 32),
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        spacing: 16,
-                        runSpacing: 12,
-                        children: [
-                          for (var tutor in tutorsList!.rows!)
-                            TutorItem(
-                              tutor: tutor,
-                            )
-                        ],
-                      ),
-                    );
-                  },
+          Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final AsyncValue<TutorList?> tutorsState = ref.watch(tutorsControllerProvider);
+            return AsyncValueWidget<TutorList?>(
+              value: tutorsState,
+              data: (tutorsList) {
+                return Container(
+                  margin: const EdgeInsets.only(left: 32, right: 32),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 16,
+                    runSpacing: 12,
+                    children: [
+                      for (var tutor in tutorsList!.rows!)
+                        TutorItem(
+                          tutor: tutor,
+                        )
+                    ],
+                  ),
                 );
-              }),
+              },
+            );
+          }),
           const SizedBox(
             height: 108,
           ),
         ],
       ),
-
     );
   }
 
   Widget _buildTutorsSearchBox() {
     return Container(
-      margin: EdgeInsets.only(left: 32, right: 32),
+      margin: const EdgeInsets.only(left: 32, right: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Find a tutor',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(
-              color: Colors.black,
-              fontFamily: GoogleFonts
-                  .poppins(fontWeight: FontWeight.w700)
-                  .fontFamily,
-            ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.black,
+                  fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
+                ),
           ),
           TextField(
-            decoration: const InputDecoration(
-              hintText: 'Enter tutor name..',
-            ),
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodySmall,
-            controller: textSearchController,
-            onSubmitted: (value) {
-              ref
-                  .watch(tutorsControllerProvider.notifier)
-                  .searchTutorsByFilters(SearchPayload(
-                page: "1",
-                perPage: 9,
-                search: textSearchController.text,
-                filters: Filters(
-                  specialties: specialties,
-                )
-              ));
-            }
-          ),
+              decoration: const InputDecoration(
+                hintText: 'Enter tutor name..',
+              ),
+              style: Theme.of(context).textTheme.bodySmall,
+              controller: textSearchController,
+              onSubmitted: (value) {
+                ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
+                    page: "1",
+                    perPage: 9,
+                    search: textSearchController.text,
+                    filters: Filters(
+                      specialties: specialties,
+                    )));
+              }),
           const SizedBox(
             height: 8,
           ),
-          TextField(
-            decoration: const InputDecoration(
-              hintText: 'Enter tutor native..',
+          MultiSelectDropDown(
+            showClearIcon: true,
+            onOptionSelected: (options) {
+              ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
+                    page: "1",
+                    perPage: 9,
+                    search: textSearchController.text,
+                    filters: Filters(
+                      specialties: specialties,
+                    ),
+                    nationality: nationalitiesController.options.isNotEmpty ? Nationality(
+                      isNative: options.contains(nationalities.where((element) => element.value == 'native').first),
+                      isVietnamese: options.contains(nationalities.where((element) => element.value == 'vietnam').first),
+                    ) : null,
+                  ));
+            },
+            options: nationalities,
+            selectionType: SelectionType.multi,
+            chipConfig: ChipConfig(
+              wrapType: WrapType.scroll,
+              labelStyle: const TextStyle(
+                fontSize: 12,
+              ),
+              padding: const EdgeInsets.all(4),
+              radius: 8,
+              backgroundColor: Colors.grey.shade300,
+              deleteIconColor: Colors.grey.shade600,
             ),
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodySmall,
+            borderRadius: 16,
+            optionTextStyle: Theme.of(context).textTheme.bodySmall!,
+            selectedOptionIcon: const Icon(Icons.check),
+            selectedOptionBackgroundColor: Colors.blue.shade50,
+            padding: EdgeInsets.zero,
+            hint: 'Select tutor nationality',
+            controller: nationalitiesController,
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
             'Select available tutoring time:',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(
-              color: Colors.black,
-              fontFamily: GoogleFonts
-                  .poppins(fontWeight: FontWeight.w600)
-                  .fontFamily,
-            ),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Colors.black,
+                  fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
+                ),
           ),
           TextField(
             decoration: const InputDecoration(
               hintText: 'This field for date picker',
             ),
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodySmall!,
+            style: Theme.of(context).textTheme.bodySmall!,
           ),
           const SizedBox(
             height: 8,
@@ -165,10 +191,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             decoration: const InputDecoration(
               hintText: 'This field for start time and end time',
             ),
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodySmall,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Container(
             margin: EdgeInsets.only(top: 16),
@@ -178,110 +201,17 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               spacing: 16,
               runSpacing: 12,
               children: [
-                FilterButton(buttonKey: 'english-for-kids',
-                  text: "English for kids",
-                  specialities: specialties,
-                  onPressed: (){
-                    setState(() {
-                      if (specialties.contains('english-for-kids')) {
-                        specialties.remove('english-for-kids');
-                      } else {
-                        specialties.add('english-for-kids');
-                      }
-                    });
-                    // ref
-                    //   .watch(tutorsViewmodelProvider.notifier)
-                    //   .searchTutorsByFilters(SearchPayload(
-                    //     specialties: specialties,
-                    //   ));
-                    }
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (specialties.contains('english-for-business')) {
-                          specialties.remove('english-for-business');
-                        } else {
-                          specialties.add('english-for-business');
-                        }
-                        // ref.read(tutorsViewmodelProvider.notifier)
-                        //     .searchTutorsByFilters(SearchPayload(
-                        //   specialties: specialties,
-                        // ));
-                        // ref.read(tutorsViewmodelProvider.notifier).getTutorsWithPagination(9, 1);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor:
-                      specialties.contains('english-for-business')
-                          ? Colors.blue
-                          : Colors.grey,
-                    ),
-                    child: Text('English for Business')),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (specialties.contains('conversational')) {
-                          specialties.remove('conversational');
-                        } else {
-                          specialties.add('conversational');
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: specialties.contains('conversational')
-                          ? Colors.blue
-                          : Colors.grey,
-                    ),
-                    child: Text('Conversational')),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (specialties.contains('starters')) {
-                          specialties.remove('starters');
-                        } else {
-                          specialties.add('starters');
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: specialties.contains('starters')
-                          ? Colors.blue
-                          : Colors.grey,
-                    ),
-                    child: Text('STARTERS')),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (specialties.contains('movers')) {
-                          specialties.remove('movers');
-                        } else {
-                          specialties.add('movers');
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: specialties.contains('movers')
-                          ? Colors.blue
-                          : Colors.grey,
-                    ),
-                    child: Text('MOVERS')),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (specialties.contains('flyers')) {
-                          specialties.remove('flyers');
-                        } else {
-                          specialties.add('flyers');
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: specialties.contains('flyers')
-                          ? Colors.blue
-                          : Colors.grey,
-                    ),
-                    child: Text('FLYERS')),
+                _buildFilterSpecialty('english-for-kids', 'English for kids'),
+                _buildFilterSpecialty('business-english', 'English for Business'),
+                _buildFilterSpecialty('conversational', 'Conversational'),
+                _buildFilterSpecialty('starters', 'STARTERS'),
+                _buildFilterSpecialty('movers', 'MOVERS'),
+                _buildFilterSpecialty('flyers', 'FLYERS'),
+                _buildFilterSpecialty('ket', 'KET'),
+                _buildFilterSpecialty('pet', 'PET'),
+                _buildFilterSpecialty('ielts', 'IELTS'),
+                _buildFilterSpecialty('toeic', 'TOEIC'),
+                _buildFilterSpecialty('toefl', 'TOEFL'),
               ],
             ),
           ),
@@ -301,31 +231,23 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
       ),
     );
   }
-}
 
-class FilterButton extends StatelessWidget {
-  final String buttonKey;
-  final String text;
-
-  const FilterButton({super.key,
-    required this.buttonKey,
-    required this.text,
-    required this.specialities,
-    required this.onPressed
-  });
-
-  final List<String> specialities;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildFilterSpecialty(String value, String label){
     return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        foregroundColor:
-        specialities.contains(buttonKey) ? Colors.blue : Colors.grey,
-      ),
-      child: Text(text)
+        onPressed: () {
+          setState(() {
+            if (specialties.contains(value)) {
+              specialties.remove(value);
+            } else {
+              specialties.add(value);
+            }
+          });
+          handleOnSearchChange();
+        },
+        style: ElevatedButton.styleFrom(
+          foregroundColor: specialties.contains(value) ? Colors.blue : Colors.grey,
+        ),
+        child: Text(label)
     );
   }
 }

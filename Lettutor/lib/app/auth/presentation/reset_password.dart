@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lettutor/app/auth/data/auth_repository.dart';
 
 import '../../../core/commom-widgets/appbar.dart';
 
-class ResetPasswordPage extends StatefulWidget{
+class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
 
   @override
@@ -11,20 +13,22 @@ class ResetPasswordPage extends StatefulWidget{
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-
   bool _isEmailSent = false;
+  String _message = '';
 
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const LoginAppbar(),
-      body: _isEmailSent ? buildEmailSentBox() : buildSendEmailBox(),
+      body: _isEmailSent ? buildEmailSentBox(_message) : buildSendEmailBox(),
     );
   }
 
-  Widget buildSendEmailBox(){
+  Widget buildSendEmailBox() {
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: Form(
@@ -32,8 +36,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Reset Password',
                   style: TextStyle(
@@ -42,8 +46,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Enter your email address and we will send you a link to reset your password.',
                   style: TextStyle(
@@ -57,30 +61,39 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    }
-                  ),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
+                      ),
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      }),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if(_formKey.currentState!.validate()){
-                      setState(() {
-                        _isEmailSent = true;
-                      });
-                    }
+                child: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          final response = await ref.read(authRepositoryProvider).forgotPassword(emailController.text);
+                          print(response);
+                          setState(() {
+                            _message = response;
+                          });
+                          setState(() {
+                            _isEmailSent = true;
+                          });
+                        }
+                      },
+                      child: const Text('Send'),
+                    );
                   },
-                  child: Text('Send'),
                 ),
               ),
             ],
@@ -90,13 +103,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  Widget buildEmailSentBox() {
+  Widget buildEmailSentBox(String message) {
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
                 'Reset Password',
@@ -107,11 +120,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Check your email for a link to reset your password. '
-                    'If it doesn\'t appear within a few minutes, check your spam folder.',
-                style: TextStyle(
+                message == 'success'
+                    ? 'Check your email for a link to reset your password. '
+                        'If it doesn\'t appear within a few minutes, check your spam folder.'
+                    : message,
+                style: const TextStyle(
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
@@ -122,5 +137,4 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       ),
     );
   }
-
 }

@@ -8,9 +8,9 @@ class SearchPayload{
   String? page;
   int? perPage;
   String? search;
-  // List<String>? nationality =
+  Nationality? nationality;
 
-  SearchPayload({this.filters, this.page, this.perPage, this.search});
+  SearchPayload({this.filters, this.page, this.perPage, this.search, this.nationality});
   factory SearchPayload.fromJson(Map<String, dynamic> json) => _$SearchPayloadFromJson(json);
   Map<String, dynamic> toJson() => _$SearchPayloadToJson(this);
 }
@@ -23,5 +23,16 @@ class Filters{
 
   factory Filters.fromJson(Map<String, dynamic> json) => _$FiltersFromJson(json);
   Map<String, dynamic> toJson() => _$FiltersToJson(this);
+}
+
+@JsonSerializable()
+class Nationality {
+  final bool isVietnamese;
+  final bool isNative;
+
+  Nationality({required this.isVietnamese, required this.isNative});
+
+  factory Nationality.fromJson(Map<String, dynamic> json) => _$NationalityFromJson(json);
+  Map<String, dynamic> toJson() => _$NationalityToJson(this);
 }
 
