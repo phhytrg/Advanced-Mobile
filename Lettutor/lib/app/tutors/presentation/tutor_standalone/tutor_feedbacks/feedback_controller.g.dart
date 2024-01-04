@@ -7,7 +7,7 @@ part of 'feedback_controller.dart';
 // **************************************************************************
 
 String _$feedbacksControllerHash() =>
-    r'8e20f49915e2c1d3403e7777d4a8ab1bed084b09';
+    r'722d40ff54163f00875ee4b6d3b38c7186723ae2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -33,13 +33,9 @@ class _SystemHash {
 abstract class _$FeedbacksController
     extends BuildlessAutoDisposeAsyncNotifier<FeedbackList?> {
   late final String tutorId;
-  late final int page;
-  late final int perPage;
 
   FutureOr<FeedbackList?> build(
     String tutorId,
-    int page,
-    int perPage,
   );
 }
 
@@ -55,13 +51,9 @@ class FeedbacksControllerFamily extends Family<AsyncValue<FeedbackList?>> {
   /// See also [FeedbacksController].
   FeedbacksControllerProvider call(
     String tutorId,
-    int page,
-    int perPage,
   ) {
     return FeedbacksControllerProvider(
       tutorId,
-      page,
-      perPage,
     );
   }
 
@@ -71,8 +63,6 @@ class FeedbacksControllerFamily extends Family<AsyncValue<FeedbackList?>> {
   ) {
     return call(
       provider.tutorId,
-      provider.page,
-      provider.perPage,
     );
   }
 
@@ -97,13 +87,8 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
   /// See also [FeedbacksController].
   FeedbacksControllerProvider(
     String tutorId,
-    int page,
-    int perPage,
   ) : this._internal(
-          () => FeedbacksController()
-            ..tutorId = tutorId
-            ..page = page
-            ..perPage = perPage,
+          () => FeedbacksController()..tutorId = tutorId,
           from: feedbacksControllerProvider,
           name: r'feedbacksControllerProvider',
           debugGetCreateSourceHash:
@@ -114,8 +99,6 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
           allTransitiveDependencies:
               FeedbacksControllerFamily._allTransitiveDependencies,
           tutorId: tutorId,
-          page: page,
-          perPage: perPage,
         );
 
   FeedbacksControllerProvider._internal(
@@ -126,13 +109,9 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.tutorId,
-    required this.page,
-    required this.perPage,
   }) : super.internal();
 
   final String tutorId;
-  final int page;
-  final int perPage;
 
   @override
   FutureOr<FeedbackList?> runNotifierBuild(
@@ -140,8 +119,6 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
   ) {
     return notifier.build(
       tutorId,
-      page,
-      perPage,
     );
   }
 
@@ -150,18 +127,13 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: FeedbacksControllerProvider._internal(
-        () => create()
-          ..tutorId = tutorId
-          ..page = page
-          ..perPage = perPage,
+        () => create()..tutorId = tutorId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         tutorId: tutorId,
-        page: page,
-        perPage: perPage,
       ),
     );
   }
@@ -174,18 +146,13 @@ class FeedbacksControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
 
   @override
   bool operator ==(Object other) {
-    return other is FeedbacksControllerProvider &&
-        other.tutorId == tutorId &&
-        other.page == page &&
-        other.perPage == perPage;
+    return other is FeedbacksControllerProvider && other.tutorId == tutorId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, tutorId.hashCode);
-    hash = _SystemHash.combine(hash, page.hashCode);
-    hash = _SystemHash.combine(hash, perPage.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -195,12 +162,6 @@ mixin FeedbacksControllerRef
     on AutoDisposeAsyncNotifierProviderRef<FeedbackList?> {
   /// The parameter `tutorId` of this provider.
   String get tutorId;
-
-  /// The parameter `page` of this provider.
-  int get page;
-
-  /// The parameter `perPage` of this provider.
-  int get perPage;
 }
 
 class _FeedbacksControllerProviderElement
@@ -210,10 +171,6 @@ class _FeedbacksControllerProviderElement
 
   @override
   String get tutorId => (origin as FeedbacksControllerProvider).tutorId;
-  @override
-  int get page => (origin as FeedbacksControllerProvider).page;
-  @override
-  int get perPage => (origin as FeedbacksControllerProvider).perPage;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

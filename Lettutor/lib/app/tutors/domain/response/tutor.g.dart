@@ -17,7 +17,7 @@ Tutor _$TutorFromJson(Map<String, dynamic> json) => Tutor(
       rating: (json['rating'] as num?)?.toDouble(),
       userId: json['userId'] as String?,
       schedulesTimes: json['schedulesTimes'] as int?,
-      isFavoriteTutor: json['isFavoriteTutor'] as bool?,
+      isFavorite: json['isFavorite'] as bool?,
       price: json['price'] as int?,
       video: json['video'] as String?,
       education: json['education'] as String?,
@@ -30,7 +30,8 @@ Tutor _$TutorFromJson(Map<String, dynamic> json) => Tutor(
       user: json['User'] == null
           ? null
           : User.fromJson(json['User'] as Map<String, dynamic>),
-    );
+      totalFeedback: json['totalFeedback'] as int?,
+    )..isFavoriteTutor = json['isFavoriteTutor'] as bool?;
 
 Map<String, dynamic> _$TutorToJson(Tutor instance) => <String, dynamic>{
       'avatar': instance.avatar,
@@ -43,6 +44,7 @@ Map<String, dynamic> _$TutorToJson(Tutor instance) => <String, dynamic>{
       'rating': instance.rating,
       'userId': instance.userId,
       'schedulesTimes': instance.schedulesTimes,
+      'isFavorite': instance.isFavorite,
       'isFavoriteTutor': instance.isFavoriteTutor,
       'price': instance.price,
       'video': instance.video,
@@ -53,5 +55,6 @@ Map<String, dynamic> _$TutorToJson(Tutor instance) => <String, dynamic>{
       'targetStudent': instance.targetStudent,
       'interests': instance.interests,
       'languages': instance.languages,
+      'totalFeedback': instance.totalFeedback,
       'User': instance.user,
     };

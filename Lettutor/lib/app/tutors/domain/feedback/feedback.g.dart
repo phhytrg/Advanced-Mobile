@@ -21,8 +21,8 @@ Map<String, dynamic> _$FeedbackResponseToJson(FeedbackResponse instance) =>
     };
 
 FeedbackList _$FeedbackListFromJson(Map<String, dynamic> json) => FeedbackList(
-      json['count'] as int,
-      (json['rows'] as List<dynamic>)
+      count: json['count'] as int,
+      rows: (json['rows'] as List<dynamic>)
           .map((e) => FeedbackData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );

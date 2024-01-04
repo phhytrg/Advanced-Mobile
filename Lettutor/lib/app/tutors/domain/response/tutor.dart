@@ -17,6 +17,7 @@ class Tutor{
   double? rating;
   String? userId;
   int? schedulesTimes;
+  bool? isFavorite;
   bool? isFavoriteTutor;
   int? price;
   String? video;
@@ -27,9 +28,9 @@ class Tutor{
   String? targetStudent;
   String? interests;
   String? languages;
+  int? totalFeedback;
   @JsonKey(name: 'User')
   User? user;
-
 
   Tutor({
       this.avatar,
@@ -42,7 +43,7 @@ class Tutor{
       this.rating,
       this.userId,
       this.schedulesTimes,
-      this.isFavoriteTutor,
+      this.isFavorite,
       this.price,
       this.video,
       this.education,
@@ -52,7 +53,8 @@ class Tutor{
       this.targetStudent,
       this.interests,
       this.languages,
-      this.user
+      this.user,
+      this.totalFeedback
   });
 
   factory Tutor.fromJson(Map<String, dynamic> json) => _$TutorFromJson(json);

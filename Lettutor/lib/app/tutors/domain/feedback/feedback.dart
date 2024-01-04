@@ -19,7 +19,7 @@ class FeedbackList{
   final int count;
   final List<FeedbackData> rows;
 
-  FeedbackList(this.count, this.rows);
+  FeedbackList({required this.count, required this.rows});
 
   factory FeedbackList.fromJson(Map<String, dynamic> json) => _$FeedbackListFromJson(json);
   Map<String, dynamic> toJson() => _$FeedbackListToJson(this);

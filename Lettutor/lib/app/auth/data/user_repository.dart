@@ -19,7 +19,7 @@ class UserRepository extends BaseUserRepository{
   @override
   Future<void> updateTutorInFavoriteList(String tutorId) async {
     final response = await dio.post(
-      "/manageFavoriteTutor",
+      "$baseUrl/manageFavoriteTutor",
       data: {
         "tutorId": tutorId,
       }

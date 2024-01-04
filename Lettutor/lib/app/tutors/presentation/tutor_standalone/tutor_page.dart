@@ -1,182 +1,262 @@
+import 'dart:async';
+
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lettutor/app/auth/data/user_repository.dart';
+import 'package:lettutor/app/tutors/domain/response/tutor.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
+import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedbacks/feedback_controller.dart';
+import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedbacks/tutor_feedback.dart';
+import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_intro_video.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_viewmodel.dart';
+import 'package:lettutor/app/tutors/service/tutors_service.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:video_player/video_player.dart';
 
-import '../../../../core/commom-widgets/appbar.dart';
-import '../../../../core/commom-widgets/drawer.dart';
 import '../../../../core/commom-widgets/text_widget.dart';
 import '../../../../core/constant.dart';
-import 'tutor_feedbacks/tutor_feedback.dart';
 import 'tutor_schedule/tutor_schedule.dart';
 
-class TutorPage extends StatelessWidget {
+class TutorPage extends ConsumerStatefulWidget {
   const TutorPage({super.key, required this.tutorId});
 
   final String tutorId;
 
   @override
-  Widget build(BuildContext context) {
+  ConsumerState<TutorPage> createState() => _TutorPageState();
+}
 
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraint) {
-          if (constraint.maxWidth <= mobileWidth * 2) {
-            //This is for mobile
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Column(
-                children: [
-                  _TutorInfoMobileBody(
-                      _buildTutorBriefIntro(context),
-                      Container(
-                        color: Colors.black12,
-                        width: double.infinity,
-                        height: 300,
-                      )),
-                  _TutorDetailMobileBody(
-                    tutorDetailInfo: _buildTutorDetail(context),
-                    schedule: BookingSchedule(
-                      tutorId: tutorId,
-                    ),
+class _TutorPageState extends ConsumerState<TutorPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      final hasReachedEnd = _scrollController.offset >= _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange;
+      if (hasReachedEnd) {
+        loadMoreFeedbacks();
+      }
+    });
+  }
+
+  void loadMoreFeedbacks() {
+    ref
+        .read(feedbacksControllerProvider(widget.tutorId).notifier)
+        .getMoreTutorFeedbacks(widget.tutorId);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var tutor = ref.watch(tutorViewmodelProvider(widget.tutorId));
+    return AsyncValueWidget(
+      value: tutor,
+      data: (tutor) {
+        return SingleChildScrollView(
+          controller: _scrollController,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraint) {
+              if (constraint.maxWidth <= mobileWidth * 2) {
+                //This is for mobile
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Column(
+                    children: [
+                      _TutorInfoMobileBody(
+                        _buildTutorBriefIntro(context, tutor!),
+                        tutor.video != null
+                            ? TutorIntroVideo(
+                                tutorVideo: tutor.video!,
+                              )
+                            : Container(),
+                      ),
+                      _TutorDetailMobileBody(
+                        tutorDetailInfo: _buildTutorDetail(context),
+                        schedule: BookingSchedule(
+                          tutorId: widget.tutorId,
+                        ),
+                      ),
+                      Builder(builder: (context) {
+                        final feedbacks = ref.watch(feedbacksControllerProvider(widget.tutorId));
+                        return AsyncValueWidget(
+                          value: feedbacks,
+                          data: (feedbacks) {
+                            return feedbacks != null
+                                ? _PartInfo(
+                                    partTitle: 'Others review',
+                                    partDescription: TutorFeedback(
+                                      feedbacks: feedbacks,
+                                    ))
+                                : Container();
+                          },
+                        );
+                      })
+                    ],
                   ),
-                  _PartInfo(
-                    partTitle: 'Others review',
-                    partDescription: TutorFeedback(
-                      tutorId: tutorId,
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else {
-            //This this for desktop
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
-              child: Column(
-                children: [
-                  _TutorInfoDesktopBody(
-                      _buildTutorBriefIntro(context),
-                      Container(
-                        color: Colors.black12,
-                        width: double.infinity,
-                        height: 300,
-                      )),
-                  _TutorDetailDesktopBody(
-                      tutorDetailInfo: _buildTutorDetail(context),
-                      schedule: BookingSchedule(
-                        tutorId: tutorId,
-                      )),
-                  _PartInfo(
-                    partTitle: 'Others review',
-                    partDescription: TutorFeedback(
-                      tutorId: tutorId,
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
-        },
-      ),
+                );
+              } else {
+                //This this for desktop
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16 * 10),
+                  child: Column(
+                    children: [
+                      _TutorInfoDesktopBody(
+                        _buildTutorBriefIntro(context, tutor!),
+                        tutor.video != null
+                            ? TutorIntroVideo(
+                                tutorVideo: tutor.video!,
+                              )
+                            : Container(),
+                      ),
+                      _TutorDetailDesktopBody(
+                          tutorDetailInfo: _buildTutorDetail(context),
+                          schedule: BookingSchedule(
+                            tutorId: widget.tutorId,
+                          )),
+                      Consumer(
+                        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                          final feedbacks = ref.watch(feedbacksControllerProvider(widget.tutorId));
+                          return AsyncValueWidget(
+                            value: feedbacks,
+                            data: (feedbacks) {
+                              return feedbacks != null
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: feedbacks.rows.length,
+                                      itemBuilder: (context, index) {
+                                        return TutorFeedbackItem(feedback: feedbacks.rows[index]);
+                                      })
+                                  : Container();
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildTutorBriefIntro(BuildContext context) {
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        var tutor = ref.watch(tutorViewmodelProvider(tutorId));
-        return AsyncValueWidget(
-          value: tutor,
-          data: (tutor) {
-            return Column(
+  Widget _buildTutorBriefIntro(BuildContext context, Tutor tutor) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              minRadius: 64,
+              backgroundImage: tutor.user?.avatar != null ? NetworkImage(tutor!.user!.avatar!) : null,
+              child: tutor.user?.avatar == null ? const Icon(Icons.portrait) : null,
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      minRadius: 64,
-                      backgroundImage: tutor?.user?.avatar != null ? NetworkImage(tutor!.user!.avatar!) : null,
-                      child: tutor?.user?.avatar == null ? const Icon(Icons.portrait) : null,
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          tutor!.user!.name!,
-                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        Row(
-                          children: [
-                            Icon(Icons.star),
-                            Icon(Icons.star),
-                            Icon(Icons.star),
-                            Icon(Icons.star),
-                            Icon(Icons.star),
-                            Text('(127)')
-                          ],
-                        ),
-                        Wrap(
-                          children: [
-                            Flag.fromString(
-                              tutor.user!.country!,
-                              width: 20 * 4 / 3,
-                              height: 20,
-                              fit: BoxFit.scaleDown,
-                              borderRadius: 8,
-                            ),
-                            Text(Countries.alpha2ToCountryName(tutor.user!.country!)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
                 Text(
-                  sampleText,
-                  textAlign: TextAlign.justify,
-                ),
-                const SizedBox(
-                  height: 16,
+                  tutor.user!.name!,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      children: [
-                        Icon(Icons.favorite),
-                        Text('Favorite'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(Icons.report),
-                        Text('Report'),
-                      ],
-                    ),
+                    Icon(Icons.star, color: tutor.rating! >= 0.5 ? Colors.yellow : Colors.grey),
+                    Icon(Icons.star, color: tutor.rating! >= 1.5 ? Colors.yellow : Colors.grey),
+                    Icon(Icons.star, color: tutor.rating! >= 2.5 ? Colors.yellow : Colors.grey),
+                    Icon(Icons.star, color: tutor.rating! >= 3.5 ? Colors.yellow : Colors.grey),
+                    Icon(Icons.star, color: tutor.rating! >= 4.5 ? Colors.yellow : Colors.grey),
+                    Text('(${tutor.totalFeedback})')
                   ],
-                )
+                ),
+                Wrap(
+                  children: [
+                    Flag.fromString(
+                      tutor.user!.country!,
+                      width: 20 * 4 / 3,
+                      height: 20,
+                      fit: BoxFit.scaleDown,
+                      borderRadius: 8,
+                    ),
+                    Text(Countries.alpha2ToCountryName(tutor.user!.country!)),
+                  ],
+                ),
               ],
-            );
-          },
-        );
-      },
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Text(
+          tutor.bio ?? 'No data',
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                    return InkWell(
+                      child: Icon(
+                        tutor.isFavorite == null
+                            ? Icons.favorite_border
+                            : tutor.isFavorite!
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                        color: Colors.red,
+                      ),
+                      onTap: () {
+                        ref.read(userRepositoryProvider).updateTutorInFavoriteList(tutor.user!.id);
+                        setState(() {
+                          tutor.isFavorite ??= false;
+                          tutor.isFavorite = !tutor.isFavorite!;
+                        });
+                      },
+                    );
+                  },
+                ),
+                const Text(
+                  'Favorite',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+            const Column(
+              children: [
+                Icon(Icons.report),
+                Text('Report'),
+              ],
+            ),
+          ],
+        )
+      ],
     );
   }
 
   Widget _buildTutorDetail(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        var tutor = ref.watch(tutorViewmodelProvider(tutorId));
+        var tutor = ref.watch(tutorViewmodelProvider(widget.tutorId));
         return AsyncValueWidget(
           value: tutor,
           data: (tutor) {

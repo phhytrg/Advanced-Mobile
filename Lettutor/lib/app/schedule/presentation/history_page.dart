@@ -74,19 +74,6 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                   );
                 },
               );
-              // return RiverPagedBuilder<int, BookingData>(
-              //
-              //     provider: bookingProvider,
-              //     pagedBuilder: (controller, builder) => PagedListView(
-              //         shrinkWrap: true,
-              //         pagingController: controller,
-              //         builderDelegate: builder),
-              //     itemBuilder: (context, item, index) {
-              //       return HistoryItem(
-              //         booking: item,
-              //       );
-              //     },
-              //     firstPageKey: 1);
             }),
           ],
         ),

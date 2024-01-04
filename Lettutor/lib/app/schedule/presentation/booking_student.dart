@@ -22,7 +22,7 @@ class BookingStudentPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Column(
           children: [
-            PageHeader(
+            const PageHeader(
               svgIconPath: 'icons/calendar-check.svg',
               pageDescription: sampleText,
               pageName: 'Schedule',
