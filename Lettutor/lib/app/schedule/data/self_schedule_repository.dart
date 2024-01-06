@@ -77,6 +77,20 @@ class SelfScheduleRepository{
     Map responseData = response.data;
     return responseData["total"];
   }
+
+  Future<String> cancelBooking(String scheduleDetailId, String cancelReason) async{
+    final response = await dio.delete(
+      '$baseUrl/schedule-detail',
+      data: {
+        "cancelInfo": {
+          "cancelReasonId": 1,
+          "note": cancelReason,
+        },
+        "scheduleDetailId": scheduleDetailId,
+      },
+    );
+    return response.data["message"];
+  }
 }
 
 @Riverpod(keepAlive: true)

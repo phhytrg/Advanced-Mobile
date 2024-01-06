@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/tutors/domain/tutor_schedule/tutor_schedule_response.dart';
+import 'package:lettutor/app/tutors/service/tutors_service.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
 
@@ -142,10 +143,29 @@ class BookingListWidget extends ConsumerWidget {
   }
 }
 
-class BookingItem extends StatelessWidget {
+class BookingItem extends ConsumerStatefulWidget {
   const BookingItem({super.key, required this.bookingData});
 
   final BookingData bookingData;
+
+  @override
+  ConsumerState<BookingItem> createState() => _BookingItemState();
+}
+
+class _BookingItemState extends ConsumerState<BookingItem> {
+  late final TextEditingController dropdownMenuController;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownMenuController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    dropdownMenuController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +175,8 @@ class BookingItem extends StatelessWidget {
   Widget _buildLessonLine(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Row(
@@ -165,14 +185,106 @@ class BookingItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
-                    '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!))} - ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.endPeriodTimestamp!))}'),
+                    '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(widget.bookingData.scheduleDetailInfo!.startPeriodTimestamp!))} - ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(widget.bookingData.scheduleDetailInfo!.endPeriodTimestamp!))}'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(foregroundColor: Colors.red, side: BorderSide(color: Colors.red)),
-                    child: Row(
+                    onPressed: DateTime.now().millisecondsSinceEpoch + 3600000000 <
+                            widget.bookingData.scheduleDetailInfo!.startPeriodTimestamp!.toInt()
+                        ? null
+                        : () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Align(
+                                      alignment: Alignment.center,
+                                      child: Text('Cancel booking'),
+                                    ),
+                                    surfaceTintColor: Colors.white,
+                                    content: SizedBox(
+                                      width: 400,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TutorMiniItem(
+                                              tutorName:
+                                                  widget.bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!,
+                                              tutorCountry: widget
+                                                  .bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!,
+                                              tutorAvatar: widget
+                                                  .bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              const Text(
+                                                'Lesson time: ',
+                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(
+                                                  widget.bookingData.scheduleDetailInfo!.startPeriodTimestamp!))),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          DropdownMenu(
+                                            dropdownMenuEntries: const [
+                                              DropdownMenuEntry(
+                                                value: 'reschedule',
+                                                label: 'Reschedule at another time',
+                                              ),
+                                              DropdownMenuEntry(
+                                                value: 'busy',
+                                                label: 'Busy at that time',
+                                              ),
+                                              DropdownMenuEntry(value: 'asked', label: 'Asked by tutor'),
+                                              DropdownMenuEntry(value: 'other', label: 'Other'),
+                                            ],
+                                            controller: dropdownMenuController,
+                                            hintText: 'Select reason',
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          const TextField(
+                                            maxLines: 5,
+                                            decoration: InputDecoration(
+                                              hintText: 'Reason',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('No')),
+                                      FilledButton(
+                                          onPressed: () {
+                                            ref
+                                                .read(tutorServiceProvider)
+                                                .cancelBooking(widget.bookingData.id!, dropdownMenuController.text);
+                                            ref.watch(bookingControllerProvider.notifier).getBookingList();
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Yes')),
+                                    ],
+                                  );
+                                });
+                          },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      side: const BorderSide(color: Colors.red),
+                    ),
+                    child: const Row(
                       children: [
                         Icon(Icons.cancel),
                         Text('Cancel'),
@@ -205,7 +317,7 @@ class BookingItem extends StatelessWidget {
                     color: Colors.white,
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: bookingData.studentRequest == null
+                    child: widget.bookingData.studentRequest == null
                         ? Text(
                             'Currently there are no requests for this class. '
                             'Please write down any requests for the teacher.',
@@ -213,7 +325,7 @@ class BookingItem extends StatelessWidget {
                               color: Colors.grey.shade400,
                             ),
                           )
-                        : Text(bookingData.studentRequest!),
+                        : Text(widget.bookingData.studentRequest!),
                   )
                 ],
               ),
@@ -284,7 +396,7 @@ class BookingItem extends StatelessWidget {
             children: [
               Text(
                 MyDateUtils.getWeekDayMonthYear(
-                    DateTime.fromMillisecondsSinceEpoch(bookingData.scheduleDetailInfo!.startPeriodTimestamp!)),
+                    DateTime.fromMillisecondsSinceEpoch(widget.bookingData.scheduleDetailInfo!.startPeriodTimestamp!)),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(),
               ),
               Text('1 lesson'),
@@ -292,9 +404,9 @@ class BookingItem extends StatelessWidget {
           ),
         ),
         TutorMiniItem(
-            tutorName: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!,
-            tutorCountry: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!,
-            tutorAvatar: bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
+            tutorName: widget.bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!,
+            tutorCountry: widget.bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!,
+            tutorAvatar: widget.bookingData.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!),
       ],
     );
   }

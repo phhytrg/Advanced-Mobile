@@ -50,6 +50,10 @@ class TutorService{
   Future<FeedbackList?> getTutorFeedback(String tutorId, int page, int perPage) async{
     return await ref.read(feedbackRepositoryProvider).getFeedback(tutorId, page, perPage);
   }
+
+  Future<void> cancelBooking(String scheduleDetailId, String cancelReason) async{
+    await ref.read(selfScheduleRepositoryProvider).cancelBooking(scheduleDetailId, cancelReason);
+  }
 }
 
 final tutorServiceProvider = Provider<TutorService>((ref) {

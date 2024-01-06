@@ -45,7 +45,6 @@ class BookingData {
   String? id;
   bool? isDeleted;
   bool? isTrial;
-  // String? lessonPlanId;
   String? recordUrl;
   String? scheduleDetailId;
   ScheduleDetail? scheduleDetailInfo;
