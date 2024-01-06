@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,27 +9,51 @@ import '../../../service/tutors_service.dart';
 part 'tutors_controller.g.dart';
 
 @riverpod
-class TutorsController extends _$TutorsController{
+class TutorsController extends _$TutorsController {
+  var page = 1;
+  var perPage = 9;
+  late int maxPage;
 
   @override
-  FutureOr<TutorList?> build() async{
-    // return await searchTutorsByFilters(SearchPayload(filters: new Filters(), page: "1", perPage: 9));
-    return await getTutorsWithPagination(9, "1");
-  }
-
-  Future<TutorList?> getTutorsWithPagination(int perPage, String page) async {
+  FutureOr<TutorList?> build() async {
     final tutorsService = ref.read(tutorServiceProvider);
     state = const AsyncLoading();
-    state = await AsyncValue.guard<TutorList?>(() =>
-        tutorsService.getTutorsWithPagination(perPage, page));
+    state = await AsyncValue.guard<TutorList?>(() => tutorsService.getTutorsWithPagination(9, 1));
+    maxPage = state.value!.count! ~/ perPage;
     return state.valueOrNull;
   }
 
-    Future<TutorList?> searchTutorsByFilters(SearchPayload filters) async {
-      final tutorsService = ref.read(tutorServiceProvider);
-      state = const AsyncLoading();
-      state = await AsyncValue.guard<TutorList?>(() =>
-          tutorsService.searchTutorsByFilters(filters));
-      return state.valueOrNull;
+  Future<TutorList?> getTutorsWithPagination(int perPage, int page) async {
+    this.page = 1;
+    final tutorsService = ref.read(tutorServiceProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard<TutorList?>(() => tutorsService.getTutorsWithPagination(perPage, page));
+    return state.valueOrNull;
+  }
+
+  Future<TutorList?> searchTutorsByFilters(SearchPayload filters) async {
+    final tutorsService = ref.read(tutorServiceProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard<TutorList?>(() => tutorsService.searchTutorsByFilters(filters));
+    if(filters.page != null) {
+      page = filters.page!;
+      maxPage = state.value!.count ~/ perPage;
     }
+    return state.valueOrNull;
+  }
+
+  Future<void> getMoreTutors(SearchPayload filters) async{
+    if(page >= maxPage) {
+      return;
+    }
+    page++;
+    filters.page = page;
+    filters.perPage = perPage;
+    final tutorService = ref.read(tutorServiceProvider);
+    if (state.value == null) {
+      state = await AsyncValue.guard(() => tutorService.searchTutorsByFilters(filters));
+    }
+    final newState = await AsyncValue.guard(() => tutorService.searchTutorsByFilters(filters));
+    state = AsyncData(TutorList(count: state.value!.count, rows: [...?state.value!.rows, ...?newState.value!.rows]));
+  }
 }

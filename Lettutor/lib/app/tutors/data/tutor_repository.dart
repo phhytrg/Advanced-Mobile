@@ -8,7 +8,7 @@ import 'package:lettutor/app/tutors/domain/response/tutor_list.dart';
 part 'tutor_repository.g.dart';
 
 abstract class BaseTutorRepository {
-  Future<TutorList?> fetchTutorsWithPagination(int perPage, String page);
+  Future<TutorList?> fetchTutorsWithPagination(int perPage, int page);
 
   Future<TutorList?> searchTutorsByFilters(SearchPayload filters);
 
@@ -22,7 +22,7 @@ class TutorRepository implements BaseTutorRepository {
   TutorRepository({required this.dio});
 
   @override
-  Future<TutorList?> fetchTutorsWithPagination(int perPage, String page) async {
+  Future<TutorList?> fetchTutorsWithPagination(int perPage, int page) async {
     final response = await dio.post('/tutor/search', data: SearchPayload(
         page: page,
         perPage: perPage,

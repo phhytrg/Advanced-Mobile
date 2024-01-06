@@ -20,7 +20,7 @@ class TutorService{
   TutorService(this.ref);
   final Ref ref;
 
-  Future<TutorList?> getTutorsWithPagination(int perPage, String page) async {
+  Future<TutorList?> getTutorsWithPagination(int perPage, int page) async {
     return await ref.read(tutorRepositoryProvider).fetchTutorsWithPagination(perPage, page);
   }
 

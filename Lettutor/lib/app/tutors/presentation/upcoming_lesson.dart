@@ -43,65 +43,78 @@ class _UpcomingLessonState extends ConsumerState<UpcomingLesson> {
           SizedBox(
             height: 16,
           ),
-          Row(
-            children: [
-              Expanded(
-                child: AsyncValueWidget(
-                  value: upcomingLessonController,
-                  data: (upcomingLesson) {
-                    return Wrap(
-                      alignment: WrapAlignment.center,
+          AsyncValueWidget(
+            value: ref.watch(upcomingLessonControllerProvider),
+            data: (upcomingLesson) {
+              return upcomingLesson != null && upcomingLesson.isNotEmpty
+                  ? Row(
                       children: [
-                        Builder(
-                          builder: (BuildContext context) {
-                            return Text(
-                              textAlign: TextAlign.center,
-                              MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(
-                                  upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp!)),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
+                        Expanded(
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            children: [
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return Text(
+                                    textAlign: TextAlign.center,
+                                    MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(
+                                        upcomingLesson[0].scheduleDetailInfo!.startPeriodTimestamp!)),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
+                              Builder(
+                                builder: (context) {
+                                  timeLeft = upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp! -
+                                      DateTime.now().millisecondsSinceEpoch;
+                                  Timer.periodic(const Duration(seconds: 1), (timer) {
+                                    if (mounted) {
+                                      setState(() {
+                                        timeLeft -= 1000;
+                                      });
+                                    }
+                                  });
+                                  int minutes = timeLeft ~/ 60000 % 60;
+                                  int seconds = (timeLeft % 60000) ~/ 1000;
+                                  int hours = timeLeft ~/ 3600000;
+                                  return Text(
+                                    textAlign: TextAlign.center,
+                                    '(starts in ${hours < 10 ? 0 : ''}$hours:${minutes < 10 ? 0 : ''}$minutes:${seconds < 10 ? 0 : ''}$seconds)',
+                                    style: TextStyle(
+                                      color: Colors.yellow[300],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        Builder(
-                          builder: (context) {
-                            timeLeft = upcomingLesson![0].scheduleDetailInfo!.startPeriodTimestamp! -
-                                DateTime.now().millisecondsSinceEpoch;
-                            Timer.periodic(const Duration(seconds: 1), (timer) {
-                              if(mounted){
-                                setState(() {
-                                  timeLeft -= 1000;
-                                });
-                              }
-                            });
-                            int minutes = timeLeft ~/ 60000 % 60;
-                            int seconds = (timeLeft % 60000) ~/ 1000;
-                            int hours = timeLeft ~/ 3600000;
-                            return Text(
-                              textAlign: TextAlign.center,
-                              '(starts in ${hours < 10 ? 0 : ''}$hours:${minutes < 10 ? 0 : ''}$minutes:${seconds < 10 ? 0 : ''}$seconds)',
-                              style: TextStyle(
-                                color: Colors.yellow[300],
-                              ),
-                            );
-                          },
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text(
+                              'Enter lesson room',
+                            ),
+                          ),
                         ),
                       ],
+                    )
+                  : const SizedBox(
+                      width: double.infinity,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No upcoming lesson',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     );
-                  },
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Enter lesson room',
-                  ),
-                ),
-              ),
-            ],
+            },
           ),
           const SizedBox(
             height: 16,

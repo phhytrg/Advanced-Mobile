@@ -22,45 +22,70 @@ class TutorsPage extends ConsumerStatefulWidget {
 }
 
 class _TutorsPageState extends ConsumerState<TutorsPage> {
+  late final ScrollController scrollController;
   final List<String> specialties = [];
   final textSearchController = TextEditingController();
   final MultiSelectController nationalitiesController = MultiSelectController();
-  final List<ValueItem> nationalities= [
+  final List<ValueItem> nationalities = [
     const ValueItem(label: 'Foreign Tutor', value: 'foreign'),
     const ValueItem(label: 'Vietnamese Tutor', value: 'vietnam'),
     const ValueItem(label: 'Native English tutor', value: 'native'),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        ref.read(tutorsControllerProvider.notifier).getMoreTutors(SearchPayload(
+              filters: Filters(
+                specialties: specialties,
+                nationality: nationalitiesController.selectedOptions.isNotEmpty
+                    ? Nationality(
+                        isNative: nationalitiesController.selectedOptions
+                            .contains(nationalities.where((element) => element.value == 'native').first),
+                        isVietnamese: nationalitiesController.selectedOptions
+                            .contains(nationalities.where((element) => element.value == 'vietnam').first),
+                      )
+                    : null,
+              ),
+              search: textSearchController.text,
+            ));
+      }
+    });
+  }
+
   void handleOnSearchChange() {
     ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
-      page: "1",
-      perPage: 9,
-      search: textSearchController.text,
-      filters: Filters(
-        specialties: specialties,
-      ),
-      nationality: nationalitiesController.options.isNotEmpty
-          ? Nationality(
-        isNative: nationalitiesController.options
-            .contains(nationalities.where((element) => element.value == 'native').first),
-        isVietnamese: nationalitiesController.options
-            .contains(nationalities.where((element) => element.value == 'vietnam').first),
-      )
-          : null,
-    ));
+          perPage: 9,
+          search: textSearchController.text,
+          filters: Filters(
+            specialties: specialties,
+            nationality: nationalitiesController.selectedOptions.isNotEmpty
+                ? Nationality(
+                    isNative: nationalitiesController.selectedOptions
+                        .contains(nationalities.where((element) => element.value == 'native').first),
+                    isVietnamese: nationalitiesController.selectedOptions
+                        .contains(nationalities.where((element) => element.value == 'vietnam').first),
+                  )
+                : null,
+          ),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: scrollController,
       child: Column(
         children: [
-          UpcomingLesson(),
-          SizedBox(
+          const UpcomingLesson(),
+          const SizedBox(
             height: 24,
           ),
           _buildTutorsSearchBox(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Container(
@@ -76,20 +101,51 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             return AsyncValueWidget<TutorList?>(
               value: tutorsState,
               data: (tutorsList) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 32, right: 32),
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 16,
-                    runSpacing: 12,
-                    children: [
-                      for (var tutor in tutorsList!.rows!)
-                        TutorItem(
-                          tutor: tutor,
-                        )
-                    ],
-                  ),
-                );
+                return tutorsList != null && tutorsList.count > 0
+                    ? Container(
+                        margin: const EdgeInsets.only(left: 32, right: 32),
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 16,
+                          runSpacing: 12,
+                          children: [
+                            for (var tutor in tutorsList!.rows!)
+                              TutorItem(
+                                tutor: tutor,
+                              )
+                          ],
+                        ),
+                      )
+                    : Container(
+                        margin: const EdgeInsets.only(left: 32, right: 32),
+                        child: const Column(
+                          children: [
+                            SizedBox(
+                              height: 32,
+                            ),
+                            Text(
+                              'No tutor found',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Sorry we can\'t found any tutor matched your need. Try different keywords or remove search filters.',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 32,
+                            ),
+                          ],
+                        ),
+                      );
               },
             );
           }),
@@ -122,7 +178,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               controller: textSearchController,
               onSubmitted: (value) {
                 ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
-                    page: "1",
+                    page: 1,
                     perPage: 9,
                     search: textSearchController.text,
                     filters: Filters(
@@ -136,16 +192,19 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             showClearIcon: true,
             onOptionSelected: (options) {
               ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
-                    page: "1",
                     perPage: 9,
                     search: textSearchController.text,
                     filters: Filters(
                       specialties: specialties,
+                      nationality: nationalitiesController.selectedOptions.isNotEmpty
+                          ? Nationality(
+                              isNative:
+                                  options.contains(nationalities.where((element) => element.value == 'native').first),
+                              isVietnamese:
+                                  options.contains(nationalities.where((element) => element.value == 'vietnam').first),
+                            )
+                          : null,
                     ),
-                    nationality: nationalitiesController.options.isNotEmpty ? Nationality(
-                      isNative: options.contains(nationalities.where((element) => element.value == 'native').first),
-                      isVietnamese: options.contains(nationalities.where((element) => element.value == 'vietnam').first),
-                    ) : null,
                   ));
             },
             options: nationalities,
@@ -223,7 +282,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               setState(() {
                 specialties.clear();
               });
-              ref.read(tutorsControllerProvider.notifier).getTutorsWithPagination(9, "1");
+              ref.read(tutorsControllerProvider.notifier).getTutorsWithPagination(9, 1);
             },
             child: const Text('Reset filters'),
           ),
@@ -232,7 +291,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
     );
   }
 
-  Widget _buildFilterSpecialty(String value, String label){
+  Widget _buildFilterSpecialty(String value, String label) {
     return ElevatedButton(
         onPressed: () {
           setState(() {
@@ -247,7 +306,6 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
         style: ElevatedButton.styleFrom(
           foregroundColor: specialties.contains(value) ? Colors.blue : Colors.grey,
         ),
-        child: Text(label)
-    );
+        child: Text(label));
   }
 }

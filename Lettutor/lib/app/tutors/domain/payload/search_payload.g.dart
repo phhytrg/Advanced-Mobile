@@ -11,12 +11,9 @@ SearchPayload _$SearchPayloadFromJson(Map<String, dynamic> json) =>
       filters: json['filters'] == null
           ? null
           : Filters.fromJson(json['filters'] as Map<String, dynamic>),
-      page: json['page'] as String?,
+      page: json['page'] as int?,
       perPage: json['perPage'] as int?,
       search: json['search'] as String?,
-      nationality: json['nationality'] == null
-          ? null
-          : Nationality.fromJson(json['nationality'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SearchPayloadToJson(SearchPayload instance) =>
@@ -25,17 +22,20 @@ Map<String, dynamic> _$SearchPayloadToJson(SearchPayload instance) =>
       'page': instance.page,
       'perPage': instance.perPage,
       'search': instance.search,
-      'nationality': instance.nationality,
     };
 
 Filters _$FiltersFromJson(Map<String, dynamic> json) => Filters(
       specialties: (json['specialties'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      nationality: json['nationality'] == null
+          ? null
+          : Nationality.fromJson(json['nationality'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FiltersToJson(Filters instance) => <String, dynamic>{
       'specialties': instance.specialties,
+      'nationality': instance.nationality,
     };
 
 Nationality _$NationalityFromJson(Map<String, dynamic> json) => Nationality(
