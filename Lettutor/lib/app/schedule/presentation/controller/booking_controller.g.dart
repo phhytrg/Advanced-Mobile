@@ -6,7 +6,7 @@ part of 'booking_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookingControllerHash() => r'e0166076f6cb355b97aafde286118149e75fb992';
+String _$bookingControllerHash() => r'0f8ee3ffd80ba6cb1e226c50a1d2646ff906f8e7';
 
 /// See also [BookingController].
 @ProviderFor(BookingController)

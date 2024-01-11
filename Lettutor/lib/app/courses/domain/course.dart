@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lettutor/app/courses/domain/tutor_course.dart';
 
-class CourseList{
+class CourseList {
   int count;
   List<Course> rows;
 
@@ -35,6 +35,7 @@ class Course {
   bool? visible;
   String level;
   List<Topic> topics;
+  List<Category> categories;
 
   Course({
     required this.description,
@@ -46,6 +47,7 @@ class Course {
     this.visible,
     required this.topics,
     required this.level,
+    required this.categories,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) {
@@ -59,6 +61,7 @@ class Course {
       visible: json['visible'],
       topics: json['topics'].map<Topic>((topic) => Topic.fromJson(topic)).toList(),
       level: json['level'],
+      categories: json['categories'].map<Category>((category) => Category.fromJson(category)).toList(),
     );
   }
 
@@ -73,6 +76,7 @@ class Course {
       'visible': visible,
       'topics': topics.map((topic) => topic.toJson()).toList(),
       'level': level,
+      'categories': categories.map((category) => category.toJson()).toList(),
     };
   }
 }
@@ -109,6 +113,30 @@ class Topic {
       'name': name,
       'nameFile': nameFile,
       'orderCourse': orderCourse,
+    };
+  }
+}
+
+class Category {
+  String id;
+  String title;
+
+  Category({
+    required this.id,
+    required this.title,
+  });
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
     };
   }
 }

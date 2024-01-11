@@ -11,135 +11,125 @@ import 'package:lettutor/core/utils/string_utils.dart';
 import '../controller/courses_controller.dart';
 
 class CoursesNavigation extends StatefulWidget {
-  const CoursesNavigation({super.key});
+  final TabController tabController;
+
+  const CoursesNavigation({super.key, required this.resetOnTabChange, required this.tabController});
+
+  final VoidCallback resetOnTabChange;
 
   @override
   State<CoursesNavigation> createState() => _CoursesNavigationState();
 }
 
-class _CoursesNavigationState extends State<CoursesNavigation>
-    with TickerProviderStateMixin{
-
-  // var courseTab = Wrap(
-  //   alignment: WrapAlignment.start,
-  //   key: ValueKey<int>(0),
-  //   children: [
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //   ],
-  // );
-  // var ebookTab = Wrap(
-  //   alignment: WrapAlignment.start,
-  //   key: ValueKey<int>(1),
-  //   children: [
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //     CourseItem(),
-  //   ],
-  // );
-  // var interactiveEbookTab = Wrap(
-  //   alignment: WrapAlignment.start,
-  //   key: ValueKey<int>(2),
-  //   children: [
-  //   ],
-  // );
-
+class _CoursesNavigationState extends State<CoursesNavigation> {
   var _selectedTabIndex = 0;
-
-  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 0, );
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    var animatedWidgets = [
-      _buildCourseTab(),_buildEbookTab(),_buildInteractiveEbookTab()
-    ];
+    var animatedWidgets = [_buildCourseTab(), _buildEbookTab(), _buildInteractiveEbookTab()];
 
     return DefaultTabController(
       length: 3,
       child: Column(
         children: [
           TabBar(
-            tabs: [
-              Tab(text: 'Course',),
-              Tab(text: 'E-Book',),
+            tabs: const [
+              Tab(
+                text: 'Course',
+              ),
+              Tab(
+                text: 'E-Book',
+              ),
               Tab(text: 'Interactive E-book'),
             ],
-            onTap: (index){
+            onTap: (index) {
               setState(() {
                 _selectedTabIndex = index;
-                _tabController.animateTo(index);
+                widget.resetOnTabChange();
+                widget.tabController.animateTo(index);
               });
             },
-            controller: _tabController,
+            controller: widget.tabController,
           ),
           const SizedBox(
             height: 16,
           ),
           IndexedStack(
+            index: _selectedTabIndex,
             children: [
               Visibility(
-                child: animatedWidgets[0],
                 maintainState: true,
                 visible: _selectedTabIndex == 0,
+                child: animatedWidgets[0],
               ),
               Visibility(
-                child: animatedWidgets[1],
                 maintainState: true,
                 visible: _selectedTabIndex == 1,
+                child: animatedWidgets[1],
               ),
               Visibility(
-                child: animatedWidgets[2],
                 maintainState: true,
                 visible: _selectedTabIndex == 2,
+                child: animatedWidgets[2],
               ),
             ],
-            index: _selectedTabIndex,
           )
         ],
       ),
     );
   }
 
-  Widget _buildCourseTab(){
+  Widget _buildCourseTab() {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final coursesState = ref.watch(courseListControllerProvider);
         return AsyncValueWidget(
           value: coursesState,
           data: (coursesList) {
-            return Wrap(
-              alignment: WrapAlignment.start,
-              key: ValueKey<int>(0),
+            //Specific item in list
+            final List<String> categories = coursesList.rows.map((e) => e.categories[0].title).toSet().toList();
+            return Column(
               children: [
-                for (var course in coursesList.rows)
-                  CourseItem(course: course,),
+                for (int i = 0; i < categories.length; i++)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24.0),
+                        child: Text(
+                          categories[i],
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.w900, fontSize: 24),
+                        ),
+                      ),
+                      Wrap(
+                        alignment: WrapAlignment.start,
+                        key: ValueKey<int>(i),
+                        children: [
+                          for (var course in coursesList.rows)
+                            if (course.categories[0].title == categories[i])
+                              CourseItem(
+                                course: course,
+                              ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                    ],
+                  )
               ],
             );
           },
@@ -148,16 +138,15 @@ class _CoursesNavigationState extends State<CoursesNavigation>
     );
   }
 
-  Widget _buildInteractiveEbookTab(){
-    return Wrap(
+  Widget _buildInteractiveEbookTab() {
+    return const Wrap(
       alignment: WrapAlignment.start,
       key: ValueKey<int>(2),
-      children: [
-      ],
+      children: [],
     );
   }
 
-  Widget _buildEbookTab(){
+  Widget _buildEbookTab() {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final ebooksState = ref.watch(ebooksControllerProvider);
@@ -169,7 +158,9 @@ class _CoursesNavigationState extends State<CoursesNavigation>
               key: const ValueKey<int>(1),
               children: [
                 for (var ebook in ebookList.rows)
-                  EbookItem(ebook: ebook,),
+                  EbookItem(
+                    ebook: ebook,
+                  ),
               ],
             );
           },
@@ -179,15 +170,15 @@ class _CoursesNavigationState extends State<CoursesNavigation>
   }
 }
 
-
 class CourseItem extends StatelessWidget {
   const CourseItem({super.key, required this.course});
+
   final Course course;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         context.goNamed(AppRoute.courseInfo.name, pathParameters: {
           'id': course.id.toString(),
         });
@@ -195,7 +186,7 @@ class CourseItem extends StatelessWidget {
       child: Container(
         width: 300,
         height: 300 * 3.8 / 3,
-        margin: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         // height: 280 * 3.8 / 3,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
@@ -208,34 +199,38 @@ class CourseItem extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 // spreadRadius: 5,
                 blurRadius: 0,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
-            color: Colors.white
-        ),
+            color: Colors.white),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
-                child: Image.network(course.imageUrl, width: 300, fit: BoxFit.scaleDown, )
-            ),
+                child: Image.network(
+                  course.imageUrl,
+                  width: 300,
+                  fit: BoxFit.scaleDown,
+                )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(course.name, style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w900
-                  ),),
+                  Text(
+                    course.name,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w900),
+                  ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(course.description,
+                  Text(
+                    course.description,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.grey,
-                    ),
+                          color: Colors.grey,
+                        ),
                   ),
                 ],
               ),

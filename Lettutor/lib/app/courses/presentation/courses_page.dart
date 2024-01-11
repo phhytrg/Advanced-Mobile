@@ -1,15 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lettutor/app/courses/data/course_repository.dart';
+import 'package:lettutor/app/courses/presentation/controller/courses_controller.dart';
+import 'package:lettutor/app/courses/presentation/controller/ebooks_controller.dart';
+import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../../../../core/commom-widgets/search.dart';
-import '../../../core/commom-widgets/appbar.dart';
-import '../../../core/commom-widgets/drawer.dart';
 import '../../../core/constant.dart';
 import 'common/courses_tab.dart';
 
-class CoursesPage extends StatelessWidget {
+class CoursesPage extends ConsumerStatefulWidget {
   const CoursesPage({super.key});
+
+  @override
+  ConsumerState<CoursesPage> createState() => _CoursesPageState();
+}
+
+class _CoursesPageState extends ConsumerState<CoursesPage> with TickerProviderStateMixin {
+  late final MultiSelectController levelSelectingController;
+  late final MultiSelectController categoryController;
+  late final MultiSelectController levelSortingController;
+  late final TextEditingController searchController;
+  late final TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    levelSelectingController = MultiSelectController();
+    categoryController = MultiSelectController();
+    levelSortingController = MultiSelectController();
+    searchController = TextEditingController();
+
+    tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: 0,
+    );
+
+    searchController.addListener(() {
+      final currentTab = tabController.index;
+      if (searchController.value.text == '') return;
+      if (currentTab == 0) {
+        ref.read(courseListControllerProvider.notifier).filter(
+              query: searchController.text != '' ? searchController.text : null,
+              level: levelSelectingController.selectedOptions.isNotEmpty
+                  ? levelSelectingController.selectedOptions.map((e) => e.toString()).toList()
+                  : null,
+              order: ['level'],
+              orderBy: levelSortingController.selectedOptions.isNotEmpty
+                  ? levelSortingController.selectedOptions.first.toString()
+                  : null,
+              categoryIds: categoryController.selectedOptions.isNotEmpty
+                  ? categoryController.selectedOptions.map((e) => e.toString()).toList()
+                  : null,
+            );
+      } else if (currentTab == 1) {
+        ref.read(ebooksControllerProvider.notifier).filter(
+            query: searchController.text != '' ? searchController.text : null,
+            level: levelSelectingController.selectedOptions.isNotEmpty
+                ? levelSelectingController.selectedOptions.map((e) => e.toString()).toList()
+                : null,
+            order: ['level'],
+            orderBy: levelSortingController.selectedOptions.isNotEmpty
+                ? levelSortingController.selectedOptions.first.toString()
+                : null,
+            categoryIds: categoryController.selectedOptions.isNotEmpty
+                ? categoryController.selectedOptions.map((e) => e.toString()).toList()
+                : null);
+      } else if (currentTab == 2) {
+        // ref.read(interactiveEbooksControllerProvider.notifier).filter(searchController.text);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    levelSelectingController.dispose();
+    categoryController.dispose();
+    levelSortingController.dispose();
+    searchController.dispose();
+    tabController.dispose();
+    super.dispose();
+  }
+
+  void reset() {
+    levelSelectingController.setSelectedOptions([]);
+    categoryController.setSelectedOptions([]);
+    levelSortingController.setSelectedOptions([]);
+    searchController.text = '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +99,18 @@ class CoursesPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CoursesHeader(),
-            CoursesNavigation(),
+            CoursesHeader(
+              levelSelectingController: levelSelectingController,
+              categoryController: categoryController,
+              levelSortingController: levelSortingController,
+              searchController: searchController,
+            ),
+            CoursesNavigation(
+              resetOnTabChange: () {
+                reset();
+              },
+              tabController: tabController,
+            ),
           ],
         ),
       ),
@@ -34,7 +125,17 @@ class CoursesHeader extends StatelessWidget {
 
   final sortDropdownMenu = <DropdownMenuEntry<String>>[];
 
-  CoursesHeader({super.key});
+  final MultiSelectController levelSelectingController;
+  final MultiSelectController categoryController;
+  final MultiSelectController levelSortingController;
+  final TextEditingController searchController;
+
+  CoursesHeader(
+      {super.key,
+      required this.levelSelectingController,
+      required this.categoryController,
+      required this.levelSortingController,
+      required this.searchController});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +169,7 @@ class CoursesHeader extends StatelessWidget {
                     ),
                     MySearchBar(
                       hintText: 'Course',
+                      controller: searchController,
                     )
                   ],
                 ),
@@ -78,8 +180,8 @@ class CoursesHeader extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text(
               'LiveTutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.'),
         ),
@@ -90,21 +192,54 @@ class CoursesHeader extends StatelessWidget {
                 Expanded(
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: _buildMultiSelectDropdownButton(context, [], 'Select level')),
+                      child: _buildMultiSelectDropdownButton(
+                          context,
+                          const [
+                            ValueItem(label: 'Beginner', value: '1'),
+                            ValueItem(label: 'Upper Beginner', value: '2'),
+                            ValueItem(label: 'Pre-Intermediate', value: '3'),
+                            ValueItem(label: 'Upper-Intermediate', value: '4'),
+                            ValueItem(label: 'Pre-Advance', value: '5'),
+                            ValueItem(label: 'Advanced', value: '6'),
+                            ValueItem(label: 'Very Advanced', value: '7'),
+                          ],
+                          'Select level',
+                          levelSelectingController)),
                 ),
                 Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _buildMultiSelectDropdownButton(
-                        context,
-                        [],
-                        'Select category',
-                      )),
+                  child: Consumer(builder: (context, ref, child) {
+                    final categories = ref.watch(getCategoriesProvider);
+                    return AsyncValueWidget(
+                        value: categories,
+                        data: (categories) {
+                          return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildMultiSelectDropdownButton(
+                                context,
+                                [
+                                  for (var category in categories)
+                                    ValueItem(
+                                      label: category.title,
+                                      value: category.id.toString(),
+                                    )
+                                ],
+                                'Select category',
+                                categoryController,
+                              ));
+                        });
+                  }),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: _buildSingleSelectDropdownButton(context, [], ''),
+                    child: _buildSingleSelectDropdownButton(
+                        context,
+                        const [
+                          ValueItem(label: 'Level decreasing', value: 'DESC'),
+                          ValueItem(label: 'Level increasing', value: 'ASC')
+                        ],
+                        'Sort by level',
+                        levelSortingController),
                   ),
                 ),
               ],
@@ -114,15 +249,51 @@ class CoursesHeader extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _buildMultiSelectDropdownButton(context, [], 'Select level'),
+                  child: _buildMultiSelectDropdownButton(
+                      context,
+                      [
+                        const ValueItem(label: 'Beginner', value: '1'),
+                        const ValueItem(label: 'Upper Beginner', value: '2'),
+                        const ValueItem(label: 'Pre-Intermediate', value: '3'),
+                        const ValueItem(label: 'Upper-Intermediate', value: '4'),
+                        const ValueItem(label: 'Pre-Advance', value: '5'),
+                        const ValueItem(label: 'Advanced', value: '6'),
+                        const ValueItem(label: 'Very Advanced', value: '7'),
+                      ],
+                      'Select level',
+                      levelSelectingController),
                 ),
+                Consumer(builder: (context, ref, child) {
+                  final categories = ref.watch(getCategoriesProvider);
+                  return AsyncValueWidget(
+                      value: categories,
+                      data: (categories) {
+                        return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _buildMultiSelectDropdownButton(
+                              context,
+                              [
+                                for (var category in categories)
+                                  ValueItem(
+                                    label: category.title,
+                                    value: category.id.toString(),
+                                  )
+                              ],
+                              'Select category',
+                              categoryController,
+                            ));
+                      });
+                }),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _buildMultiSelectDropdownButton(context, [], 'Select category'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _buildSingleSelectDropdownButton(context, [], ''),
+                  child: _buildSingleSelectDropdownButton(
+                      context,
+                      const [
+                        ValueItem(label: 'Level decreasing', value: 'DESC'),
+                        ValueItem(label: 'Level increasing', value: 'ASC'),
+                      ],
+                      'Sort by level',
+                      levelSortingController),
                 ),
               ],
             );
@@ -132,7 +303,8 @@ class CoursesHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildMultiSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText) {
+  Widget _buildMultiSelectDropdownButton(
+      BuildContext context, List<ValueItem> valueItems, String hintText, MultiSelectController controller) {
     return Theme(
       data: ThemeData(
         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
@@ -141,14 +313,12 @@ class CoursesHeader extends StatelessWidget {
       ),
       child: MultiSelectDropDown(
         showClearIcon: true,
-        onOptionSelected: (options) {
-          debugPrint(options.toString());
-        },
+        onOptionSelected: (options) {},
         options: valueItems,
         selectionType: SelectionType.multi,
         chipConfig: ChipConfig(
           wrapType: WrapType.scroll,
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             fontSize: 12,
           ),
           padding: EdgeInsets.all(4),
@@ -162,11 +332,13 @@ class CoursesHeader extends StatelessWidget {
         selectedOptionBackgroundColor: Colors.blue.shade50,
         padding: EdgeInsets.zero,
         hint: hintText,
+        controller: controller,
       ),
     );
   }
 
-  Widget _buildSingleSelectDropdownButton(BuildContext context, List<ValueItem> valueItems, String hintText) {
+  Widget _buildSingleSelectDropdownButton(
+      BuildContext context, List<ValueItem> valueItems, String hintText, MultiSelectController controller) {
     return Theme(
       data: ThemeData(
         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
@@ -184,6 +356,7 @@ class CoursesHeader extends StatelessWidget {
         selectedOptionBackgroundColor: Colors.blue.shade50,
         padding: EdgeInsets.zero,
         hint: hintText,
+        controller: controller,
       ),
     );
   }

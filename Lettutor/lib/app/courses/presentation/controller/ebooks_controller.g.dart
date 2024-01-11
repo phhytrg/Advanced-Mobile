@@ -6,7 +6,7 @@ part of 'ebooks_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ebooksControllerHash() => r'ebfc465721f761d9979e2929806db5082ac96b8a';
+String _$ebooksControllerHash() => r'842c11c77fdb7c6b74158196c38cbfac6e7c9d48';
 
 /// See also [EbooksController].
 @ProviderFor(EbooksController)
