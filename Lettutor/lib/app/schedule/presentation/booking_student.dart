@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
-import 'package:lettutor/app/tutors/domain/tutor_schedule/tutor_schedule_response.dart';
 import 'package:lettutor/app/tutors/service/tutors_service.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
@@ -9,16 +8,44 @@ import 'package:lettutor/core/utils/date_untils.dart';
 import '../../../../core/commom-widgets/button_widget.dart';
 import '../../../../core/commom-widgets/page_header.dart';
 import '../../../../core/commom-widgets/tutor_mini_item.dart';
-import '../../../core/commom-widgets/appbar.dart';
 import '../../../core/constant.dart';
 import 'controller/booking_controller.dart';
 
-class BookingStudentPage extends StatelessWidget {
+class BookingStudentPage extends ConsumerStatefulWidget {
   const BookingStudentPage({super.key});
+
+  @override
+  ConsumerState<BookingStudentPage> createState() => _BookingStudentPageState();
+}
+
+class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
+  late final ScrollController _scrollController;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          ref.read(bookingControllerProvider.notifier).getMoreBookingList();
+        }
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Column(
@@ -200,10 +227,6 @@ class _BookingItemState extends ConsumerState<BookingItem> {
   @override
   Widget build(BuildContext context) {
     return _buildBookingBody(context);
-  }
-
-  void _close() {
-    Navigator.pop(context);
   }
 
   Widget _buildCancelBookingButton(BuildContext context, BookingData bookingData) {
@@ -409,7 +432,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
               alignment: Alignment.bottomRight,
               child: OutlinedButton(
                 onPressed: () {},
-                child: Text('Go to meeting'),
+                child: const Text('Go to meeting'),
               ),
             ),
           )
@@ -471,7 +494,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                     widget.bookingList[0].scheduleDetailInfo!.startPeriodTimestamp!)),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(),
               ),
-              Text('1 lesson'),
+              Text('${widget.bookingList.length} ${widget.bookingList.length <= 1 ? 'lesson' : 'lessons'}'),
             ],
           ),
         ),
