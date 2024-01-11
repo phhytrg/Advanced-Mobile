@@ -35,7 +35,7 @@ class Course {
   bool? visible;
   String level;
   List<Topic> topics;
-  List<Category> categories;
+  List<Category>? categories;
 
   Course({
     required this.description,
@@ -47,7 +47,7 @@ class Course {
     this.visible,
     required this.topics,
     required this.level,
-    required this.categories,
+    this.categories,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) {
@@ -61,7 +61,7 @@ class Course {
       visible: json['visible'],
       topics: json['topics'].map<Topic>((topic) => Topic.fromJson(topic)).toList(),
       level: json['level'],
-      categories: json['categories'].map<Category>((category) => Category.fromJson(category)).toList(),
+      categories: json['categories']?.map<Category>((category) => Category.fromJson(category)).toList(),
     );
   }
 
@@ -76,7 +76,7 @@ class Course {
       'visible': visible,
       'topics': topics.map((topic) => topic.toJson()).toList(),
       'level': level,
-      'categories': categories.map((category) => category.toJson()).toList(),
+      'categories': categories?.map((category) => category.toJson()).toList(),
     };
   }
 }

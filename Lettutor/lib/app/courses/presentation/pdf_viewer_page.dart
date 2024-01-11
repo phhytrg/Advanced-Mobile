@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lettutor/app/courses/presentation/common/pdf_viewer.dart';
 
 class PdfViewerPage extends StatelessWidget {
-  const PdfViewerPage({super.key});
+  final String url;
+  const PdfViewerPage({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
-    return const MyPdfViewer();
+    return MyPdfViewer(url: url,);
   }
 }

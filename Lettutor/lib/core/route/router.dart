@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/advertising/advertising_page.dart';
 import 'package:lettutor/app/auth/presentation/login_page.dart';
 import 'package:lettutor/app/auth/presentation/reset_password.dart';
+import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
@@ -74,7 +75,7 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
     initialLocation: '/',
     refreshListenable: authState,
     redirect: (context, state) {
-      List<String>unAuthoredRoutes = [
+      List<String> unAuthoredRoutes = [
         AppRoute.login.getPath(),
         AppRoute.signup.getPath(),
         AppRoute.resetPassword.getPath(),
@@ -126,10 +127,12 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
               },
             ),
             GoRoute(
-              path: AppRoute.pdfViewer.getPath(),
+              path: '${AppRoute.pdfViewer.getPath()}:url',
               name: AppRoute.pdfViewer.name,
               builder: (context, state) {
-                return PdfViewerPage();
+                return PdfViewerPage(
+                  url: state.pathParameters['url'] ?? '',
+                );
               },
             ),
             GoRoute(
@@ -137,17 +140,18 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
                 name: AppRoute.courseInfo.name,
                 builder: (context, state) => CourseStandalonePage(
                       courseId: state.pathParameters['id'] ?? '',
-                    )
+                    ),
             ),
-            // GoRoute(
-            //   path: AppRoute.courseDetail.getString(),
-            //   name: AppRoute.courseDetail.name,
-            //   builder: (context, state) => CourseDetailPage(),
-            // ),
             GoRoute(
-              path: AppRoute.courseTopics.getPath(),
+              path: '${AppRoute.courseTopics.getPath()}/:id/:index',
               name: AppRoute.courseTopics.name,
-              builder: (context, state) => CourseTopicsPage(),
+              builder: (context, state) {
+                final courseId = state.pathParameters['id'] ?? '';
+                return CourseTopicsPage(
+                  courseId: courseId,
+                  index: int.parse(state.pathParameters['index'] ?? '0'),
+                );
+              },
             ),
           ],
           builder: (context, state, child) {
@@ -161,7 +165,9 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
       GoRoute(
         path: '/login',
         name: AppRoute.login.name,
-        builder: (context, state) => LoginPage(authState: authState,),
+        builder: (context, state) => LoginPage(
+          authState: authState,
+        ),
       ),
       GoRoute(
         path: '/signup',

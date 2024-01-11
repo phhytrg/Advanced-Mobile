@@ -4,27 +4,37 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
-// import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class MyPdfViewer extends StatefulWidget {
-  const MyPdfViewer({super.key});
+  final String url;
+  final PdfControllerPinch? pdfController;
+
+  const MyPdfViewer({super.key, required this.url, this.pdfController});
 
   @override
   State<MyPdfViewer> createState() => _MyPdfViewerState();
 }
 
 class _MyPdfViewerState extends State<MyPdfViewer> {
-
   late PdfControllerPinch _pdfController;
 
+  @override
+  void initState() {
+    if (widget.pdfController != null) {
+      _pdfController = widget.pdfController!;
+    } else {
+      _pdfController = PdfControllerPinch(
+        document: PdfDocument.openData(_fetchPdfData(widget.url)),
+      );
+    }
+    super.initState();
+    return;
+  }
 
   @override
-  void initState(){
-    
-    _pdfController = PdfControllerPinch(
-        document: PdfDocument.openData(_fetchPdfData('https://api.app.lettutor.com/file/be4c3df8-3b1b-4c8f-a5cc-75a8e2e6626afileFoods%20You%20Love.pdf')),
-    );
-    super.initState();
+  void dispose() {
+    _pdfController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,9 +53,7 @@ class _MyPdfViewerState extends State<MyPdfViewer> {
       throw Exception('Failed to fetch PDF data');
     }
   }
-
 }
-
 
 // class _MyPdfViewerState extends State<MyPdfViewer> {
 //   late PdfViewerController _pdfViewerController;

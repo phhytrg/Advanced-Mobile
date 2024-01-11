@@ -37,6 +37,8 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   flutter_secure_storage: ^9.0.0
   jwt_decoder: ^2.0.1
+  universal_html: ^2.2.4
+  js: ^0.6.7
 
   # Paid Packet
 #  syncfusion_flutter_pdfviewer: ^23.1.42

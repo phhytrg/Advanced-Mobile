@@ -108,7 +108,7 @@ class CourseStandalonePage extends ConsumerWidget {
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
               onPressed: () {
-                context.goNamed(AppRoute.pdfViewer.name);
+                context.goNamed(AppRoute.courseTopics.name, pathParameters: {'id': course.id, 'index': '0'});
               },
               child: const Text('Discover'),
             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/common/ebook_item.dart';
 import 'package:lettutor/app/courses/presentation/controller/ebooks_controller.dart';
+import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/core/utils/string_utils.dart';
@@ -97,7 +98,7 @@ class _CoursesNavigationState extends State<CoursesNavigation> {
           value: coursesState,
           data: (coursesList) {
             //Specific item in list
-            final List<String> categories = coursesList.rows.map((e) => e.categories[0].title).toSet().toList();
+            final List<String> categories = coursesList.rows.map((e) => e.categories![0].title).toSet().toList();
             return Column(
               children: [
                 for (int i = 0; i < categories.length; i++)
@@ -119,7 +120,7 @@ class _CoursesNavigationState extends State<CoursesNavigation> {
                         key: ValueKey<int>(i),
                         children: [
                           for (var course in coursesList.rows)
-                            if (course.categories[0].title == categories[i])
+                            if (course.categories![0].title == categories[i])
                               CourseItem(
                                 course: course,
                               ),
@@ -170,15 +171,15 @@ class _CoursesNavigationState extends State<CoursesNavigation> {
   }
 }
 
-class CourseItem extends StatelessWidget {
+class CourseItem extends ConsumerWidget {
   const CourseItem({super.key, required this.course});
 
   final Course course;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         context.goNamed(AppRoute.courseInfo.name, pathParameters: {
           'id': course.id.toString(),
         });
