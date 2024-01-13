@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:lettutor/app/auth/data/local_auth_repository.dart';
+import 'package:lettutor/app/auth/data/user_repository.dart';
+import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
+import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
+import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
 
@@ -11,7 +17,7 @@ import '../constant.dart';
 class LettutorAppbar extends StatefulWidget implements PreferredSizeWidget {
   final VoidCallback? onMenuIconPressed;
 
-  LettutorAppbar({super.key, this.onMenuIconPressed});
+  const LettutorAppbar({super.key, this.onMenuIconPressed});
 
   @override
   State<LettutorAppbar> createState() => _LettutorAppbarState();
@@ -21,12 +27,11 @@ class LettutorAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _LettutorAppbarState extends State<LettutorAppbar> {
-  List _hoverNavBar = [false, false, false, false, false];
+  final List _hoverNavBar = [false, false, false, false, false];
   bool showAvatarButton = false;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return AppBar(
       backgroundColor: Colors.white,
       shadowColor: Colors.black,
@@ -60,8 +65,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
         ),
         Builder(builder: (context) {
           if (MediaQuery.of(context).size.width <= titleWidth) {
-            return IconButton(
-                onPressed: widget.onMenuIconPressed, icon: Icon(Icons.menu));
+            return IconButton(onPressed: widget.onMenuIconPressed, icon: Icon(Icons.menu));
           } else {
             return MouseRegion(
               onEnter: (value) {
@@ -74,24 +78,48 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                   showAvatarButton = false;
                 });
               },
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  return InkWell(
-                    onTap: () {
-                      // ref.read(goRouterProvider).pushNamed(AppRoute.profile.getPath());
-                      // context.pushNamed(AppRoute.profile.getPath());
-                      print(GoRouter.of(context).pushNamed('/profile'));
-                    },
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage('assets/images/course-image.png'),
-                    ),
-                  );
-                },
-              ),
+              child: Consumer(builder: (context, ref, child) {
+                final userState = ref.watch(userControllerProvider);
+                return AsyncValueWidget(
+                  value: userState,
+                  data: (user) {
+                    return InkWell(
+                      onTap: () {
+                        context.go(AppRoute.profile.getPath());
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Hi, ${user.name}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text('${int.parse(user.walletInfo.amount) / 100000} lessons left', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage: Image.network(user.avatar).image,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
             );
           }
-          ;
         }),
         const SizedBox(
           width: 16,
@@ -134,8 +162,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             child: Text(
               'TUTOR',
               style: TextStyle(
-                color: _hoverNavBar[0]
-                    || currentRoutePath.toString() == AppRoute.tutorsList.getPath()
+                color: _hoverNavBar[0] || currentRoutePath.toString() == AppRoute.tutorsList.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -162,8 +189,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             child: Text(
               'SCHEDULE',
               style: TextStyle(
-                color: _hoverNavBar[1]
-                    || currentRoutePath.toString() == AppRoute.bookingStudents.getPath()
+                color: _hoverNavBar[1] || currentRoutePath.toString() == AppRoute.bookingStudents.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -190,8 +216,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             child: Text(
               'HISTORY',
               style: TextStyle(
-                color: _hoverNavBar[2]
-                    || currentRoutePath.toString() == AppRoute.history.getPath()
+                color: _hoverNavBar[2] || currentRoutePath.toString() == AppRoute.history.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -218,8 +243,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             child: Text(
               'COURSES',
               style: TextStyle(
-                color: _hoverNavBar[3]
-                    || currentRoutePath.toString() == AppRoute.courses.getPath()
+                color: _hoverNavBar[3] || currentRoutePath.toString() == AppRoute.courses.getPath()
                     ? Colors.blue
                     : Colors.black,
               ),
@@ -261,7 +285,6 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
 }
 
 class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
-
   const LoginAppbar({super.key});
 
   @override
@@ -302,5 +325,5 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize =>  const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -1,14 +1,13 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/user_profile/domain/user.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/commom-widgets/button_widget.dart';
 import 'package:lettutor/core/commom-widgets/common_scaffold.dart';
+import 'package:lettutor/core/constant.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
-
   const UserProfilePage({super.key});
 
   @override
@@ -16,20 +15,25 @@ class UserProfilePage extends ConsumerStatefulWidget {
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
-
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userControllerProvider);
-
+    double width = MediaQuery.of(context).size.width;
     return CommonScaffold(
-      body: AsyncValueWidget(
+        body: SingleChildScrollView(
+      child: AsyncValueWidget(
         value: userState,
         data: (user) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 16),
+            padding: width > mobileWidth
+                ? const EdgeInsets.symmetric(horizontal: 108, vertical: 16)
+                : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: [
-                const Text('User Profile'),
+                const Text(
+                  'User Profile',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -41,7 +45,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               ],
             ),
           );
-      },
+        },
+      ),
     ));
   }
 
@@ -52,15 +57,33 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           radius: 64,
           backgroundImage: NetworkImage(user.avatar),
         ),
-        const SizedBox(width: 16,),
+        const SizedBox(
+          width: 16,
+        ),
         Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(user.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-            const SizedBox(height: 8,),
-            Text('Account ID: ${user.id}'),
-            TextButton(onPressed: (){}, child: Text('Others reviews')),
-            TextButton(onPressed: (){}, child: Text('Change password')),
+            Text(
+              user.name,
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Builder(builder: (context) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width <= mobileWidth
+                    ? MediaQuery.of(context).size.width - 200
+                    : MediaQuery.of(context).size.width - 400,
+                child: Text(
+                  'Account ID: ${user.id}',
+                  overflow: TextOverflow.visible,
+                ),
+              );
+            }),
+            MyTextButton(onPressed: () {}, child: const Text('Others reviews')),
+            MyTextButton(onPressed: () {}, child: const Text('Change password')),
           ],
         )
       ],
@@ -70,8 +93,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   Widget _buildAccountInfo(BuildContext context, User user) {
-
-
     final nameController = TextEditingController();
     final emailController = TextEditingController();
     final phoneController = TextEditingController();
@@ -100,140 +121,132 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Name: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your name',
-                ),
-                controller: nameController,
-              ),
-            )
-          ],
-        ),
+        const Text('Name: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Email: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your email',
-                ),
-                controller: emailController,
-                enabled: false,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your name',
+          ),
+          controller: nameController,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Email: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Phone: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your phone',
-                ),
-                controller: phoneController,
-                enabled: false,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your email',
+          ),
+          controller: emailController,
+          enabled: false,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Phone: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Country: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your country',
-                ),
-                controller: countryController,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your phone',
+          ),
+          controller: phoneController,
+          enabled: false,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Country: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Birthday: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your birthday',
-                ),
-                controller: birthdayController,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your country',
+          ),
+          controller: countryController,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Birthday: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('My level:'),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your level',
-                ),
-                controller: levelController,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your birthday',
+          ),
+          controller: birthdayController,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('My level:'),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Want to learn: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your need',
-                ),
-                controller: needController,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your level',
+          ),
+          controller: levelController,
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Want to learn: '),
         const SizedBox(
           height: 8,
         ),
-        Row(
-          children: [
-            Text('Study schedule: '),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your study schedule',
-                ),
-                controller: studyScheduleController,
-              ),
-            )
-          ],
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your need',
+          ),
+          controller: needController,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        const Text('Study schedule: '),
+        const SizedBox(
+          height: 8,
+        ),
+        TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your study schedule',
+          ),
+          controller: studyScheduleController,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        FilledButton(onPressed: () {
+          Map<String, dynamic> data = {
+            'name': nameController.text,
+            'country': countryController.text,
+            'birthday': birthdayController.text,
+            'level': levelController.text,
+            'studySchedule': studyScheduleController.text,
+          };
+          ref.read(userControllerProvider.notifier).updateUserProfile(data);
+        }, child: const Text('Save changes')),
+        const SizedBox(
+          height: 64,
         ),
       ]),
     );

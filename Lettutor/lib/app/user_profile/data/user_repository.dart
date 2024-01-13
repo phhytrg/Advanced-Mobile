@@ -20,6 +20,17 @@ class UserRepository {
 
     return User.fromJson(data["user"]);
   }
+
+  Future<User> updateUserProfile(Map<String, dynamic> user) async {
+    Response response = await dio.put(
+      '$baseUrl/info',
+      data: user,
+    );
+
+    Map data = response.data;
+
+    return User.fromJson(data["user"]);
+  }
 }
 
 @Riverpod(keepAlive: true)

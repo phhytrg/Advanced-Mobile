@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/auth/data/local_auth_repository.dart';
 import 'package:lettutor/app/auth/data/token_repository.dart';
-import 'package:lettutor/app/auth/presentation/controller/auth_controller.dart';
+import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 import 'package:lettutor/core/route/router.dart';
@@ -228,7 +228,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     passwordController.text);
                             if(result != null){
                               widget.authState.login(result.tokens);
-                              // await ref.read(localAuthRepositoryProvider).saveUserId(result.user.id);
                               if(mounted){
                                 context.go('/tutors');
                               }

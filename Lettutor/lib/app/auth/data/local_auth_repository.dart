@@ -4,6 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lettutor/core/data/local/local_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../domain/user.dart';
+
 part 'local_auth_repository.g.dart';
 
 class LocalAuthRepository{
@@ -24,14 +26,6 @@ class LocalAuthRepository{
     final refreshToken = jsonDecode(localToken)['refresh']['token'];
     return refreshToken;
   }
-
-  // Future<void> saveUserId(userId) async {
-  //   await secureStorage.write(key: 'userId', value: userId);
-  // }
-  //
-  // Future<String?> getUserId() async {
-  //   return await secureStorage.read(key: 'userId');
-  // }
 }
 
 @Riverpod(keepAlive: true)

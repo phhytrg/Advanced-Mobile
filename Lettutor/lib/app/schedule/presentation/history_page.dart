@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lettutor/app/auth/data/local_auth_repository.dart';
-import 'package:lettutor/app/auth/presentation/controller/auth_controller.dart';
+import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
 import 'package:lettutor/app/auth/presentation/controller/login_controller.dart';
 import 'package:lettutor/app/schedule/data/self_schedule_repository.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';

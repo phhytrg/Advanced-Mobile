@@ -11,9 +11,11 @@ class User {
   String avatar;
   String country;
   String phone;
+  String language;
   String birthday;
   String studySchedule;
   String level;
+  WalletInfo walletInfo;
 
   User({
     required this.id,
@@ -25,9 +27,28 @@ class User {
     required this.birthday,
     required this.studySchedule,
     required this.level,
+    required this.language,
+    required this.walletInfo,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
 }
+
+@JsonSerializable()
+class WalletInfo {
+  String amount;
+  bool isBlocked;
+  int bonus;
+
+  WalletInfo({
+    required this.amount,
+    required this.isBlocked,
+    required this.bonus,
+  });
+
+  factory WalletInfo.fromJson(Map<String, dynamic> json) => _$WalletInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$WalletInfoToJson(this);
+}
+

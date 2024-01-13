@@ -13,6 +13,7 @@ import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_page.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutors_page.dart';
+import 'package:lettutor/app/user_profile/presentation/user_profile_page.dart';
 import 'package:lettutor/core/commom-widgets/app_scaffold.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -32,6 +33,7 @@ enum AppRoute {
   courseTopics,
   pdfViewer,
   advertising,
+  profile,
   resetPassword;
 
   String getPath() {
@@ -60,6 +62,8 @@ enum AppRoute {
         return '/course-topics';
       case AppRoute.pdfViewer:
         return '/pdf-viewer';
+      case AppRoute.profile:
+        return '/profile';
       case AppRoute.advertising:
         return '/';
     }
@@ -157,6 +161,13 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
           builder: (context, state, child) {
             return AppScaffold(child: child);
           }),
+      GoRoute(
+        path: AppRoute.profile.getPath(),
+        name: AppRoute.profile.name,
+        builder: (context, state) {
+          return UserProfilePage();
+        },
+      ),
       GoRoute(
         path: AppRoute.advertising.getPath(),
         name: AppRoute.advertising.name,
