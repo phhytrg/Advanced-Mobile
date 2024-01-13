@@ -21,6 +21,13 @@ class BookingHistoryController extends _$BookingHistoryController {
     return state.valueOrNull;
   }
 
+  Future<void> refresh() async {
+    final bookingRepository = ref.read(selfScheduleRepositoryProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => bookingRepository.getBookingList(page: 1, perPage: 20, inFuture: 0, orderBy: "meeting", sortBy: "desc"));
+    page = 2;
+  }
+
   Future<BookingList?> loadMore() async {
     final bookingRepository = ref.read(selfScheduleRepositoryProvider);
     if(state.value == null){

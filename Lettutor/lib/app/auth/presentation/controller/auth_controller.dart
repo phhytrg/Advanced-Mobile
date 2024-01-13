@@ -9,6 +9,6 @@ class AuthController extends _$AuthController {
 
   @override
   FutureOr<bool?> build() {
-    return null;
+
   }
 }

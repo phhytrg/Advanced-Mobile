@@ -24,15 +24,34 @@ class _CoursesPageState extends ConsumerState<CoursesPage> with TickerProviderSt
   late final MultiSelectController levelSortingController;
   late final TextEditingController searchController;
   late final TabController tabController;
+  late final ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        if (tabController.index == 1) {
+          ref.read(ebooksControllerProvider.notifier).loadMore(
+              query: searchController.text != '' ? searchController.text : null,
+              level: levelSelectingController.selectedOptions.isNotEmpty
+                  ? levelSelectingController.selectedOptions.map((e) => e.toString()).toList()
+                  : null,
+              order: ['level'],
+              orderBy: levelSortingController.selectedOptions.isNotEmpty
+                  ? levelSortingController.selectedOptions.first.toString()
+                  : null,
+              categories: categoryController.selectedOptions.isNotEmpty
+                  ? categoryController.selectedOptions.map((e) => e.toString()).toList()
+                  : null);
+        }
+      }
+    });
     levelSelectingController = MultiSelectController();
     categoryController = MultiSelectController();
     levelSortingController = MultiSelectController();
     searchController = TextEditingController();
-
     tabController = TabController(
       length: 3,
       vsync: this,
@@ -82,6 +101,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> with TickerProviderSt
     levelSortingController.dispose();
     searchController.dispose();
     tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -95,8 +115,9 @@ class _CoursesPageState extends ConsumerState<CoursesPage> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: scrollController,
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             CoursesHeader(

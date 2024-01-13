@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/auth/data/local_auth_repository.dart';
 import 'package:lettutor/app/auth/data/token_repository.dart';
+import 'package:lettutor/app/auth/presentation/controller/auth_controller.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 import 'package:lettutor/core/route/router.dart';
@@ -44,7 +46,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: LoginAppbar(),
+        appBar: const LoginAppbar(),
         body: SingleChildScrollView(
             child: (isMobile(context))
                 ? Column(
@@ -68,12 +70,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ? const EdgeInsets.only(left: 80)
                             : const EdgeInsets.only(left: 16),
                         width: 480,
-                        // child: FilledButton(
-                        //   onPressed: (){
-                        //     Provider.of<LoginViewModel>(context, listen:false).login("a","a");
-                        //   },
-                        //   child: Text("Click me"),
-                        // ),
                         child: buildLoginForm(),
                       ),
                       Expanded(
@@ -230,9 +226,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 .read(loginControllerProvider.notifier)
                                 .login(emailController.text,
                                     passwordController.text);
-                            if (mounted && result != null) {
+                            if(result != null){
                               widget.authState.login(result.tokens);
-                              context.go('/tutors');
+                              // await ref.read(localAuthRepositoryProvider).saveUserId(result.user.id);
+                              if(mounted){
+                                context.go('/tutors');
+                              }
                             }
                           }
                         },

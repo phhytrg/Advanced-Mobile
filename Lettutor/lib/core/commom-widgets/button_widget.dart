@@ -3,12 +3,13 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 class MyTextButton extends StatelessWidget {
   final Widget child;
-  const MyTextButton({super.key, required this.child});
+  final VoidCallback? onPressed;
+  const MyTextButton({super.key, required this.child, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: (){},
+      onPressed: onPressed,
       padding: EdgeInsets.zero,
       hoverColor: Colors.transparent,
       textColor: Colors.blue,

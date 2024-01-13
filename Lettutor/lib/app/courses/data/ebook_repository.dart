@@ -38,12 +38,12 @@ class EbookRepository {
         'q': query,
         'page': page,
         'size': size,
-        'level': level,
-        'orderBy': [
-          orderBy,
-        ],
-        'order': order,
-        'categoryId': categoryIds,
+        // 'level': level,
+        // 'orderBy': [
+        //   orderBy,
+        // ],
+        // 'order': order,
+        // 'categoryId': categoryIds,
       },
     );
     return EbookList.fromJson(response.data["data"]);

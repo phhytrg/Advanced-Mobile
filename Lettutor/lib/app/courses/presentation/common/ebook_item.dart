@@ -1,21 +1,24 @@
-
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/courses/domain/ebook.dart';
 import 'package:lettutor/core/utils/string_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EbookItem extends StatelessWidget {
   const EbookItem({super.key, required this.ebook});
+
   final Ebook ebook;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        final router = GoRouter.of(context);
-        router.pushNamed('/ebook', queryParameters: {
-          'id': ebook.id.toString(),
-        });
+      onTap: () async {
+        if(ebook.fileUrl == null) {
+          throw 'No file url';
+        }
+        final Uri uri = Uri.parse(ebook.fileUrl!);
+        if (!await launchUrl(uri)) {
+          throw Exception('Could not launch ${uri.toString()}');
+        }
       },
       child: Container(
         width: 300,
@@ -36,8 +39,7 @@ class EbookItem extends StatelessWidget {
                 offset: Offset(0, 3),
               ),
             ],
-            color: Colors.white
-        ),
+            color: Colors.white),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,25 +48,29 @@ class EbookItem extends StatelessWidget {
               height: MediaQuery.of(context).size.height / 4,
               width: double.infinity,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: Image.network(ebook.imageUrl!, fit: BoxFit.fill,)
-              ),
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: Image.network(
+                    ebook.imageUrl!,
+                    fit: BoxFit.fill,
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(ebook.name!, style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w900
-                  ),),
+                  Text(
+                    ebook.name!,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w900),
+                  ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(ebook.description!,
+                  Text(
+                    ebook.description!,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.grey,
-                    ),
+                          color: Colors.grey,
+                        ),
                   ),
                 ],
               ),

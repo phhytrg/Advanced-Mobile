@@ -12,14 +12,12 @@ part 'tutors_controller.g.dart';
 class TutorsController extends _$TutorsController {
   var page = 1;
   var perPage = 9;
-  late int maxPage;
 
   @override
   FutureOr<TutorList?> build() async {
     final tutorsService = ref.read(tutorServiceProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard<TutorList?>(() => tutorsService.getTutorsWithPagination(9, 1));
-    maxPage = state.value!.count! ~/ perPage;
     return state.valueOrNull;
   }
 
@@ -37,15 +35,11 @@ class TutorsController extends _$TutorsController {
     state = await AsyncValue.guard<TutorList?>(() => tutorsService.searchTutorsByFilters(filters));
     if(filters.page != null) {
       page = filters.page!;
-      maxPage = state.value!.count ~/ perPage;
     }
     return state.valueOrNull;
   }
 
   Future<void> getMoreTutors(SearchPayload filters) async{
-    if(page >= maxPage) {
-      return;
-    }
     page++;
     filters.page = page;
     filters.perPage = perPage;

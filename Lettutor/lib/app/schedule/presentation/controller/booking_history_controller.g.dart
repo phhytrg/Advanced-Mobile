@@ -7,7 +7,7 @@ part of 'booking_history_controller.dart';
 // **************************************************************************
 
 String _$bookingHistoryControllerHash() =>
-    r'5f798fad76dcad96ccffb2e67fa01068acfcdca0';
+    r'a26d8e15e3ca9bd45125f58161eb5db78c9f46e2';
 
 /// See also [BookingHistoryController].
 @ProviderFor(BookingHistoryController)

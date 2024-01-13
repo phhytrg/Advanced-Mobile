@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lettutor/app/auth/data/local_auth_repository.dart';
+import 'package:lettutor/app/auth/presentation/controller/auth_controller.dart';
+import 'package:lettutor/app/auth/presentation/controller/login_controller.dart';
+import 'package:lettutor/app/schedule/data/self_schedule_repository.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/schedule/presentation/controller/booking_history_controller.dart';
+import 'package:lettutor/app/tutors/data/feedback_repository.dart';
 import 'package:lettutor/core/commom-widgets/appbar.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/commom-widgets/drawer.dart';
@@ -67,7 +72,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                     for (int i = 0; i < historyBookingList.rows!.length - 1; i++) {
                       final booking = historyBookingList.rows![i];
                       for (int j = i + 1; j < historyBookingList.rows!.length; j++) {
-                        if(j >= historyBookingList.rows!.length){
+                        if (j >= historyBookingList.rows!.length) {
                           break;
                         }
                         final nextBooking = historyBookingList.rows![j];
@@ -77,13 +82,13 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                               nextBooking.scheduleDetailInfo!.endPeriodTimestamp!.toInt() + 5 * 60 * 1000) {
                             booking.scheduleDetailInfo!.startPeriodTimestamp =
                                 nextBooking.scheduleDetailInfo!.startPeriodTimestamp;
-                            booking.studentRequest = '${'${booking.studentRequest}\n' ?? ''}${nextBooking.studentRequest ?? ''}';
+                            booking.studentRequest =
+                                '${'${booking.studentRequest}\n' ?? ''}${nextBooking.studentRequest ?? ''}';
                             historyBookingList.rows!.removeAt(j);
                             historyBookingList.count--;
                             j--;
                           }
-                        }
-                        else{
+                        } else {
                           break;
                         }
                       }
@@ -245,14 +250,53 @@ class HistoryItem extends StatelessWidget {
               : _buildReviewItem(context, booking.classReview!),
         ),
         Container(
-            padding: EdgeInsets.all(8.0),
-            margin: EdgeInsets.only(top: 1, bottom: 16, right: 16, left: 16),
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.only(top: 1, bottom: 16, right: 16, left: 16),
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyTextButton(child: Text('Add a rating')),
-                MyTextButton(child: Text('Report')),
+                booking.feedbacks!.isEmpty
+                    ? MyTextButton(
+                        child: const Text('Add a rating'),
+                        onPressed: () {
+                          var rating = 5;
+                          final controller = TextEditingController();
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return StatefulBuilder(builder: (context, setState) {
+                                  return buildRatingDialog(rating: rating, controller: controller, type: 'add');
+                                });
+                              });
+                        })
+                    : Row(
+                        children: [
+                          const Text('Your rating: '),
+                          RatingWidget(
+                            rating: booking.feedbacks![0]["rating"],
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                var rating = booking.feedbacks![0]["rating"];
+                                final controller = TextEditingController(text: booking.feedbacks![0]["content"]);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return StatefulBuilder(builder: (context, setState) {
+                                        return buildRatingDialog(
+                                            rating: rating,
+                                            controller: controller,
+                                            type: 'edit',
+                                            feedbackId: booking.feedbacks![0]["id"]
+                                        );
+                                      });
+                                    });
+                              },
+                              child: const Text('Edit')),
+                        ],
+                      ),
+                MyTextButton(onPressed: () {}, child: Text('Report')),
               ],
             )),
       ],
@@ -309,5 +353,151 @@ class HistoryItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildRatingDialog(
+      {required int rating, required TextEditingController controller, required String type, String? feedbackId}) {
+    return StatefulBuilder(builder: (context, setState) {
+      return AlertDialog(
+        title: const Text('Add a rating'),
+        surfaceTintColor: Colors.white,
+        content: SizedBox(
+          width: 500,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TutorMiniItem(
+                tutorName: booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!,
+                tutorCountry: booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.country!,
+                tutorAvatar: booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar!,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text('Lesson Time: ', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                  '${MyDateUtils.getShortWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))}, '
+                  '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))} '
+                  '- '
+                  '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.endPeriodTimestamp!))}'),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text('Please rate your tutor', style: TextStyle(fontWeight: FontWeight.bold)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            rating = 1;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: rating >= 1 ? Colors.yellow : Colors.grey,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            rating = 2;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: rating >= 2 ? Colors.yellow : Colors.grey,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            rating = 3;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: rating >= 3 ? Colors.yellow : Colors.grey,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            rating = 4;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: rating >= 4 ? Colors.yellow : Colors.grey,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            rating = 5;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: rating >= 5 ? Colors.yellow : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text('Please leave a comment', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextField(
+                maxLines: 5,
+                decoration: const InputDecoration(
+                  hintText: 'Comment',
+                  border: OutlineInputBorder(),
+                ),
+                controller: controller,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return FilledButton(
+                onPressed: () async {
+                  late final bool result;
+                  if (type == 'add') {
+                    result = await ref.read(feedbackTutorProvider(booking.id!,
+                            booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.id!, controller.text, rating)
+                        .future);
+                  } else {
+                    result = await ref
+                        .read(selfScheduleRepositoryProvider)
+                        .editFeedback(feedbackId!, controller.text, rating);
+                  }
+                  if (context.mounted) {
+                    if (result) {
+                      ref.read(bookingHistoryControllerProvider.notifier).refresh();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Success')));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error')));
+                    }
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Submit'));
+          }),
+          MyTextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel')),
+        ],
+      );
+    });
   }
 }

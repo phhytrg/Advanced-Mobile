@@ -91,9 +91,40 @@ class SelfScheduleRepository{
     );
     return response.data["message"];
   }
+
+  Future<bool> feedbackTutor(String bookingId, String feedback, int rating, String userId) async{
+    final response = await dio.post(
+      'user/feedbackTutor',
+      data: {
+        "bookingId": bookingId,
+        "content": feedback,
+        "rating": rating,
+        "userId": userId,
+      },
+    );
+    return response.statusCode == 200;
+  }
+
+  Future<bool> editFeedback(String feedbackId, String feedback, int rating) async{
+    final response = await dio.put(
+      'user/feedbackTutor',
+      data: {
+        "id": feedbackId,
+        "content": feedback,
+        "rating": rating,
+      },
+    );
+    return response.statusCode == 200;
+  }
 }
 
 @Riverpod(keepAlive: true)
 SelfScheduleRepository selfScheduleRepository(SelfScheduleRepositoryRef ref){
   return SelfScheduleRepository(dio: ref.read(dioProvider));
+}
+
+@riverpod
+Future<bool> feedbackTutor(FeedbackTutorRef ref, String bookingId, String userId, String feedback, int rating) async{
+  final repo = ref.read(selfScheduleRepositoryProvider);
+  return repo.feedbackTutor(bookingId, feedback, rating, userId);
 }

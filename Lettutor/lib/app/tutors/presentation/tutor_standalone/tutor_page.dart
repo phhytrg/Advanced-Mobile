@@ -4,6 +4,7 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/auth/data/user_repository.dart';
+import 'package:lettutor/app/tutors/data/tutor_repository.dart';
 import 'package:lettutor/app/tutors/domain/response/tutor.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedbacks/feedback_controller.dart';
@@ -11,6 +12,7 @@ import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedback
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_intro_video.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_viewmodel.dart';
 import 'package:lettutor/app/tutors/service/tutors_service.dart';
+import 'package:lettutor/core/commom-widgets/alert_dialog.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:video_player/video_player.dart';
 
@@ -43,9 +45,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
   }
 
   void loadMoreFeedbacks() {
-    ref
-        .read(feedbacksControllerProvider(widget.tutorId).notifier)
-        .getMoreTutorFeedbacks(widget.tutorId);
+    ref.read(feedbacksControllerProvider(widget.tutorId).notifier).getMoreTutorFeedbacks(widget.tutorId);
   }
 
   @override
@@ -241,11 +241,129 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                 ),
               ],
             ),
-            const Column(
-              children: [
-                Icon(Icons.report),
-                Text('Report'),
-              ],
+            InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      final List<String> reportContents = [];
+                      final List<int> reportValues = [];
+                      final TextEditingController controller = TextEditingController();
+                      return StatefulBuilder(builder: (context, setState) {
+                        return AlertDialog(
+                          title: const Text('Report'),
+                          surfaceTintColor: Colors.white,
+                          content: SizedBox(
+                            width: 500,
+                            child: Column(
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(Icons.report, color: Colors.blue),
+                                    Text('Help us understand what\'s happening',
+                                        style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                CheckboxListTile(
+                                  value: reportValues.contains(0),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value!) {
+                                        reportValues.add(0);
+                                        reportContents.add('This tutor is annoying me\n');
+                                      } else {
+                                        reportValues.remove(0);
+                                        reportContents.remove('This tutor is annoying me\n');
+                                      }
+                                      controller.text = reportContents.join();
+                                    });
+                                  },
+                                  title: const Text('This tutor is annoying me\n'),
+                                ),
+                                CheckboxListTile(
+                                  value: reportValues.contains(1),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value!) {
+                                        reportValues.add(1);
+                                        reportContents.add('This profile is pretending be someone or is fake\n');
+                                      } else {
+                                        reportValues.remove(1);
+                                        reportContents.remove('This profile is pretending be someone or is fake\n');
+                                      }
+                                      controller.text = reportContents.join();
+                                    });
+                                  },
+                                  title: const Text('This profile is pretending be someone or is fake\n'),
+                                ),
+                                CheckboxListTile(
+                                  value: reportValues.contains(2),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value!) {
+                                        reportValues.add(2);
+                                        reportContents.add('Inappropriate profile photo\n');
+                                      } else {
+                                        reportValues.remove(2);
+                                        reportContents.remove('Inappropriate profile photo\n');
+                                      }
+                                      controller.text = reportContents.join();
+                                    });
+                                  },
+                                  title: const Text('Inappropriate profile photo\n'),
+                                ),
+                                TextField(
+                                  maxLines: 5,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Reason',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  controller: controller,
+                                )
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                bool result =
+                                    await ref.read(reportTutorProvider(widget.tutorId, controller.text).future);
+                                if (mounted) {
+                                  if (result) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(content: Text('Report success')));
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(content: Text('Report failed')));
+                                  }
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              child: const Text('Report'),
+                            ),
+                          ],
+                        );
+                      });
+                    });
+              },
+              child: const Column(
+                children: [
+                  Icon(
+                    Icons.report,
+                    color: Colors.blue,
+                  ),
+                  Text('Report'),
+                ],
+              ),
             ),
           ],
         )

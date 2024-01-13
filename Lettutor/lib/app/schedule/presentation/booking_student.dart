@@ -21,7 +21,6 @@ class BookingStudentPage extends ConsumerStatefulWidget {
 class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
   late final ScrollController _scrollController;
 
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +33,6 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
       }
     });
   }
-
 
   @override
   void dispose() {
@@ -311,7 +309,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                                     .read(tutorServiceProvider)
                                     .cancelBooking(bookingData.id!, dropdownMenuController.text);
                                 await ref.watch(bookingControllerProvider.notifier).getBookingList();
-                                if(context.mounted){
+                                if (context.mounted) {
                                   Navigator.of(context).pop();
                                 }
                               },
@@ -404,14 +402,14 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                 clipBehavior: Clip.antiAlias,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Request for lesson'), MyTextButton(child: Text('Edit Request'))],
+                  children: [Text('Request for lesson'), MyTextButton(onPressed: () {}, child: Text('Edit Request'))],
                 ),
                 expandedAlignment: Alignment.centerLeft,
                 children: [
                   Container(
                     color: Colors.white,
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: widget.bookingList[0].studentRequest == null
                         ? Text(
                             'Currently there are no requests for this class. '

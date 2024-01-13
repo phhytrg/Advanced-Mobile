@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'login_controller.g.dart';
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LoginController extends _$LoginController{
 
   @override
@@ -20,6 +20,13 @@ class LoginController extends _$LoginController{
     state = const AsyncLoading();
     state = await AsyncValue.guard<LoginResponse?>(() => authRepository.login(email, password));
     return state.valueOrNull;
+  }
+
+  User? getUser() {
+    if(state.valueOrNull == null){
+      return null;
+    }
+    return state.value!.user;
   }
 
 }

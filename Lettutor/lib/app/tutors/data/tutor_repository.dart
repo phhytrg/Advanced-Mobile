@@ -13,6 +13,8 @@ abstract class BaseTutorRepository {
   Future<TutorList?> searchTutorsByFilters(SearchPayload filters);
 
   Future<Tutor?> findTutorialById(String id);
+
+  Future<bool> reportTutor(String id, String reason);
 }
 
 class TutorRepository implements BaseTutorRepository {
@@ -49,9 +51,23 @@ class TutorRepository implements BaseTutorRepository {
     Tutor tutor =  Tutor.fromJson(response.data);
     return tutor;
   }
+
+  @override
+  Future<bool> reportTutor(String id, String reason) async {
+    final response = await dio.post('/report', data: {
+      'tutorId': id,
+      'content': reason
+    });
+    return response.statusCode == 200;
+  }
 }
 
 @Riverpod(keepAlive: true)
 TutorRepository tutorRepository(TutorRepositoryRef ref) {
   return TutorRepository(dio: ref.read(dioProvider));
+}
+
+@riverpod
+Future<bool> reportTutor(ReportTutorRef ref, String id, String reason){
+  return ref.read(tutorRepositoryProvider).reportTutor(id, reason);
 }
