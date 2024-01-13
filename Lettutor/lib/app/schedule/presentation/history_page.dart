@@ -289,6 +289,7 @@ class HistoryItem extends StatelessWidget {
                                             controller: controller,
                                             type: 'edit',
                                             feedbackId: booking.feedbacks![0]["id"]
+
                                         );
                                       });
                                     });
