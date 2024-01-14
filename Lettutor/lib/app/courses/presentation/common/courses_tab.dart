@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/common/ebook_item.dart';
 import 'package:lettutor/app/courses/presentation/controller/ebooks_controller.dart';
-import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/core/utils/string_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../controller/courses_controller.dart';
 
@@ -38,20 +38,20 @@ class _CoursesNavigationState extends State<CoursesNavigation> {
   @override
   Widget build(BuildContext context) {
     var animatedWidgets = [_buildCourseTab(), _buildEbookTab(), _buildInteractiveEbookTab()];
-
+    final txt = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 3,
       child: Column(
         children: [
           TabBar(
-            tabs: const [
+            tabs: [
               Tab(
-                text: 'Course',
+                text: txt.course,
               ),
-              Tab(
+              const Tab(
                 text: 'E-Book',
               ),
-              Tab(text: 'Interactive E-book'),
+              const Tab(text: 'Interactive E-book'),
             ],
             onTap: (index) {
               setState(() {

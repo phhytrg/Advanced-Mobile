@@ -4,10 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/app/courses/data/course_repository.dart';
 import 'package:lettutor/app/courses/presentation/controller/courses_controller.dart';
 import 'package:lettutor/app/courses/presentation/controller/ebooks_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../core/commom-widgets/search.dart';
+import '../../../../core/common-widgets/search.dart';
 import '../../../core/constant.dart';
 import 'common/courses_tab.dart';
 
@@ -160,6 +161,7 @@ class CoursesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -180,7 +182,7 @@ class CoursesHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Discover Courses',
+                      txt.discoverCourse,
                       style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                             fontWeight: FontWeight.w900,
                           ),
@@ -189,7 +191,7 @@ class CoursesHeader extends StatelessWidget {
                       height: 8,
                     ),
                     MySearchBar(
-                      hintText: 'Course',
+                      hintText: txt.course,
                       controller: searchController,
                     )
                   ],
@@ -201,10 +203,9 @@ class CoursesHeader extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-              'LiveTutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.'),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(txt.whatCourse),
         ),
         LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth > mobileWidth) {
@@ -244,7 +245,7 @@ class CoursesHeader extends StatelessWidget {
                                       value: category.id.toString(),
                                     )
                                 ],
-                                'Select category',
+                                txt.selectCategory,
                                 categoryController,
                               ));
                         });
@@ -255,11 +256,11 @@ class CoursesHeader extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: _buildSingleSelectDropdownButton(
                         context,
-                        const [
-                          ValueItem(label: 'Level decreasing', value: 'DESC'),
-                          ValueItem(label: 'Level increasing', value: 'ASC')
+                        [
+                          ValueItem(label: txt.levelDecreasing, value: 'DESC'),
+                          ValueItem(label: txt.levelIncreasing, value: 'ASC')
                         ],
-                        'Sort by level',
+                        txt.sortByLevel,
                         levelSortingController),
                   ),
                 ),
@@ -281,7 +282,7 @@ class CoursesHeader extends StatelessWidget {
                         const ValueItem(label: 'Advanced', value: '6'),
                         const ValueItem(label: 'Very Advanced', value: '7'),
                       ],
-                      'Select level',
+                      txt.selectLevel,
                       levelSelectingController),
                 ),
                 Consumer(builder: (context, ref, child) {
@@ -313,7 +314,7 @@ class CoursesHeader extends StatelessWidget {
                         ValueItem(label: 'Level decreasing', value: 'DESC'),
                         ValueItem(label: 'Level increasing', value: 'ASC'),
                       ],
-                      'Sort by level',
+                      txt.sortByLevel,
                       levelSortingController),
                 ),
               ],
@@ -342,7 +343,7 @@ class CoursesHeader extends StatelessWidget {
           labelStyle: const TextStyle(
             fontSize: 12,
           ),
-          padding: EdgeInsets.all(4),
+          padding: const EdgeInsets.all(4),
           radius: 8,
           backgroundColor: Colors.grey.shade300,
           deleteIconColor: Colors.grey.shade600,

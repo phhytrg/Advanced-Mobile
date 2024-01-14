@@ -3,7 +3,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_schedule/time_ranges_tab.dart';
 
-import '../../../../../core/commom-widgets/year_dropdown.dart';
+import '../../../../../core/common-widgets/year_dropdown.dart';
 
 class BookingSchedule extends StatefulWidget {
   final String tutorId;

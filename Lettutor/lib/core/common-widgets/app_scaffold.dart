@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/commom-widgets/appbar.dart';
-import 'package:lettutor/core/commom-widgets/drawer.dart';
+import 'package:lettutor/core/common-widgets/appbar.dart';
+import 'package:lettutor/core/common-widgets/drawer.dart';
 import 'package:lettutor/core/constant.dart';
 
 class AppScaffold extends StatefulWidget {

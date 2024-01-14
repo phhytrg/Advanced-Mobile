@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
-import '../../../../../core/commom-widgets/alert_dialog.dart';
+import '../../../../../core/common-widgets/alert_dialog.dart';
 import '../../../domain/tutor_schedule/tutor_schedule_response.dart';
 import 'tutor_schedule_controller.dart';
 

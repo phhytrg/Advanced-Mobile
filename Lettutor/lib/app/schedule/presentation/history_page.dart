@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:lettutor/app/auth/data/local_auth_repository.dart';
-import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
-import 'package:lettutor/app/auth/presentation/controller/login_controller.dart';
 import 'package:lettutor/app/schedule/data/self_schedule_repository.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/schedule/presentation/controller/booking_history_controller.dart';
-import 'package:lettutor/app/tutors/data/feedback_repository.dart';
-import 'package:lettutor/core/commom-widgets/appbar.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
-import 'package:lettutor/core/commom-widgets/drawer.dart';
-import 'package:lettutor/core/commom-widgets/rating.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/rating.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../core/commom-widgets/button_widget.dart';
-import '../../../../core/commom-widgets/page_header.dart';
-import '../../../../core/commom-widgets/tutor_mini_item.dart';
+import '../../../../core/common-widgets/button_widget.dart';
+import '../../../../core/common-widgets/page_header.dart';
+import '../../../../core/common-widgets/tutor_mini_item.dart';
 
 class HistoryPage extends ConsumerStatefulWidget {
   const HistoryPage({super.key});
@@ -48,16 +42,17 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       controller: _scrollController,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Column(
           children: [
-            const PageHeader(
+            PageHeader(
               svgIconPath: 'icons/history.svg',
-              pageDescription: sampleText,
-              pageName: 'History',
+              pageDescription: txt.whatHistory,
+              pageName: txt.history,
             ),
             const SizedBox(
               height: 32,
@@ -197,6 +192,7 @@ class HistoryItem extends StatelessWidget {
   }
 
   Widget _buildItemBody(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
@@ -207,7 +203,7 @@ class HistoryItem extends StatelessWidget {
           color: Colors.white,
           child: Row(
             children: [
-              Text('Lesson Time: '
+              Text('${txt.lessonTime}: '
                   '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))} '
                   '- '
                   '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.endPeriodTimestamp!))}'),
@@ -220,11 +216,11 @@ class HistoryItem extends StatelessWidget {
           margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 1),
           color: Colors.white,
           child: booking.studentRequest == null || booking.studentRequest == ''
-              ? const Text('No request for lesson')
+              ? Text(txt.noRequestForLesson)
               : Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [const Text('Request for lesson'), Text(booking.studentRequest!)],
+                  children: [Text(txt.requestForLesson), Text(booking.studentRequest!)],
                 ),
         ),
         booking.scoreByTutor == null
@@ -235,7 +231,7 @@ class HistoryItem extends StatelessWidget {
                 color: Colors.white,
                 child: Row(
                   children: [
-                    const Text('Mark: '),
+                    Text('${txt.mark} '),
                     Text(booking.scoreByTutor.toString()),
                   ],
                 ),
@@ -246,7 +242,7 @@ class HistoryItem extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 16),
           color: Colors.white,
           child: booking.classReview == null
-              ? const Text('Tutor haven\'t reviewed yet')
+              ? Text(txt.tutorHaventReview)
               : _buildReviewItem(context, booking.classReview!),
         ),
         Container(
@@ -258,7 +254,7 @@ class HistoryItem extends StatelessWidget {
               children: [
                 booking.feedbacks!.isEmpty
                     ? MyTextButton(
-                        child: const Text('Add a rating'),
+                        child: Text(txt.addARating),
                         onPressed: () {
                           var rating = 5;
                           final controller = TextEditingController();
@@ -266,13 +262,13 @@ class HistoryItem extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return StatefulBuilder(builder: (context, setState) {
-                                  return buildRatingDialog(rating: rating, controller: controller, type: 'add');
+                                  return buildRatingDialog(context, rating: rating, controller: controller, type: 'add');
                                 });
                               });
                         })
                     : Row(
                         children: [
-                          const Text('Your rating: '),
+                          Text('${txt.yourRating} '),
                           RatingWidget(
                             rating: booking.feedbacks![0]["rating"],
                           ),
@@ -285,6 +281,7 @@ class HistoryItem extends StatelessWidget {
                                     builder: (context) {
                                       return StatefulBuilder(builder: (context, setState) {
                                         return buildRatingDialog(
+                                            context,
                                             rating: rating,
                                             controller: controller,
                                             type: 'edit',
@@ -297,7 +294,7 @@ class HistoryItem extends StatelessWidget {
                               child: const Text('Edit')),
                         ],
                       ),
-                MyTextButton(onPressed: () {}, child: Text('Report')),
+                MyTextButton(onPressed: () {}, child: Text(txt.report)),
               ],
             )),
       ],
@@ -305,6 +302,7 @@ class HistoryItem extends StatelessWidget {
   }
 
   _buildReviewItem(BuildContext context, ClassReview classReview) {
+    final txt = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -312,11 +310,11 @@ class HistoryItem extends StatelessWidget {
         children: [
           classReview.lessonStatus?.status == null
               ? Container()
-              : Text('Lesson status: ${classReview.lessonStatus!.status}'),
+              : Text('${txt.lessonStatus}: ${classReview.lessonStatus!.status}'),
           classReview.book == null ? Container() : Text('Book: ${classReview.book}'),
           Row(
             children: [
-              const Text('Listening '),
+              Text('${txt.listening} '),
               RatingWidget(
                 rating: classReview.listeningRating ?? 0,
               ),
@@ -325,7 +323,7 @@ class HistoryItem extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text('Speaking '),
+              Text('${txt.speaking} '),
               RatingWidget(
                 rating: classReview.speakingRating ?? 0,
               ),
@@ -334,7 +332,7 @@ class HistoryItem extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text('Vocabulary '),
+              Text('${txt.vocabulary} '),
               RatingWidget(
                 rating: classReview.vocabularyRating ?? 0,
               ),
@@ -343,24 +341,25 @@ class HistoryItem extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text('Behavior '),
+              Text('${txt.behavior} '),
               RatingWidget(
                 rating: classReview.behaviorRating ?? 0,
               ),
               Text(classReview.behaviorComment ?? ''),
             ],
           ),
-          classReview.overallComment == null ? Container() : Text('Overall comment: ${classReview.overallComment}'),
+          classReview.overallComment == null ? Container() : Text('${txt.overallComment}: ${classReview.overallComment}'),
         ],
       ),
     );
   }
 
-  Widget buildRatingDialog(
+  Widget buildRatingDialog(BuildContext context,
       {required int rating, required TextEditingController controller, required String type, String? feedbackId}) {
+    final txt = AppLocalizations.of(context)!;
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
-        title: const Text('Add a rating'),
+        title: Text(txt.addARating),
         surfaceTintColor: Colors.white,
         content: SizedBox(
           width: 500,
@@ -376,7 +375,7 @@ class HistoryItem extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const Text('Lesson Time: ', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('${txt.lessonTime}: ', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
                   '${MyDateUtils.getShortWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))}, '
                   '${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))} '
@@ -385,7 +384,7 @@ class HistoryItem extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const Text('Please rate your tutor', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('${txt.pleaseRateYourTutor}', style: TextStyle(fontWeight: FontWeight.bold)),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -454,12 +453,12 @@ class HistoryItem extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const Text('Please leave a comment', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(txt.pleaseLeaveComment, style: const TextStyle(fontWeight: FontWeight.bold)),
               TextField(
                 maxLines: 5,
-                decoration: const InputDecoration(
-                  hintText: 'Comment',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  hintText: txt.comment,
+                  border: const OutlineInputBorder(),
                 ),
                 controller: controller,
               ),
@@ -490,13 +489,13 @@ class HistoryItem extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Submit'));
+                child: Text(txt.submit));
           }),
           MyTextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancel')),
+              child: Text(txt.cancel)),
         ],
       );
     });

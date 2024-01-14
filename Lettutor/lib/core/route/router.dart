@@ -4,7 +4,6 @@ import 'package:lettutor/app/advertising/advertising_page.dart';
 import 'package:lettutor/app/auth/presentation/login_page.dart';
 import 'package:lettutor/app/auth/presentation/reset_password.dart';
 import 'package:lettutor/app/become_tutor/presentation/register_tutor_page.dart';
-import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
@@ -15,7 +14,7 @@ import 'package:lettutor/app/signup/presentation/signup.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_page.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutors_page.dart';
 import 'package:lettutor/app/user_profile/presentation/user_profile_page.dart';
-import 'package:lettutor/core/commom-widgets/app_scaffold.dart';
+import 'package:lettutor/core/common-widgets/app_scaffold.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

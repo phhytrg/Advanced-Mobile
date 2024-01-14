@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/auth/data/auth_repository.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/route/router.dart';
-import '../../../core/commom-widgets/appbar.dart';
+import '../../../core/common-widgets/appbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
@@ -72,6 +73,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   }
 
   Widget _buildSignUpForm() {
+    final txt = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Form(
@@ -82,7 +84,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                "Say hello to your English tutors",
+                txt.sayHelloLettutor,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue[600],
@@ -91,9 +93,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const Text(
-              "Become fluent faster through one on one video chat lessons tailored to your goals.",
-              style: TextStyle(
+            Text(
+              txt.lettutorIntro,
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1,
               ),
@@ -136,10 +138,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
+                  return txt.pleaseEmail;
                 }
                 if (!emailValidator.hasMatch(value)) {
-                  return 'Please enter valid email';
+                  return txt.pleaseValidEmail;
                 }
                 return null;
               },
@@ -148,7 +150,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               height: 20,
             ),
             Text(
-              "PASSWORD",
+              txt.password.toUpperCase(),
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[500],
@@ -175,7 +177,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               autocorrect: false,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
+                  return txt.pleasePassword;
                 }
                 return null;
               },
@@ -185,7 +187,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               height: 20,
             ),
             Text(
-              "Re-PASSWORD",
+              txt.rePassword.toUpperCase(),
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[500],
@@ -212,10 +214,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               autocorrect: false,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Please enter your re-password";
+                  return txt.pleaseRePassword;
                 }
                 if (value != passwordController.text) {
-                  return "The passwords you entered do not match";
+                  return txt.passwordNotMatch;
                 }
                 return null;
               },
@@ -225,22 +227,22 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             ),
             FilledButton(
                 onPressed: handleOnSignupClicked,
-                style: ButtonStyle(),
-                child: const Text(
-                  "SIGN UP",
-                  style: TextStyle(
+                style: const ButtonStyle(),
+                child: Text(
+                  txt.signup.toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Text(
-              "Or continue with",
+              txt.orContinueWith,
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Row(
@@ -293,18 +295,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             const SnackBar(content: Text('Sign up successful. Please check your email to verify the account')));
         context.go(AppRoute.login.getPath());
       }
-      // final state = ref.watch(signupProvider(emailController.text, passwordController.text));
-      // state.whenData((value){
-      //   print(value);
-      //   if (value == true) {
-      //     if (!mounted) {
-      //       return;
-      //     }
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //         const SnackBar(content: Text('Sign up successful. Please check your email to verify the account')));
-      //     context.go(AppRoute.login.getPath());
-      //   }
-      // });
     }
   }
 }

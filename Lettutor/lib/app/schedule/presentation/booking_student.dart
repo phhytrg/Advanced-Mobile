@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/tutors/service/tutors_service.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../core/commom-widgets/button_widget.dart';
-import '../../../../core/commom-widgets/page_header.dart';
-import '../../../../core/commom-widgets/tutor_mini_item.dart';
+import '../../../../core/common-widgets/button_widget.dart';
+import '../../../../core/common-widgets/page_header.dart';
+import '../../../../core/common-widgets/tutor_mini_item.dart';
 import '../../../core/constant.dart';
 import 'controller/booking_controller.dart';
 
@@ -42,16 +43,17 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       controller: _scrollController,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Column(
           children: [
-            const PageHeader(
+            PageHeader(
               svgIconPath: 'icons/calendar-check.svg',
-              pageDescription: sampleText,
-              pageName: 'Schedule',
+              pageDescription: txt.whatSchedule,
+              pageName: txt.schedule,
             ),
             const SizedBox(
               height: 32,
@@ -60,7 +62,7 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
             const SizedBox(
               height: 32,
             ),
-            BookingListWidget(),
+            const BookingListWidget(),
           ],
         ),
       ),
@@ -68,14 +70,15 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
   }
 
   Widget _buildLatestBook(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Latest Book',
+          txt.latestBook,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w900),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Table(
@@ -92,15 +95,15 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8)),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.all(16.0),
-                child: Text('Name'),
+                child: Text(txt.name),
               ),
               Table(
-                  defaultColumnWidth: IntrinsicColumnWidth(),
+                  defaultColumnWidth: const IntrinsicColumnWidth(),
                   border: TableBorder.symmetric(
-                    inside: BorderSide(
+                    inside: const BorderSide(
                       color: Colors.black12,
                     ),
                   ),
@@ -113,8 +116,8 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
                             color: Colors.grey.shade200,
                             borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                           ),
-                          child: const Text('Page')),
-                      Padding(padding: EdgeInsets.all(16.0), child: Text('0')),
+                          child: Text(txt.page)),
+                      const Padding(padding: EdgeInsets.all(16.0), child: Text('0')),
                     ]),
                   ]),
             ]),
@@ -124,13 +127,12 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8)),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                   ),
-                  child: Text('Description'),
+                  child: Text(txt.description),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(''),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                 ),
               ],
             )
@@ -228,6 +230,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
   }
 
   Widget _buildCancelBookingButton(BuildContext context, BookingData bookingData) {
+    final txt = AppLocalizations.of(context)!;
     return OutlinedButton(
         onPressed: DateTime.now().millisecondsSinceEpoch + 3600000000 <
                 bookingData.scheduleDetailInfo!.startPeriodTimestamp!.toInt()
@@ -237,9 +240,9 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Align(
+                        title: Align(
                           alignment: Alignment.center,
-                          child: Text('Cancel booking'),
+                          child: Text(txt.cancelBooking),
                         ),
                         surfaceTintColor: Colors.white,
                         content: SizedBox(
@@ -257,9 +260,9 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    'Lesson time: ',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  Text(
+                                    '${txt.lessonTime}: ',
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(MyDateUtils.getWeekDayMonthYear(DateTime.fromMillisecondsSinceEpoch(
                                       bookingData.scheduleDetailInfo!.startPeriodTimestamp!))),
@@ -269,29 +272,29 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                                 height: 16,
                               ),
                               DropdownMenu(
-                                dropdownMenuEntries: const [
+                                dropdownMenuEntries: [
                                   DropdownMenuEntry(
                                     value: 'reschedule',
-                                    label: 'Reschedule at another time',
+                                    label: txt.whyReschedule,
                                   ),
                                   DropdownMenuEntry(
                                     value: 'busy',
-                                    label: 'Busy at that time',
+                                    label: txt.whyBusy,
                                   ),
-                                  DropdownMenuEntry(value: 'asked', label: 'Asked by tutor'),
-                                  DropdownMenuEntry(value: 'other', label: 'Other'),
+                                  DropdownMenuEntry(value: 'asked', label: txt.askedByTutor),
+                                  DropdownMenuEntry(value: 'other', label: txt.other),
                                 ],
                                 controller: dropdownMenuController,
-                                hintText: 'Select reason',
+                                hintText: txt.selectReason,
                               ),
                               const SizedBox(
                                 height: 16,
                               ),
-                              const TextField(
+                              TextField(
                                 maxLines: 5,
                                 decoration: InputDecoration(
-                                  hintText: 'Reason',
-                                  border: OutlineInputBorder(),
+                                  hintText: txt.reason,
+                                  border: const OutlineInputBorder(),
                                 ),
                               )
                             ],
@@ -302,7 +305,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('No')),
+                              child: Text(txt.no)),
                           FilledButton(
                               onPressed: () async {
                                 await ref
@@ -313,7 +316,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                                   Navigator.of(context).pop();
                                 }
                               },
-                              child: const Text('Yes')),
+                              child: Text(txt.yes)),
                         ],
                       );
                     });
@@ -322,15 +325,16 @@ class _BookingItemState extends ConsumerState<BookingItem> {
           foregroundColor: Colors.red,
           side: const BorderSide(color: Colors.red),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.cancel),
-            Text('Cancel'),
+            const Icon(Icons.cancel),
+            Text(txt.cancel),
           ],
         ));
   }
 
   Widget _buildLessonLine(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return Container(
       color: Colors.white,
       margin: const EdgeInsets.all(8.0),
@@ -358,7 +362,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8),
                             child: Text(
-                                'Lesson ${i + 1}: ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(widget.bookingList[i].scheduleDetailInfo!.startPeriodTimestamp!))} '
+                                '${txt.lesson} ${i + 1}: ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(widget.bookingList[i].scheduleDetailInfo!.startPeriodTimestamp!))} '
                                 '-'
                                 ' ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(widget.bookingList[i].scheduleDetailInfo!.endPeriodTimestamp!))}'),
                           ),
@@ -392,17 +396,17 @@ class _BookingItemState extends ConsumerState<BookingItem> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: ListTileTheme(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               dense: true,
               child: ExpansionTile(
-                shape: Border(),
-                tilePadding: EdgeInsets.symmetric(horizontal: 8),
+                shape: const Border(),
+                tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                 controlAffinity: ListTileControlAffinity.leading,
                 initiallyExpanded: true,
                 clipBehavior: Clip.antiAlias,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Request for lesson'), MyTextButton(onPressed: () {}, child: Text('Edit Request'))],
+                  children: [Text(txt.requestForLesson), MyTextButton(onPressed: () {}, child: Text(txt.editRequest))],
                 ),
                 expandedAlignment: Alignment.centerLeft,
                 children: [
@@ -411,9 +415,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: widget.bookingList[0].studentRequest == null
-                        ? Text(
-                            'Currently there are no requests for this class. '
-                            'Please write down any requests for the teacher.',
+                        ? Text(txt.currentlyNoRequest,
                             style: TextStyle(
                               color: Colors.grey.shade400,
                             ),
@@ -430,7 +432,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
               alignment: Alignment.bottomRight,
               child: OutlinedButton(
                 onPressed: () {},
-                child: const Text('Go to meeting'),
+                child: Text(txt.goToMeeting),
               ),
             ),
           )
@@ -450,9 +452,9 @@ class _BookingItemState extends ConsumerState<BookingItem> {
           ),
           child: Column(
             children: [
-              Container(
-                child: _buildBookingItemHeader(context),
+              SizedBox(
                 width: double.infinity,
+                child: _buildBookingItemHeader(context),
               ),
               _buildLessonLine(context),
             ],

@@ -1,11 +1,16 @@
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lettutor/app/user_profile/domain/user.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
-import 'package:lettutor/core/commom-widgets/button_widget.dart';
-import 'package:lettutor/core/commom-widgets/common_scaffold.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/button_widget.dart';
+import 'package:lettutor/core/common-widgets/common_scaffold.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lettutor/core/constant.dart';
+
+import '../data/user_repository.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   const UserProfilePage({super.key});
@@ -15,10 +20,13 @@ class UserProfilePage extends ConsumerStatefulWidget {
 }
 
 class _UserProfilePageState extends ConsumerState<UserProfilePage> {
+
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userControllerProvider);
     double width = MediaQuery.of(context).size.width;
+    final txt = AppLocalizations.of(context)!;
+
     return CommonScaffold(
         body: SingleChildScrollView(
       child: AsyncValueWidget(
@@ -30,9 +38,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                 : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: [
-                const Text(
-                  'User Profile',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Text(
+                  txt.userProfile,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
                   height: 16,
@@ -51,11 +59,30 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   }
 
   Widget _buildUserBasicInfo(BuildContext context, User user) {
+    final txt = AppLocalizations.of(context)!;
     return Row(
       children: [
-        CircleAvatar(
-          radius: 64,
-          backgroundImage: NetworkImage(user.avatar),
+        InkWell(
+          onTap: () async {
+            FilePickerResult? picked = await FilePicker.platform
+                .pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
+            if (picked != null) {
+              MultipartFile avatar = MultipartFile.fromBytes(
+                picked.files.first.bytes!,
+                filename: picked.files.first.name,
+              );
+              final result = await ref.read(userRepositoryProvider).uploadAvatar(avatar);
+              if(result){
+                ref.read(userControllerProvider.notifier).build();
+              }
+            } else {
+              // User canceled the picker
+            }
+          },
+          child: CircleAvatar(
+            radius: 64,
+            backgroundImage: NetworkImage(user.avatar),
+          ),
         ),
         const SizedBox(
           width: 16,
@@ -67,7 +94,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             children: [
               Text(
                 user.name,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(
                 height: 8,
@@ -76,8 +103,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                 'Account ID: ${user.id}',
                 overflow: TextOverflow.visible,
               ),
-              MyTextButton(onPressed: () {}, child: const Text('Others reviews')),
-              MyTextButton(onPressed: () {}, child: const Text('Change password')),
+              MyTextButton(onPressed: () {}, child: Text(txt.othersReviewYou)),
+              MyTextButton(onPressed: () {}, child: Text(txt.changePassword)),
             ],
           ),
         )
@@ -88,6 +115,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   Widget _buildAccountInfo(BuildContext context, User user) {
+    final txt = AppLocalizations.of(context)!;
+
     final nameController = TextEditingController();
     final emailController = TextEditingController();
     final phoneController = TextEditingController();
@@ -109,21 +138,21 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     return Form(
       key: _formKey,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text(
-          'Account Information',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Text(
+          txt.accountInformation,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 8,
         ),
-        const Text('Name: '),
+        Text('${txt.name}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your name',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourName,
           ),
           controller: nameController,
         ),
@@ -135,9 +164,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             border: OutlineInputBorder(),
-            hintText: 'Enter your email',
+            hintText: txt.enterYourEmail,
           ),
           controller: emailController,
           enabled: false,
@@ -150,9 +179,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your phone',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourPhoneNumber,
           ),
           controller: phoneController,
           enabled: false,
@@ -160,70 +189,70 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         const SizedBox(
           height: 16,
         ),
-        const Text('Country: '),
+        Text('${txt.country}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your country',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourCountry,
           ),
           controller: countryController,
         ),
         const SizedBox(
           height: 16,
         ),
-        const Text('Birthday: '),
+        Text('${txt.birthday}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your birthday',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourBirthday
           ),
           controller: birthdayController,
         ),
         const SizedBox(
           height: 16,
         ),
-        const Text('My level:'),
+        Text('${txt.myLevel}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your level',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourLevel,
           ),
           controller: levelController,
         ),
         const SizedBox(
           height: 16,
         ),
-        const Text('Want to learn: '),
+        Text('${txt.wantToLearn}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your need',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourWantToLearn,
           ),
           controller: needController,
         ),
         const SizedBox(
           height: 16,
         ),
-        const Text('Study schedule: '),
+        Text('${txt.studySchedule}: '),
         const SizedBox(
           height: 8,
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your study schedule',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: txt.enterYourStudySchedule,
           ),
           controller: studyScheduleController,
         ),
@@ -241,7 +270,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               };
               ref.read(userControllerProvider.notifier).updateUserProfile(data);
             },
-            child: const Text('Save changes')),
+            child: Text(txt.saveChanges)),
         const SizedBox(
           height: 64,
         ),

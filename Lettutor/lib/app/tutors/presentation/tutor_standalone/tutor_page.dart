@@ -11,12 +11,10 @@ import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedback
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_feedbacks/tutor_feedback.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_intro_video.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_viewmodel.dart';
-import 'package:lettutor/app/tutors/service/tutors_service.dart';
-import 'package:lettutor/core/commom-widgets/alert_dialog.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
-import 'package:video_player/video_player.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../core/commom-widgets/text_widget.dart';
+import '../../../../core/common-widgets/text_widget.dart';
 import '../../../../core/constant.dart';
 import 'tutor_schedule/tutor_schedule.dart';
 
@@ -152,13 +150,14 @@ class _TutorPageState extends ConsumerState<TutorPage> {
   }
 
   Widget _buildTutorBriefIntro(BuildContext context, Tutor tutor) {
+    final txt = AppLocalizations.of(context)!;
     return Column(
       children: [
         Row(
           children: [
             CircleAvatar(
               minRadius: 64,
-              backgroundImage: tutor.user?.avatar != null ? NetworkImage(tutor!.user!.avatar!) : null,
+              backgroundImage: tutor.user?.avatar != null ? NetworkImage(tutor.user!.avatar!) : null,
               child: tutor.user?.avatar == null ? const Icon(Icons.portrait) : null,
             ),
             const SizedBox(
@@ -173,16 +172,18 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.star, color: tutor.rating! >= 0.5 ? Colors.yellow : Colors.grey),
-                    Icon(Icons.star, color: tutor.rating! >= 1.5 ? Colors.yellow : Colors.grey),
-                    Icon(Icons.star, color: tutor.rating! >= 2.5 ? Colors.yellow : Colors.grey),
-                    Icon(Icons.star, color: tutor.rating! >= 3.5 ? Colors.yellow : Colors.grey),
-                    Icon(Icons.star, color: tutor.rating! >= 4.5 ? Colors.yellow : Colors.grey),
-                    Text('(${tutor.totalFeedback})')
-                  ],
-                ),
+                tutor.rating == null
+                    ? Text(txt.noReviewYet)
+                    : Row(
+                        children: [
+                          Icon(Icons.star, color: tutor.rating! >= 0.5 ? Colors.yellow : Colors.grey),
+                          Icon(Icons.star, color: tutor.rating! >= 1.5 ? Colors.yellow : Colors.grey),
+                          Icon(Icons.star, color: tutor.rating! >= 2.5 ? Colors.yellow : Colors.grey),
+                          Icon(Icons.star, color: tutor.rating! >= 3.5 ? Colors.yellow : Colors.grey),
+                          Icon(Icons.star, color: tutor.rating! >= 4.5 ? Colors.yellow : Colors.grey),
+                          Text('(${tutor.totalFeedback})')
+                        ],
+                      ),
                 Wrap(
                   children: [
                     Flag.fromString(
@@ -235,9 +236,9 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                     );
                   },
                 ),
-                const Text(
-                  'Favorite',
-                  style: TextStyle(color: Colors.red),
+                Text(
+                  txt.favorite,
+                  style: const TextStyle(color: Colors.red),
                 ),
               ],
             ),
@@ -251,7 +252,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                       final TextEditingController controller = TextEditingController();
                       return StatefulBuilder(builder: (context, setState) {
                         return AlertDialog(
-                          title: const Text('Report'),
+                          title: Text(txt.report),
                           surfaceTintColor: Colors.white,
                           content: SizedBox(
                             width: 500,
@@ -348,20 +349,20 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                                   Navigator.of(context).pop();
                                 }
                               },
-                              child: const Text('Report'),
+                              child: Text(txt.report),
                             ),
                           ],
                         );
                       });
                     });
               },
-              child: const Column(
+              child: Column(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.report,
                     color: Colors.blue,
                   ),
-                  Text('Report'),
+                  Text(txt.report),
                 ],
               ),
             ),
@@ -372,6 +373,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
   }
 
   Widget _buildTutorDetail(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         var tutor = ref.watch(tutorViewmodelProvider(widget.tutorId));
@@ -383,7 +385,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
               children: [
                 _PartInfo(
                   partDescription: Text(tutor?.education ?? 'No data'),
-                  partTitle: 'Education',
+                  partTitle: txt.education,
                 ),
                 _PartInfo(
                   partDescription: Wrap(
@@ -393,7 +395,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                       OutlinedText(text: tutor?.languages ?? 'No data'),
                     ],
                   ),
-                  partTitle: 'Languages',
+                  partTitle: txt.languages,
                 ),
                 _PartInfo(
                   partDescription: Wrap(
@@ -404,10 +406,10 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                         OutlinedText(text: value),
                     ],
                   ),
-                  partTitle: 'Specialties',
+                  partTitle: txt.specialties,
                 ),
                 _PartInfo(
-                  partTitle: 'Suggested Courses',
+                  partTitle: txt.suggestedCourses,
                   partDescription: tutor?.user?.courses != null
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,11 +427,11 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                       : Container(),
                 ),
                 _PartInfo(
-                  partTitle: 'Interests',
+                  partTitle: txt.interests,
                   partDescription: tutor?.interests != null ? Text(tutor!.interests!) : Text('No data'),
                 ),
                 _PartInfo(
-                  partTitle: 'Teaching experiences',
+                  partTitle: txt.teachingExperiences,
                   partDescription: tutor?.experience != null ? Text(tutor!.experience!) : const Text('No data'),
                 ),
               ],

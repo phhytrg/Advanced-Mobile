@@ -31,6 +31,17 @@ class UserRepository {
 
     return User.fromJson(data["user"]);
   }
+
+  Future<bool> uploadAvatar(MultipartFile avatar) async {
+    Response response = await dio.post(
+      '$baseUrl/uploadAvatar',
+      data: FormData.fromMap({
+        "avatar": avatar,
+      }),
+    );
+
+    return response.statusCode == 200;
+  }
 }
 
 @Riverpod(keepAlive: true)

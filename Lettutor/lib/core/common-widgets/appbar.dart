@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,8 +50,8 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               MyApp.changeLocale(context, const Locale('vi'));
             },
             style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(20),
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(20),
               backgroundColor: Colors.grey[100], // <-- Button color
               foregroundColor: Colors.grey[500], // <-- Splash color
             ),
@@ -166,14 +166,14 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Hi, ${user.name}',
+                                  '${txt.hi}, ${user.name}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
-                                Text('${int.parse(user.walletInfo.amount) / 100000} lessons left',
-                                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                                Text('${int.parse(user.walletInfo.amount) / 100000} ${txt.lessons.toLowerCase()} ${txt.left.toLowerCase()}',
+                                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
                               ],
                             ),
                             const SizedBox(
@@ -212,6 +212,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
 
   Widget _buildTitle(BuildContext context) {
     final currentRoutePath = Router.of(context).routeInformationProvider?.value.uri;
+    final txt = AppLocalizations.of(context)!;
     return Row(
       children: [
         const SizedBox(
@@ -232,7 +233,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'TUTOR',
+              txt.tutor.toUpperCase(),
               style: TextStyle(
                 color: _hoverNavBar[0] || currentRoutePath.toString() == AppRoute.tutorsList.getPath()
                     ? Colors.blue
@@ -259,7 +260,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              'SCHEDULE',
+              txt.schedule.toUpperCase(),
               style: TextStyle(
                 color: _hoverNavBar[1] || currentRoutePath.toString() == AppRoute.bookingStudents.getPath()
                     ? Colors.blue
@@ -268,7 +269,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 24,
         ),
         InkWell(
@@ -286,7 +287,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'HISTORY',
+              txt.history.toUpperCase(),
               style: TextStyle(
                 color: _hoverNavBar[2] || currentRoutePath.toString() == AppRoute.history.getPath()
                     ? Colors.blue
@@ -295,7 +296,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 24,
         ),
         InkWell(
@@ -313,7 +314,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'COURSES',
+              txt.courses.toUpperCase(),
               style: TextStyle(
                 color: _hoverNavBar[3] || currentRoutePath.toString() == AppRoute.courses.getPath()
                     ? Colors.blue
@@ -322,7 +323,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 24,
         ),
         InkWell(
@@ -341,7 +342,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'MY COURSE',
+              txt.myCourse.toUpperCase(),
               style: TextStyle(
                 color: _hoverNavBar[4]
                     // || currentRoutePath.toString() == RoutePath.courses.getString()
@@ -382,8 +383,8 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
                 MyApp.changeLocale(context, const Locale('vi'));
               },
               style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(20),
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
                 backgroundColor: Colors.grey[100], // <-- Button color
                 foregroundColor: Colors.grey[500], // <-- Splash color
               ),

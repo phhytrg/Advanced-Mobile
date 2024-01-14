@@ -4,11 +4,10 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/app/tutors/data/tutor_repository.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
 import 'package:lettutor/core/constant.dart';
 
-import '../../../../core/commom-widgets/highligh_text.dart';
+import '../../../../core/common-widgets/highligh_text.dart';
 import '../../../../core/route/router.dart';
 import '../../domain/response/tutor.dart';
 import '../../service/tutors_service.dart';

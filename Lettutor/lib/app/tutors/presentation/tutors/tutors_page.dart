@@ -3,14 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutor_item.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/controller/tutors_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import '../../../../core/commom-widgets/appbar.dart';
-import '../../../../core/commom-widgets/drawer.dart';
-import '../../../../core/constant.dart';
 import '../../domain/payload/search_payload.dart';
 import '../../domain/response/tutor_list.dart';
 import '../upcoming_lesson.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TutorsPage extends ConsumerStatefulWidget {
   const TutorsPage({super.key});
@@ -76,6 +74,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       controller: scrollController,
       child: Column(
@@ -90,9 +89,9 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(left: 32),
+            margin: const EdgeInsets.only(left: 32),
             child: Text(
-              'Recommend Tutors',
+              txt.recommendTutors,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -109,7 +108,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
                           spacing: 16,
                           runSpacing: 12,
                           children: [
-                            for (var tutor in tutorsList!.rows!)
+                            for (var tutor in tutorsList.rows!)
                               TutorItem(
                                 tutor: tutor,
                               )
@@ -158,21 +157,22 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
   }
 
   Widget _buildTutorsSearchBox() {
+    final txt = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(left: 32, right: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Find a tutor',
+            txt.findATutor,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: Colors.black,
                   fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
                 ),
           ),
           TextField(
-              decoration: const InputDecoration(
-                hintText: 'Enter tutor name..',
+              decoration: InputDecoration(
+                hintText: '${txt.enterTutorName}..',
               ),
               style: Theme.of(context).textTheme.bodySmall,
               controller: textSearchController,
@@ -224,14 +224,14 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             selectedOptionIcon: const Icon(Icons.check),
             selectedOptionBackgroundColor: Colors.blue.shade50,
             padding: EdgeInsets.zero,
-            hint: 'Select tutor nationality',
+            hint: txt.selectTutorNationality,
             controller: nationalitiesController,
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
-            'Select available tutoring time:',
+            '${txt.selectAvailableTime}:',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: Colors.black,
                   fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
@@ -260,9 +260,9 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               spacing: 16,
               runSpacing: 12,
               children: [
-                _buildFilterSpecialty('english-for-kids', 'English for kids'),
-                _buildFilterSpecialty('business-english', 'English for Business'),
-                _buildFilterSpecialty('conversational', 'Conversational'),
+                _buildFilterSpecialty('english-for-kids', txt.englishForKids),
+                _buildFilterSpecialty('business-english', txt.englishForBusiness),
+                _buildFilterSpecialty('conversational', txt.conversational),
                 _buildFilterSpecialty('starters', 'STARTERS'),
                 _buildFilterSpecialty('movers', 'MOVERS'),
                 _buildFilterSpecialty('flyers', 'FLYERS'),

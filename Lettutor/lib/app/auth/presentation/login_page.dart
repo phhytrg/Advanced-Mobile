@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/app/auth/data/local_auth_repository.dart';
-import 'package:lettutor/app/auth/data/token_repository.dart';
-import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 import 'package:lettutor/core/route/router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../core/commom-widgets/appbar.dart';
-import '../domain/user.dart';
+import '../../../core/common-widgets/appbar.dart';
 import '../../../core/route/auth_provider.dart';
 import 'controller/login_controller.dart';
 
@@ -87,6 +84,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget buildLoginForm() {
+    final txt = AppLocalizations.of(context)!;
     final AsyncValue<void> state = ref.watch(loginControllerProvider);
 
     ref.listen<AsyncValue>(loginControllerProvider, (_, state) {
@@ -103,7 +101,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                "Say hello to your English tutors",
+                txt.sayHelloLettutor,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue[600],
@@ -112,9 +110,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const Text(
-              "Become fluent faster through one on one video chat lessons tailored to your goals.",
-              style: TextStyle(
+            Text(
+              txt.lettutorIntro,
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1,
               ),
@@ -158,10 +156,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
+                  return txt.pleaseEmail;
                 }
                 if (!emailValidator.hasMatch(value)) {
-                  return 'Please enter a valid email';
+                  return txt.pleaseValidEmail;
                 }
                 return null;
               },
@@ -170,7 +168,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               height: 20,
             ),
             Text(
-              "PASSWORD",
+              txt.password,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[500],
@@ -198,7 +196,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               controller: passwordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
+                  return txt.pleasePassword;
                 }
                 return null;
               },
@@ -208,7 +206,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
             RichText(
                 text: TextSpan(
-              text: "Forgot Password?",
+              text: txt.forgotPassword,
               style: const TextStyle(color: Colors.blue),
               recognizer: TapGestureRecognizer()..onTap = onForgotPasswordClick,
             )),
@@ -237,9 +235,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   style: const ButtonStyle(),
                   child: state.isLoading
                       ? const CircularProgressIndicator()
-                      : const Text(
-                          "LOG IN",
-                          style: TextStyle(
+                      : Text(
+                          txt.login.toUpperCase(),
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -250,8 +248,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             const SizedBox(
               height: 40,
             ),
-            const Text(
-              "Or continue with",
+            Text(
+              txt.orContinueWith,
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -296,10 +294,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Not a member yet? "),
+                Text(txt.notAMember),
                 RichText(
                   text: TextSpan(
-                    text: "Sign up",
+                    text: txt.signup,
                     recognizer: TapGestureRecognizer()..onTap = onSignupClick,
                     style: const TextStyle(
                       color: Colors.blue,

@@ -1,14 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
-import '../../../../../core/commom-widgets/button_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lettutor/core/utils/string_utils.dart';
+import '../../../../../core/common-widgets/button_widget.dart';
 import '../../../../core/constant.dart';
 
 class CourseStandalonePage extends ConsumerWidget {
@@ -18,6 +18,7 @@ class CourseStandalonePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final txt = AppLocalizations.of(context)!;
     final courseState = ref.watch(courseControllerProvider(courseId));
 
     return SingleChildScrollView(
@@ -45,15 +46,15 @@ class CourseStandalonePage extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: _buildCourseCard(context, course),
                                 flex: 3,
+                                child: _buildCourseCard(context, course),
                               ),
                               const SizedBox(
                                 width: 32,
                               ),
                               Expanded(
-                                child: _buildCourseInfo(context, course),
                                 flex: 7,
+                                child: _buildCourseInfo(context, course),
                               )
                             ],
                           );
@@ -66,6 +67,7 @@ class CourseStandalonePage extends ConsumerWidget {
   }
 
   Widget _buildCourseCard(BuildContext context, Course course) {
+    final txt = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
           boxShadow: [
@@ -105,12 +107,12 @@ class CourseStandalonePage extends ConsumerWidget {
           ),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FilledButton(
               onPressed: () {
                 context.goNamed(AppRoute.courseTopics.name, pathParameters: {'id': course.id, 'index': '0'});
               },
-              child: const Text('Discover'),
+              child: Text(txt.discoverCourse),
             ),
           )
         ],
@@ -119,10 +121,11 @@ class CourseStandalonePage extends ConsumerWidget {
   }
 
   Widget _buildCourseInfo(BuildContext context, Course course) {
+    final txt = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTitleText(context, 'Overview'),
+        _buildTitleText(context, txt.overview),
         const Divider(),
         RichText(
             text: TextSpan(children: [
@@ -132,7 +135,7 @@ class CourseStandalonePage extends ConsumerWidget {
                 color: Colors.red.shade700,
               ),
               alignment: PlaceholderAlignment.middle),
-          TextSpan(text: 'Why take this course', style: Theme.of(context).textTheme.titleSmall!)
+          TextSpan(text: txt.whyTakeThisCourse, style: Theme.of(context).textTheme.titleSmall!)
         ])),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -149,7 +152,7 @@ class CourseStandalonePage extends ConsumerWidget {
                 color: Colors.red.shade700,
               ),
               alignment: PlaceholderAlignment.middle),
-          TextSpan(text: 'What will you be able to do', style: Theme.of(context).textTheme.titleSmall!)
+          TextSpan(text: txt.whatWillYouBeAbleToDo, style: Theme.of(context).textTheme.titleSmall!)
         ])),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -158,24 +161,24 @@ class CourseStandalonePage extends ConsumerWidget {
         const SizedBox(
           height: 32,
         ),
-        _buildTitleText(context, 'Experience Level'),
-        Divider(),
+        _buildTitleText(context, txt.experienceLevel),
+        const Divider(),
         RichText(
             text: TextSpan(children: [
-          WidgetSpan(
+          const WidgetSpan(
               child: Icon(
                 Icons.group_add,
                 color: Colors.blue,
               ),
               alignment: PlaceholderAlignment.middle),
           const TextSpan(text: '  '),
-          TextSpan(text: 'Beginner', style: Theme.of(context).textTheme.titleSmall!)
+          TextSpan(text: StringUtils.numberToLevel(int.parse(course.level)) , style: Theme.of(context).textTheme.titleSmall!)
         ])),
         const SizedBox(
           height: 32,
         ),
-        _buildTitleText(context, 'Course length'),
-        Divider(),
+        _buildTitleText(context, txt.courseLength),
+        const Divider(),
         RichText(
             text: TextSpan(children: [
           const WidgetSpan(
@@ -185,12 +188,12 @@ class CourseStandalonePage extends ConsumerWidget {
               ),
               alignment: PlaceholderAlignment.middle),
           const TextSpan(text: '  '),
-          TextSpan(text: '10 topics', style: Theme.of(context).textTheme.titleSmall!)
+          TextSpan(text: '${course.topics.length} ${txt.topics.toLowerCase()}', style: Theme.of(context).textTheme.titleSmall!)
         ])),
         const SizedBox(
           height: 32,
         ),
-        _buildTitleText(context, 'List Topics'),
+        _buildTitleText(context, txt.listTopics),
         Divider(),
         LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth <= 600) {
@@ -213,7 +216,10 @@ class CourseStandalonePage extends ConsumerWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                     onTap: () {
-                      context.goNamed(AppRoute.courseDetail.name, pathParameters: {'id': course.id});
+                      GoRouter.of(context).pushNamed(AppRoute.courseTopics.name, pathParameters: {
+                        'id': course.id,
+                        'index': index.toString(),
+                      });
                     },
                     borderRadius: BorderRadius.circular(8.0),
                     hoverColor: Colors.grey.shade300,
@@ -225,12 +231,12 @@ class CourseStandalonePage extends ConsumerWidget {
         const SizedBox(
           height: 32,
         ),
-        _buildTitleText(context, 'Suggested Tutors'),
+        _buildTitleText(context, txt.suggestedTutors),
         const Divider(),
-        const Row(
+        Row(
           children: [
-            Text('Keegan'),
-            MyTextButton(child: Text('More info')),
+            Text(course.users.first.name),
+            const MyTextButton(child: Text('More info')),
           ],
         )
       ],

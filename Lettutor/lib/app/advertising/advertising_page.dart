@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/core/commom-widgets/appbar.dart';
+import 'package:lettutor/core/common-widgets/appbar.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/route/router.dart';
-import 'package:lettutor/main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 
 class AdvertisingPage extends ConsumerWidget {
@@ -13,7 +14,7 @@ class AdvertisingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    final txt = AppLocalizations.of(context)!;
     return Scaffold(
         appBar: LoginAppbar(),
         body: SingleChildScrollView(
@@ -35,7 +36,7 @@ class AdvertisingPage extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "LEARN ENGLISH ANYTIME, ANYWHERE",
+                        txt.ads1,
                         style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w800,
                             fontSize: constraint.maxWidth > 600
@@ -50,8 +51,7 @@ class AdvertisingPage extends ConsumerWidget {
                             color: Colors.blue.shade700),
                       ),
                       Text(
-                        "Our talented tutor will help you to reach your goals by "
-                        "one-on-one video",
+                        txt.ads11,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
                           fontSize: Theme.of(context)
@@ -61,14 +61,14 @@ class AdvertisingPage extends ConsumerWidget {
                           color: Colors.blue.shade900,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       FilledButton(
                           onPressed: () {
                             GoRouter.of(context).goNamed(AppRoute.login.name);
                           },
-                          child: Text("JOIN NOW"),
+                          child: Text(txt.joinNow),
                           style: FilledButton.styleFrom(
                             backgroundColor: Colors.blue.shade600,
                           )),
@@ -94,7 +94,7 @@ class AdvertisingPage extends ConsumerWidget {
                               fit: BoxFit.fill,
                             ),
                             Text(
-                              "New experience, new way for learner",
+                              txt.ads2,
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600,
                                 fontSize: Theme.of(context)
@@ -104,8 +104,7 @@ class AdvertisingPage extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              "Build your English with our tutor from over the world now. "
-                                  "All you need is your device",
+                              txt.ads21,
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w400,
                                 fontSize: Theme.of(context)
@@ -121,10 +120,10 @@ class AdvertisingPage extends ConsumerWidget {
                                 onPressed: () {
                                   context.go(AppRoute.login.getPath());
                                 },
-                                child: Text("Get Started"),
                                 style: FilledButton.styleFrom(
                                   backgroundColor: Colors.blue.shade600,
-                                )
+                                ),
+                                child: Text(txt.getStarted)
                             ),
                           ],
                         ),
@@ -147,7 +146,7 @@ class AdvertisingPage extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "New experience, new way for learner",
+                                    txt.ads2,
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w600,
                                       fontSize: Theme.of(context)
@@ -157,8 +156,7 @@ class AdvertisingPage extends ConsumerWidget {
                                     ),
                                   ),
                                   Text(
-                                    "Build your English with our tutor from over the world now. "
-                                    "All you need is your device",
+                                    txt.ads21,
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w400,
                                       fontSize: Theme.of(context)
@@ -177,7 +175,7 @@ class AdvertisingPage extends ConsumerWidget {
                                       style: FilledButton.styleFrom(
                                         backgroundColor: Colors.orange.shade900,
                                       ),
-                                      child: const Text("Get Started")),
+                                      child: Text(txt.getStarted)),
                                 ],
                               ),
                             ),

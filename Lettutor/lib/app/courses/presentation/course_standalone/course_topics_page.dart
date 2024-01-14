@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/common/pdf_viewer.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/controller/course_controller.dart';
-import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
+import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/route/router.dart';
 
