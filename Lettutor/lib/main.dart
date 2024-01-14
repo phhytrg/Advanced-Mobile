@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lettutor/app/auth/data/local_auth_repository.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'core/route/router.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
@@ -11,16 +12,23 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() async {
   final AuthState authState = AuthState();
   await authState.init();
+
   configureUrl();
   runApp(
-    ProviderScope(child: MyApp(authState: authState)),
+    ProviderScope(
+      overrides: [
+        authProvider.overrideWith((ref) => authState),
+      ],
+      child: MyApp()
+    ),
   );
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  final AuthState authState;
+  // final AuthState authState;
 
-  const MyApp({super.key, required this.authState});
+  // const MyApp({super.key, required this.authState});
+  const MyApp({super.key});
 
   static void changeLocale(BuildContext context, Locale locale) async {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
@@ -48,7 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final goRouter = ref.watch(routerGeneratorProvider(widget.authState));
+    final goRouter = ref.watch(routerGeneratorProvider(ref.read(authProvider)));
 
     return MaterialApp.router(
       title: 'Flutter Demo',

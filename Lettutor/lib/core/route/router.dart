@@ -8,6 +8,7 @@ import 'package:lettutor/app/courses/presentation/course_standalone/course_stand
 import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
 import 'package:lettutor/app/courses/presentation/pdf_viewer_page.dart';
+import 'package:lettutor/app/messages/presentation/message_page.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
@@ -35,6 +36,7 @@ enum AppRoute {
   advertising,
   profile,
   registerTutor,
+  messages,
   resetPassword;
 
   String getPath() {
@@ -67,6 +69,8 @@ enum AppRoute {
         return '/profile';
       case AppRoute.registerTutor:
         return '/register-tutor';
+      case AppRoute.messages:
+        return '/messages';
       case AppRoute.advertising:
         return '/';
     }
@@ -165,7 +169,11 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
                 name: AppRoute.registerTutor.name,
                 builder: (context, state) {
                   return const RegisterTutorPage();
-                }),
+                }
+            ),
+            GoRoute(path: AppRoute.messages.getPath(), name: AppRoute.messages.name, builder: (context, state) {
+              return const MessagesPage();
+            }),
           ],
           builder: (context, state, child) {
             return AppScaffold(child: child);

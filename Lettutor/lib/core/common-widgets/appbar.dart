@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
 import 'package:lettutor/core/common-widgets/async_value_widget.dart';
+import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -97,7 +97,6 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                 Padding(
                                   padding: const EdgeInsets.all(0),
                                   child: Container(
-                                    height: 100,
                                     width: 200,
                                     margin: const EdgeInsets.only(top: 64, right: 16),
                                     decoration: BoxDecoration(
@@ -122,7 +121,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                               onTap: () {
                                                 context.go(AppRoute.profile.getPath());
                                               },
-                                              child: Align(alignment: Alignment.center,child: Text(txt.profile)),
+                                              child: Align(alignment: Alignment.center, child: Text(txt.profile)),
                                             ),
                                           ),
                                         ),
@@ -134,7 +133,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                               onTap: () {
                                                 context.go(AppRoute.registerTutor.getPath());
                                               },
-                                              child: Align(alignment: Alignment.center,child: Text(txt.becomeTutor)),
+                                              child: Align(alignment: Alignment.center, child: Text(txt.becomeTutor)),
                                             ),
                                           ),
                                         ),
@@ -144,8 +143,21 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                           child: Material(
                                             child: InkWell(
                                               onTap: () {
+                                                context.go(AppRoute.messages.getPath());
                                               },
-                                              child: Align(alignment: Alignment.center,child: Text(txt.logout)),
+                                              child: Align(alignment: Alignment.center, child: Text(txt.messages)),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 30,
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {
+                                                ref.read(authProvider.notifier).logout();
+                                              },
+                                              child: Align(alignment: Alignment.center, child: Text(txt.logout)),
                                             ),
                                           ),
                                         ),
@@ -172,7 +184,8 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                     fontSize: 16,
                                   ),
                                 ),
-                                Text('${int.parse(user.walletInfo.amount) / 100000} ${txt.lessons.toLowerCase()} ${txt.left.toLowerCase()}',
+                                Text(
+                                    '${int.parse(user.walletInfo.amount) / 100000} ${txt.lessons.toLowerCase()} ${txt.left.toLowerCase()}',
                                     style: const TextStyle(color: Colors.grey, fontSize: 12)),
                               ],
                             ),
