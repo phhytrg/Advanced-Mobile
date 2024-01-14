@@ -60,31 +60,26 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         const SizedBox(
           width: 16,
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              user.name,
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Builder(builder: (context) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width <= mobileWidth
-                    ? MediaQuery.of(context).size.width - 200
-                    : MediaQuery.of(context).size.width - 400,
-                child: Text(
-                  'Account ID: ${user.id}',
-                  overflow: TextOverflow.visible,
-                ),
-              );
-            }),
-            MyTextButton(onPressed: () {}, child: const Text('Others reviews')),
-            MyTextButton(onPressed: () {}, child: const Text('Change password')),
-          ],
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.name,
+                style: TextStyle(fontSize: 20),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                'Account ID: ${user.id}',
+                overflow: TextOverflow.visible,
+              ),
+              MyTextButton(onPressed: () {}, child: const Text('Others reviews')),
+              MyTextButton(onPressed: () {}, child: const Text('Change password')),
+            ],
+          ),
         )
       ],
     );
@@ -235,16 +230,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         const SizedBox(
           height: 16,
         ),
-        FilledButton(onPressed: () {
-          Map<String, dynamic> data = {
-            'name': nameController.text,
-            'country': countryController.text,
-            'birthday': birthdayController.text,
-            'level': levelController.text,
-            'studySchedule': studyScheduleController.text,
-          };
-          ref.read(userControllerProvider.notifier).updateUserProfile(data);
-        }, child: const Text('Save changes')),
+        FilledButton(
+            onPressed: () {
+              Map<String, dynamic> data = {
+                'name': nameController.text,
+                'country': countryController.text,
+                'birthday': birthdayController.text,
+                'level': levelController.text,
+                'studySchedule': studyScheduleController.text,
+              };
+              ref.read(userControllerProvider.notifier).updateUserProfile(data);
+            },
+            child: const Text('Save changes')),
         const SizedBox(
           height: 64,
         ),

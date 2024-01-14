@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'core/route/router.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   final AuthState authState = AuthState();
@@ -21,11 +22,29 @@ class MyApp extends ConsumerStatefulWidget {
 
   const MyApp({super.key, required this.authState});
 
+  static void changeLocale(BuildContext context, Locale locale) async {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage();
+  }
+
+  static Locale getLocale(BuildContext context) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    return state?._locale ?? const Locale('en');
+  }
+
   @override
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  Locale _locale = const Locale('en');
+
+  changeLanguage() {
+    setState(() {
+      _locale = _locale == const Locale('en') ? const Locale('vi') : const Locale('en');
+    });
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -36,6 +55,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       routerConfig: goRouter,
       scrollBehavior: MyCustomerScrollBehavior(),
+      locale: _locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
@@ -53,14 +75,12 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
-              side: const BorderSide(
-                color: Colors.blue,
-              ),
-              elevation: 0,
-            )),
-        textTheme: GoogleFonts.poppinsTextTheme(Theme
-            .of(context)
-            .textTheme),
+          side: const BorderSide(
+            color: Colors.blue,
+          ),
+          elevation: 0,
+        )),
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
     );
   }
@@ -69,8 +89,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 class MyCustomerScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    PointerDeviceKind.stylus,
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+      };
 }

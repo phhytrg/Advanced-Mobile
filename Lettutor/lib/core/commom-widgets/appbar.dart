@@ -1,17 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:lettutor/app/auth/data/local_auth_repository.dart';
-import 'package:lettutor/app/auth/data/user_repository.dart';
-import 'package:lettutor/app/auth/presentation/controller/token_controller.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
 import 'package:lettutor/core/commom-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/router.dart';
 import 'package:lettutor/main.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../constant.dart';
 
 class LettutorAppbar extends StatefulWidget implements PreferredSizeWidget {
@@ -32,6 +28,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
 
   @override
   Widget build(BuildContext context) {
+    final txt = AppLocalizations.of(context)!;
     return AppBar(
       backgroundColor: Colors.white,
       shadowColor: Colors.black,
@@ -49,7 +46,9 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              MyApp.changeLocale(context, const Locale('vi'));
+            },
             style: ElevatedButton.styleFrom(
               shape: CircleBorder(),
               padding: EdgeInsets.all(20),
@@ -57,7 +56,9 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               foregroundColor: Colors.grey[500], // <-- Splash color
             ),
             child: SvgPicture.asset(
-              "assets/icons/usa-flag.svg",
+              MyApp.getLocale(context).languageCode == 'en'
+                  ? "assets/icons/usa-flag.svg"
+                  : "assets/icons/vietnam-flag.svg",
               width: 20,
               fit: BoxFit.scaleDown,
             ),
@@ -85,7 +86,77 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                   data: (user) {
                     return InkWell(
                       onTap: () {
-                        context.go(AppRoute.profile.getPath());
+                        showDialog<void>(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Container(
+                                    height: 100,
+                                    width: 200,
+                                    margin: const EdgeInsets.only(top: 64, right: 16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 1,
+                                          blurRadius: 7,
+                                          offset: const Offset(0, 3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 30,
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {
+                                                context.go(AppRoute.profile.getPath());
+                                              },
+                                              child: Align(alignment: Alignment.center,child: Text(txt.profile)),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 30,
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {
+                                                context.go(AppRoute.registerTutor.getPath());
+                                              },
+                                              child: Align(alignment: Alignment.center,child: Text(txt.becomeTutor)),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 30,
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {
+                                              },
+                                              child: Align(alignment: Alignment.center,child: Text(txt.logout)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         child: Row(
@@ -96,12 +167,13 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                               children: [
                                 Text(
                                   'Hi, ${user.name}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
-                                Text('${int.parse(user.walletInfo.amount) / 100000} lessons left', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                                Text('${int.parse(user.walletInfo.amount) / 100000} lessons left',
+                                    style: TextStyle(color: Colors.grey, fontSize: 12)),
                               ],
                             ),
                             const SizedBox(
@@ -306,7 +378,9 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                MyApp.changeLocale(context, const Locale('vi'));
+              },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
                 padding: EdgeInsets.all(20),
@@ -314,7 +388,9 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
                 foregroundColor: Colors.grey[500], // <-- Splash color
               ),
               child: SvgPicture.asset(
-                "assets/icons/usa-flag.svg",
+                MyApp.getLocale(context).languageCode == 'en'
+                    ? "assets/icons/usa-flag.svg"
+                    : "assets/icons/vietnam-flag.svg",
                 width: 20,
                 fit: BoxFit.scaleDown,
               ),

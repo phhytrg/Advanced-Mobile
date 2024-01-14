@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/advertising/advertising_page.dart';
 import 'package:lettutor/app/auth/presentation/login_page.dart';
 import 'package:lettutor/app/auth/presentation/reset_password.dart';
+import 'package:lettutor/app/become_tutor/presentation/register_tutor_page.dart';
 import 'package:lettutor/app/courses/domain/course.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_standalone_page.dart';
 import 'package:lettutor/app/courses/presentation/course_standalone/course_topics_page.dart';
@@ -34,6 +35,7 @@ enum AppRoute {
   pdfViewer,
   advertising,
   profile,
+  registerTutor,
   resetPassword;
 
   String getPath() {
@@ -64,6 +66,8 @@ enum AppRoute {
         return '/pdf-viewer';
       case AppRoute.profile:
         return '/profile';
+      case AppRoute.registerTutor:
+        return '/register-tutor';
       case AppRoute.advertising:
         return '/';
     }
@@ -140,11 +144,11 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
               },
             ),
             GoRoute(
-                path: '/course-info/:id',
-                name: AppRoute.courseInfo.name,
-                builder: (context, state) => CourseStandalonePage(
-                      courseId: state.pathParameters['id'] ?? '',
-                    ),
+              path: '/course-info/:id',
+              name: AppRoute.courseInfo.name,
+              builder: (context, state) => CourseStandalonePage(
+                courseId: state.pathParameters['id'] ?? '',
+              ),
             ),
             GoRoute(
               path: '${AppRoute.courseTopics.getPath()}/:id/:index',
@@ -157,6 +161,12 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
                 );
               },
             ),
+            GoRoute(
+                path: AppRoute.registerTutor.getPath(),
+                name: AppRoute.registerTutor.name,
+                builder: (context, state) {
+                  return const RegisterTutorPage();
+                }),
           ],
           builder: (context, state, child) {
             return AppScaffold(child: child);
