@@ -28,6 +28,7 @@ jobs:
 
     - name: Get package
       working-directory: ./Lettutor
+      run: flutter pub get
     - run: flutter build web
 
     - uses: actions/checkout@v3
