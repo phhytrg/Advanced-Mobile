@@ -39,5 +39,6 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.7.7'
-    - run: flutter build apk
+    - working-directory: ./Lettutor
+      run: flutter build apk
     - run: flutter build appbundle
