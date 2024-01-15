@@ -25,7 +25,7 @@ dependencies:
   expandable_text: 2.3.0
   country_picker: ^2.0.21
   multi_dropdown: ^2.1.0
-  pdfx: ^2.4.0
+  pdfx: ^2.5.0
   http: ^1.1.0
   dio: ^5.3.3
   flutter_riverpod: ^2.4.6
@@ -44,6 +44,7 @@ dependencies:
   flutter_localization: ^0.2.0
   file_picker: ^6.1.1
   flutter_chat_ui: ^1.6.10
+  jitsi_meet_flutter_sdk: ^0.1.9
 
   # Paid Packet
 #  syncfusion_flutter_pdfviewer: ^23.1.42
