@@ -235,7 +235,7 @@ class CourseStandalonePage extends ConsumerWidget {
         const Divider(),
         Row(
           children: [
-            Text(course.users.first.name),
+            Text(course.users!.first.name),
             const MyTextButton(child: Text('More info')),
           ],
         )
