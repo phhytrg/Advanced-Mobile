@@ -29,6 +29,10 @@ jobs:
     - name: Get package
       working-directory: ./Lettutor
       run: flutter pub get
+
+    - name: Build runner
+      working-directory: ./Lettutor
+      run: flutter packages build_runner build
     - name: Build web
       working-directory: ./Lettutor
       run: flutter build web
