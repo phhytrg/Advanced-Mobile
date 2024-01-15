@@ -32,7 +32,7 @@ jobs:
 
     - name: Build runner
       working-directory: ./Lettutor
-      run: flutter packages build_runner build
+      run: flutter packages run build_runner build
     - name: Build web
       working-directory: ./Lettutor
       run: flutter build web
