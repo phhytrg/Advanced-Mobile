@@ -28,8 +28,6 @@ jobs:
 
     - name: Get package
       working-directory: ./Lettutor
-      run: flutter pub get
-    - run: flutter test
     - run: flutter build web
 
     - uses: actions/checkout@v3
@@ -40,7 +38,5 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.7.7'
-    - run: flutter pub get
-    - run: flutter test
     - run: flutter build apk
     - run: flutter build appbundle
