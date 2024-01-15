@@ -25,7 +25,11 @@ dependencies:
   expandable_text: 2.3.0
   country_picker: ^2.0.21
   multi_dropdown: ^2.1.0
-  pdfx: ^2.5.0
+  pdfx:
+    git:
+      url: 'https://github.com/ScerIO/packages.flutter'
+      ref: '4be9de9ffed5398fd7d5f44bbb07dcd3d3f1711b'
+      path: packages/pdfx
   http: ^1.1.0
   dio: ^5.3.3
   flutter_riverpod: ^2.4.6

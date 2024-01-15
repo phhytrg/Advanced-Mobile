@@ -33,7 +33,7 @@ class Course {
   String level;
   List<Topic> topics;
   List<Category>? categories;
-  List<User> users;
+  List<User>? users;
 
   Course({
     required this.description,
@@ -46,7 +46,7 @@ class Course {
     required this.topics,
     required this.level,
     this.categories,
-    required this.users,
+    this.users,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) {
@@ -61,7 +61,7 @@ class Course {
       topics: json['topics'].map<Topic>((topic) => Topic.fromJson(topic)).toList(),
       level: json['level'],
       categories: json['categories']?.map<Category>((category) => Category.fromJson(category)).toList(),
-      users: json['users'].map<User>((user) => User.fromJson(user)).toList(),
+      users: json['users']?.map<User>((user) => User.fromJson(user)).toList(),
     );
   }
 
@@ -77,7 +77,7 @@ class Course {
       'topics': topics.map((topic) => topic.toJson()).toList(),
       'level': level,
       'categories': categories?.map((category) => category.toJson()).toList(),
-      'users': users.map((user) => user.toJson()).toList(),
+      'users': users?.map((user) => user.toJson()).toList(),
     };
   }
 }
