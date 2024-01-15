@@ -51,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image(
-                          image: Image.asset('images/login-image.png').image,
+                          image: Image.asset('assets/images/login-image.png').image,
                           fit: BoxFit.fitHeight,
                         ),
                       ),

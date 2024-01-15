@@ -224,7 +224,7 @@ class ScheduleItem extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.all(8),
         width: 100,
-        height: 110,
+        height: 130,
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
