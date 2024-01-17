@@ -9,13 +9,17 @@ import 'package:lettutor/app/courses/presentation/course_standalone/course_topic
 import 'package:lettutor/app/courses/presentation/courses_page.dart';
 import 'package:lettutor/app/courses/presentation/pdf_viewer_page.dart';
 import 'package:lettutor/app/messages/presentation/message_page.dart';
+import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/schedule/presentation/history_page.dart';
 import 'package:lettutor/app/schedule/presentation/booking_student.dart';
 import 'package:lettutor/app/signup/presentation/signup.dart';
+import 'package:lettutor/app/tutors/domain/tutor_schedule/tutor_schedule_response.dart';
 import 'package:lettutor/app/tutors/presentation/tutor_standalone/tutor_page.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutors_page.dart';
 import 'package:lettutor/app/user_profile/presentation/user_profile_page.dart';
+import 'package:lettutor/app/video_conference/presentation/waiting_page.dart';
 import 'package:lettutor/core/common-widgets/app_scaffold.dart';
+import 'package:lettutor/core/common-widgets/not_found_page.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -165,15 +169,29 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
               },
             ),
             GoRoute(
+                path: '/meeting/:id/waiting',
+                name: 'waiting',
+                builder: (context, state) {
+                  if(state.extra == null){
+                    return const NotFoundPage();
+                  }
+                  final lesson = state.extra as BookingData;
+                  return WaitingPage(
+                    lesson: lesson,
+                  );
+                }),
+            GoRoute(
                 path: AppRoute.registerTutor.getPath(),
                 name: AppRoute.registerTutor.name,
                 builder: (context, state) {
                   return const RegisterTutorPage();
-                }
-            ),
-            GoRoute(path: AppRoute.messages.getPath(), name: AppRoute.messages.name, builder: (context, state) {
-              return const MessagesPage();
-            }),
+                }),
+            GoRoute(
+                path: AppRoute.messages.getPath(),
+                name: AppRoute.messages.name,
+                builder: (context, state) {
+                  return const MessagesPage();
+                }),
           ],
           builder: (context, state, child) {
             return AppScaffold(child: child);

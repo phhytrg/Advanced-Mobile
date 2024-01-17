@@ -24,16 +24,17 @@ class TutorItem extends StatefulWidget {
 class _TutorItemState extends State<TutorItem> {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
         context.goNamed(AppRoute.tutor.name, pathParameters: {'id': widget.tutor.id!});
       },
       child: Container(
-        constraints: const BoxConstraints(
+        constraints: BoxConstraints(
           maxWidth: 3.5 * 125,
           minWidth: 3.5 * 50,
-          minHeight: 450,
-          maxHeight: 450,
+          maxHeight: width > mobileWidth ? 450 : 550,
+          minHeight: width > mobileWidth ? 450 : 550,
         ),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),

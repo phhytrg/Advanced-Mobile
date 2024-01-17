@@ -32,7 +32,8 @@ class UserRepository extends BaseUserRepository{
   @override
   Future<User> getUserInfo() async {
     final response = await dio.get("$baseUrl/info");
-    return User.fromJson(response.data);
+    print(response.data);
+    return User.fromJson(response.data["user"]);
   }
 }
 

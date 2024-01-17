@@ -1,10 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lettutor/app/courses/domain/tutor_course.dart';
+
 part 'user.g.dart';
 
 @JsonSerializable()
-class User{
-  String id;
+class User {
+  String? id;
+  String? email;
   String? level;
   String? avatar;
   String? name;
@@ -16,8 +18,8 @@ class User{
   String? studentGroupId;
   List<Course>? courses;
 
-  User({
-      required this.id,
+  User(
+      { this.id,
       this.level,
       this.avatar,
       this.name,
@@ -28,9 +30,9 @@ class User{
       this.zaloUserId,
       this.studentGroupId,
       this.courses,
-  });
-
+      required this.email});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

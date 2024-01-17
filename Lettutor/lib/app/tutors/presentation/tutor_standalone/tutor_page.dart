@@ -227,7 +227,7 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                         color: Colors.red,
                       ),
                       onTap: () {
-                        ref.read(userRepositoryProvider).updateTutorInFavoriteList(tutor.user!.id);
+                        ref.read(userRepositoryProvider).updateTutorInFavoriteList(tutor.user!.id!);
                         setState(() {
                           tutor.isFavorite ??= false;
                           tutor.isFavorite = !tutor.isFavorite!;

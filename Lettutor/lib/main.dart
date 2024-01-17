@@ -10,6 +10,8 @@ import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final AuthState authState = AuthState();
   await authState.init();
 

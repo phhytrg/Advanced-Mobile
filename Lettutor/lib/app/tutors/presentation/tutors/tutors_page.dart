@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/tutor_item.dart';
 import 'package:lettutor/app/tutors/presentation/tutors/controller/tutors_controller.dart';
 import 'package:lettutor/core/common-widgets/async_value_widget.dart';
+import 'package:lettutor/core/constant.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '../../domain/payload/search_payload.dart';
 import '../../domain/response/tutor_list.dart';
@@ -75,6 +76,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
   @override
   Widget build(BuildContext context) {
     final txt = AppLocalizations.of(context)!;
+    final width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       controller: scrollController,
       child: Column(
@@ -102,7 +104,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
               data: (tutorsList) {
                 return tutorsList != null && tutorsList.count > 0
                     ? Container(
-                        margin: const EdgeInsets.only(left: 32, right: 32),
+                        margin:  EdgeInsets.symmetric(horizontal: width > mobileWidth ? 32 : 8),
                         child: Wrap(
                           alignment: WrapAlignment.start,
                           spacing: 16,
