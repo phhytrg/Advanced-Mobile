@@ -83,7 +83,9 @@ class _LettutorDrawerState extends State<LettutorDrawer> {
           ListTile(
             leading: const Icon(Icons.support_agent),
             title: const Text('Become a tutor'),
-            onTap: () {},
+            onTap: () {
+              GoRouter.of(context).go(AppRoute.registerTutor.getPath());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.settings),

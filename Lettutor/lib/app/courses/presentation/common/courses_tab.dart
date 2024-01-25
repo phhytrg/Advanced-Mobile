@@ -180,7 +180,7 @@ class CourseItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () async {
-        context.goNamed(AppRoute.courseInfo.name, pathParameters: {
+        context.pushNamed(AppRoute.courseInfo.name, pathParameters: {
           'id': course.id.toString(),
         });
       },
@@ -203,6 +203,7 @@ class CourseItem extends ConsumerWidget {
                 offset: const Offset(0, 3),
               ),
             ],
+            color: Theme.of(context).primaryColor
             // color: Colors.white
         ),
         child: Column(
@@ -231,7 +232,7 @@ class CourseItem extends ConsumerWidget {
                   Text(
                     course.description,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).primaryColorLight,
+                          // color: Theme.of(context).primaryColorLight,
                         ),
                   ),
                 ],

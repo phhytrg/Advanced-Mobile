@@ -58,6 +58,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
   void handleOnSearchChange() {
     ref.watch(tutorsControllerProvider.notifier).searchTutorsByFilters(SearchPayload(
           perPage: 9,
+          page: 1,
           search: textSearchController.text,
           filters: Filters(
             specialties: specialties,
