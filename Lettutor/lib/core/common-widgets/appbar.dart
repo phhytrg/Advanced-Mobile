@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/app/app_settings/presentation/controllers/language_controller.dart';
 import 'package:lettutor/app/user_profile/presentation/controller/user_controller.dart';
 import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
@@ -45,23 +46,28 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
       actions: [
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-          child: ElevatedButton(
-            onPressed: () {
-              MyApp.changeLocale(context, const Locale('vi'));
+          child: Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return ElevatedButton(
+                onPressed: () {
+                  ref.read(languageControllerProvider.notifier).changeLanguage(
+                      MyApp.getLocale(context).languageCode == 'en' ? 'vi' : 'en');
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(20),
+                  backgroundColor: Colors.grey[100], // <-- Button color
+                  foregroundColor: Colors.grey[500], // <-- Splash color
+                ),
+                child: SvgPicture.asset(
+                  MyApp.getLocale(context).languageCode == 'en'
+                      ? "assets/icons/usa-flag.svg"
+                      : "assets/icons/vietnam-flag.svg",
+                  width: 20,
+                  fit: BoxFit.scaleDown,
+                ),
+              );
             },
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(20),
-              backgroundColor: Colors.grey[100], // <-- Button color
-              foregroundColor: Colors.grey[500], // <-- Splash color
-            ),
-            child: SvgPicture.asset(
-              MyApp.getLocale(context).languageCode == 'en'
-                  ? "assets/icons/usa-flag.svg"
-                  : "assets/icons/vietnam-flag.svg",
-              width: 20,
-              fit: BoxFit.scaleDown,
-            ),
           ),
         ),
         Builder(builder: (context) {
@@ -146,6 +152,18 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                                 context.go(AppRoute.messages.getPath());
                                               },
                                               child: Align(alignment: Alignment.center, child: Text(txt.messages)),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 30,
+                                          child: Material(
+                                            child: InkWell(
+                                              onTap: () {
+                                                context.go(AppRoute.settings.getPath());
+                                              },
+                                              child: Align(alignment: Alignment.center, child: Text(txt.settings)),
                                             ),
                                           ),
                                         ),
@@ -391,23 +409,28 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-            child: ElevatedButton(
-              onPressed: () {
-                MyApp.changeLocale(context, const Locale('vi'));
+            child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                return ElevatedButton(
+                  onPressed: () {
+                    ref.read(languageControllerProvider.notifier).changeLanguage(
+                        MyApp.getLocale(context).languageCode == 'en' ? 'vi' : 'en');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: Colors.grey[100], // <-- Button color
+                    foregroundColor: Colors.grey[500], // <-- Splash color
+                  ),
+                  child: SvgPicture.asset(
+                    MyApp.getLocale(context).languageCode == 'en'
+                        ? "assets/icons/usa-flag.svg"
+                        : "assets/icons/vietnam-flag.svg",
+                    width: 20,
+                    fit: BoxFit.scaleDown,
+                  ),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(20),
-                backgroundColor: Colors.grey[100], // <-- Button color
-                foregroundColor: Colors.grey[500], // <-- Splash color
-              ),
-              child: SvgPicture.asset(
-                MyApp.getLocale(context).languageCode == 'en'
-                    ? "assets/icons/usa-flag.svg"
-                    : "assets/icons/vietnam-flag.svg",
-                width: 20,
-                fit: BoxFit.scaleDown,
-              ),
             ),
           ),
         ]);

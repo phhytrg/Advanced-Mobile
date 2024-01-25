@@ -56,6 +56,12 @@
   "profile": "Profile",
   "becomeTutor": "Become a tutor",
   "logout": "Logout",
+  "language": "Language",
+  "darkMode": "Dark Mode",
+  "vietnamese": "Vietnamese",
+  "english": "English",
+  "settings": "Settings",
+
 
   "tutor": "Tutor",
   "student": "Student",

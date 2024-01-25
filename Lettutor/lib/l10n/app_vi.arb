@@ -56,6 +56,11 @@
     "profile": "Hồ sơ",
     "becomeTutor": "Trở thành giáo viên",
     "logout": "Đăng xuất",
+    "language": "Ngôn ngữ",
+    "darkMode": "Chế độ tối",
+    "vietnamese": "Tiếng Việt",
+    "english": "Tiếng Anh",
+    "settings": "Cài đặt",
 
     "tutor": "Gia sư",
     "student": "Học viên",

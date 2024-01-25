@@ -75,15 +75,22 @@ class _LettutorDrawerState extends State<LettutorDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.collections_bookmark),
-            title: const Text('My course'),
+            title: const Text('Messages'),
             onTap: () {
-
+              GoRouter.of(context).go(AppRoute.messages.getPath());
             },
           ),
           ListTile(
             leading: const Icon(Icons.support_agent),
             title: const Text('Become a tutor'),
             onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              GoRouter.of(context).go(AppRoute.settings.getPath());
+            },
           ),
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) {

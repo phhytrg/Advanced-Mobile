@@ -3,10 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lettutor/app/auth/data/local_auth_repository.dart';
+import 'package:lettutor/app/app_settings/presentation/controllers/language_controller.dart';
+import 'package:lettutor/app/app_settings/presentation/controllers/theme_mode_controller.dart';
+import 'package:lettutor/app/app_settings/presentation/setting_page.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:lettutor/core/theme/app_colors.dart';
-import 'package:lettutor/core/theme/app_theme.dart';
 import 'core/route/router.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,7 +22,13 @@ void main() async {
   runApp(
     ProviderScope(overrides: [
       authProvider.overrideWith((ref) => authState),
-    ], child: MyApp()),
+      languageControllerProvider.overrideWith(() {
+        return LanguageController()..getLanguage();
+      }),
+      themeModeControllerProvider.overrideWith(() {
+        return ThemeModeController()..getThemeMode();
+      }),
+    ], child: const MyApp()),
   );
 }
 
@@ -31,10 +38,10 @@ class MyApp extends ConsumerStatefulWidget {
   // const MyApp({super.key, required this.authState});
   const MyApp({super.key});
 
-  static void changeLocale(BuildContext context, Locale locale) async {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-    state?.changeLanguage();
-  }
+  // static void changeLocale(BuildContext context, Locale locale) async {
+  //   _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+  //   state?.changeLanguage();
+  // }
 
   static Locale getLocale(BuildContext context) {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
@@ -47,6 +54,7 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   Locale _locale = const Locale('en');
+  ThemeMode _themeMode = ThemeMode.light;
 
   changeLanguage() {
     setState(() {
@@ -58,6 +66,11 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final goRouter = ref.watch(routerGeneratorProvider(ref.read(authProvider)));
+    final language = ref.watch(languageControllerProvider);
+    final isDarkMode = ref.watch(themeModeControllerProvider);
+    language
+        .whenData((value) => _locale = value == Language.vietnamese.value ? const Locale('vi') : const Locale('en'));
+    isDarkMode.whenData((value) => _themeMode = value ? ThemeMode.dark : ThemeMode.light);
 
     return MaterialApp.router(
       title: 'Flutter Demo',
@@ -161,7 +174,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         dividerColor: Colors.white12,
         primaryColorDark: Colors.grey.shade800,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: _themeMode,
     );
   }
 }
