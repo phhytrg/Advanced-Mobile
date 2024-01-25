@@ -34,11 +34,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void onForgotPasswordClick() {
-    context.go(AppRoute.resetPassword.getPath());
+    context.push(AppRoute.resetPassword.getPath());
   }
 
   void onSignupClick() {
-    context.go(AppRoute.signup.getPath());
+    context.push(AppRoute.signup.getPath());
   }
 
   @override
