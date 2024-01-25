@@ -203,7 +203,8 @@ class CourseItem extends ConsumerWidget {
                 offset: const Offset(0, 3),
               ),
             ],
-            color: Colors.white),
+            // color: Colors.white
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +231,7 @@ class CourseItem extends ConsumerWidget {
                   Text(
                     course.description,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Colors.grey,
+                          color: Theme.of(context).primaryColorLight,
                         ),
                   ),
                 ],

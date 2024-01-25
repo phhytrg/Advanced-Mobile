@@ -3,7 +3,7 @@
     "@helloWorld": {
         "description": "Lời chào truyền thống của lập trình viên mới"
     },
-    "setupTutorIntro": "Hồ sơ giáo viên của bạn là cơ hội để quảng bá bản thân với học viên trên Tutoring. Bạn có thể chỉnh sửa sau này trên trang cài đặt hồ sơ của mình.\n\nHọc viên mới có thể duyệt qua hồ sơ giáo viên để tìm người phù hợp với mục tiêu học tập và tính cách của họ. Học viên quay lại có thể sử dụng hồ sơ giáo viên để tìm kiếm giáo viên mà họ đã có những trải nghiệm tuyệt vời.",
+    "setupTutorIntro": "Hồ sơ giáo viên của bạn là cơ hội để quảng bá bản thân với học viên trên Tutoring. Bạn có thể chỉnh sửa sau này trên trang cài đặt hồ sơ của mình.Học viên mới có thể duyệt qua hồ sơ giáo viên để tìm người phù hợp với mục tiêu học tập và tính cách của họ. Học viên quay lại có thể sử dụng hồ sơ giáo viên để tìm kiếm giáo viên mà họ đã có những trải nghiệm tuyệt vời.",
     "@setupTutorIntro": {
         "description": "Văn bản giới thiệu cho trang cài đặt hồ sơ giáo viên"
     },
@@ -75,14 +75,14 @@
     "favorite": "Yêu thích",
 
     "schedule": "Lịch trình",
-    "whatSchedule": "Dưới đây là danh sách các buổi học bạn đã đặt\nBạn có thể theo dõi khi nào buổi học bắt đầu, tham gia buổi học bằng một cú nhấp chuột hoặc có thể hủy buổi học trước 2 giờ",
+    "whatSchedule": "Dưới đây là danh sách các buổi học bạn đã đặt.Bạn có thể theo dõi khi nào buổi học bắt đầu, tham gia buổi học bằng một cú nhấp chuột hoặc có thể hủy buổi học trước 2 giờ",
     "latestBook": "Đặt Học Mới Nhất",
     "name": "Tên",
     "page": "Trang",
     "description": "Mô tả",
     "requestForLesson": "Yêu cầu Buổi Học",
     "cancel": "Hủy",
-    "editRequest": "Chỉnh sửa Yêu cầu",
+    "editRequest": "Chỉnh sửa",
     "goToMeeting": "Đi đến buổi học",
     "cancelBooking": "Hủy đặt lịch",
     "reschedule": "Đặt lại lịch",
@@ -97,7 +97,7 @@
     "currentlyNoRequest": "Hiện tại không có yêu cầu cho lớp học này. Xin vui lòng viết ra bất kỳ yêu cầu nào cho giáo viên nếu có.",
 
     "history": "Lịch sử",
-    "whatHistory": "Dưới đây là danh sách các bài học bạn đã tham gia\nBạn có thể xem lại chi tiết các bài học bạn đã tham gia",
+    "whatHistory": "Dưới đây là danh sách các bài học bạn đã tham gia. Bạn có thể xem lại chi tiết các bài học bạn đã tham gia",
     "directMessage": "Tin Nhắn Trực Tiếp",
     "addARating": "Thêm đánh giá",
     "lessonTime": "Thời gian học",

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/tutors/domain/tutor_utils.dart';
 import 'package:lettutor/core/constant.dart';
+import 'package:lettutor/core/theme/mode.dart';
 
 import '../../../../core/common-widgets/highligh_text.dart';
 import '../../../../core/route/router.dart';
@@ -27,7 +28,7 @@ class _TutorItemState extends State<TutorItem> {
     final width = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        context.goNamed(AppRoute.tutor.name, pathParameters: {'id': widget.tutor.id!});
+        context.pushNamed(AppRoute.tutor.name, pathParameters: {'id': widget.tutor.id!});
       },
       child: Container(
         constraints: BoxConstraints(
@@ -40,7 +41,7 @@ class _TutorItemState extends State<TutorItem> {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black12),
+          border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

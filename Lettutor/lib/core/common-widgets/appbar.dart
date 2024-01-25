@@ -30,7 +30,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
   Widget build(BuildContext context) {
     final txt = AppLocalizations.of(context)!;
     return AppBar(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       shadowColor: Colors.black,
       leadingWidth: 200,
       leading: Padding(
@@ -180,7 +180,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                                 Text(
                                   '${txt.hi}, ${user.name}',
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    // color: Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -250,7 +250,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               style: TextStyle(
                 color: _hoverNavBar[0] || currentRoutePath.toString() == AppRoute.tutorsList.getPath()
                     ? Colors.blue
-                    : Colors.black,
+                    : AppBarTheme.of(context).foregroundColor,
               ),
             ),
           ),
@@ -277,7 +277,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               style: TextStyle(
                 color: _hoverNavBar[1] || currentRoutePath.toString() == AppRoute.bookingStudents.getPath()
                     ? Colors.blue
-                    : Colors.black,
+                    : AppBarTheme.of(context).foregroundColor,
               ),
             ),
           ),
@@ -304,7 +304,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               style: TextStyle(
                 color: _hoverNavBar[2] || currentRoutePath.toString() == AppRoute.history.getPath()
                     ? Colors.blue
-                    : Colors.black,
+                    : AppBarTheme.of(context).foregroundColor,
               ),
             ),
           ),
@@ -331,7 +331,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
               style: TextStyle(
                 color: _hoverNavBar[3] || currentRoutePath.toString() == AppRoute.courses.getPath()
                     ? Colors.blue
-                    : Colors.black,
+                    : AppBarTheme.of(context).foregroundColor,
               ),
             ),
           ),
@@ -360,7 +360,7 @@ class _LettutorAppbarState extends State<LettutorAppbar> {
                 color: _hoverNavBar[4]
                     // || currentRoutePath.toString() == RoutePath.courses.getString()
                     ? Colors.blue
-                    : Colors.black,
+                    : AppBarTheme.of(context).foregroundColor,
               ),
             ),
           ),
@@ -376,7 +376,7 @@ class LoginAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         shadowColor: Colors.black,
         leadingWidth: 200,
         leading: Padding(

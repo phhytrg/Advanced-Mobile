@@ -3,7 +3,7 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
-  "setupTutorIntro": "Your tutor profile is your chance to market yourself to students on Tutoring. You can make edits later on your profile settings page.\n\nNew students may browse tutor profiles to find a tutor that fits their learning goals and personality. Returning students may use the tutor profiles to find tutors they've had great experiences with already.",
+  "setupTutorIntro": "Your tutor profile is your chance to market yourself to students on Tutoring. You can make edits later on your profile settings page. New students may browse tutor profiles to find a tutor that fits their learning goals and personality. Returning students may use the tutor profiles to find tutors they've had great experiences with already.",
   "@setupTutorIntro": {
     "description": "Introductory text for the tutor setup page"
   },
@@ -75,7 +75,7 @@
   "favorite": "Favorite",
 
   "schedule": "Schedule",
-  "whatSchedule": "Here is a list of the sessions you have booked\nYou can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours",
+  "whatSchedule": "Here is a list of the sessions you have booked. You can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours",
   "latestBook": "Latest Book",
   "name": "Name",
   "page": "Page",
@@ -97,7 +97,7 @@
   "currentlyNoRequest": "Currently there are no requests for this class. Please write down any requests for the teacher.",
 
   "history": "History",
-  "whatHistory": "The following is a list of lessons you have attended\nYou can review the details of the lessons you have attended",
+  "whatHistory": "The following is a list of lessons you have attended. You can review the details of the lessons you have attended",
   "directMessage": "Direct Message",
   "addARating": "Add a rating",
   "lessonTime": "Lesson Time",

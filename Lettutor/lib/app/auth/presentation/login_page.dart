@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lettutor/core/constant.dart';
 import 'package:lettutor/core/presentation/notification.dart';
 import 'package:lettutor/core/route/router.dart';
@@ -268,12 +269,30 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       color: Colors.blue,
                     )),
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    const List<String> scopes = <String>[
+                      'email',
+                      'https://www.googleapis.com/auth/contacts.readonly',
+                    ];
+
+                    GoogleSignIn googleSignIn = GoogleSignIn(
+                      // Optional clientId
+                      clientId: 'your-client_id.apps.googleusercontent.com',
+                      scopes: scopes,
+                    );
+                    final result = await googleSignIn.signIn();
+                    if (result != null) {
+                      final googleKey = await result.authentication;
+                      final token = googleKey.accessToken;
+                      print(token);
+                      print(googleKey);
+                    }
+                  },
                   style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.blue),
                       shape: const CircleBorder()),
                   child: SvgPicture.asset(
-                    '/icons/google.svg',
+                    'assets/icons/google.svg',
                     height: 24,
                   ),
                 ),

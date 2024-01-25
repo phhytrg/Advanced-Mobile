@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lettutor/app/auth/data/local_auth_repository.dart';
 import 'package:lettutor/core/route/auth_provider.dart';
+import 'package:lettutor/core/theme/app_colors.dart';
+import 'package:lettutor/core/theme/app_theme.dart';
 import 'core/route/router.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,12 +19,9 @@ void main() async {
 
   configureUrl();
   runApp(
-    ProviderScope(
-      overrides: [
-        authProvider.overrideWith((ref) => authState),
-      ],
-      child: MyApp()
-    ),
+    ProviderScope(overrides: [
+      authProvider.overrideWith((ref) => authState),
+    ], child: MyApp()),
   );
 }
 
@@ -90,8 +89,79 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
           elevation: 0,
         )),
+        primaryColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          backgroundColor: AppColors.white,
+          titleTextStyle: TextStyle(
+            color: AppColors.white,
+            fontSize: 20,
+          ),
+          iconTheme: IconThemeData(
+            color: AppColors.white,
+          ),
+          foregroundColor: AppColors.black,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            foregroundColor: Colors.grey.shade800,
+            backgroundColor: Colors.grey.shade300,
+          ),
+        ),
+        dividerColor: Colors.black12,
+        dialogTheme: const DialogTheme(
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.white,
+        ),
+        primaryColorDark: Colors.grey.shade200,
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.black,
+        colorScheme: const ColorScheme.dark(
+          primary: AppColors.primary,
+          secondary: AppColors.lightGrey,
+          error: AppColors.error,
+          background: AppColors.black,
+        ),
+        // backgroundColor: AppColors.black,
+        scaffoldBackgroundColor: AppColors.black,
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          backgroundColor: AppColors.black,
+          centerTitle: true,
+          surfaceTintColor: AppColors.white,
+          toolbarTextStyle: TextStyle(
+            color: AppColors.white,
+            fontSize: 20,
+          ),
+          titleTextStyle: TextStyle(
+            color: AppColors.white,
+            fontSize: 20,
+          ),
+          iconTheme: IconThemeData(
+            color: AppColors.white,
+          ),
+          foregroundColor: AppColors.white,
+        ),
+        dialogTheme: const DialogTheme(
+          backgroundColor: AppColors.black,
+          surfaceTintColor: AppColors.white,
+        ),
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).primaryTextTheme),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade800,
+            foregroundColor: Colors.white,
+            elevation: 0,
+          ),
+        ),
+        dividerColor: Colors.white12,
+        primaryColorDark: Colors.grey.shade800,
+      ),
+      themeMode: ThemeMode.dark,
     );
   }
 }

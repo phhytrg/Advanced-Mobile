@@ -50,9 +50,9 @@ class BookingScheduleState extends State<BookingSchedule> with TickerProviderSta
             monthPickerType: MonthPickerType.dropDown,
             selectedDateFormat: SelectedDateFormat.fullDateDMY,
           ),
-          dayProps: const EasyDayProps(
+          dayProps: EasyDayProps(
             dayStructure: DayStructure.dayStrDayNum,
-            activeDayStyle: DayStyle(
+            activeDayStyle: const DayStyle(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 gradient: LinearGradient(
@@ -63,6 +63,15 @@ class BookingScheduleState extends State<BookingSchedule> with TickerProviderSta
                     Color(0xff8426D6),
                   ],
                 ),
+              ),
+            ),
+            inactiveDayStyle: DayStyle(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                color: DialogTheme.of(context).backgroundColor,
+              ),
+              dayNumStyle: TextStyle(
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
