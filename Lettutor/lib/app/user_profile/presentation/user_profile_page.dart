@@ -38,13 +38,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                 : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: [
-                Text(
-                  txt.userProfile,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
                 _buildUserBasicInfo(context, user),
                 const SizedBox(
                   height: 16,

@@ -236,7 +236,7 @@ class ScheduleItem extends StatelessWidget {
               offset: const Offset(0, 2),
             ),
           ],
-          color: isBooked ? Colors.green.shade50 : Colors.white,
+          color: DialogTheme.of(context).backgroundColor,
           // border: Border.all(color: Colors.grey.shade300),
         ),
         child: Column(

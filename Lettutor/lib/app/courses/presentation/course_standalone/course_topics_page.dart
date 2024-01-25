@@ -114,14 +114,14 @@ class _CourseTopicsPageState extends ConsumerState<CourseTopicsPage> {
 
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(32),
-                    color: _selectedIndex == index ? Colors.grey.shade300 : null,
+                    color: _selectedIndex == index ? Theme.of(context).primaryColorDark : null,
                   ),
                   child: RichText(
                     text: TextSpan(
                         style: TextStyle(fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w500).fontFamily),
                         children: [
-                          TextSpan(text: '$index.  '),
-                          TextSpan(text: course.topics[index].name),
+                          TextSpan(text: '$index.  ', style: Theme.of(context).textTheme.bodySmall!),
+                          TextSpan(text: course.topics[index].name, style: Theme.of(context).textTheme.bodySmall!),
                         ]),
                   ),
                 ),

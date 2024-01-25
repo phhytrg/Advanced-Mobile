@@ -261,8 +261,13 @@ class _TutorPageState extends ConsumerState<TutorPage> {
                                 const Row(
                                   children: [
                                     Icon(Icons.report, color: Colors.blue),
-                                    Text('Help us understand what\'s happening',
-                                        style: TextStyle(fontWeight: FontWeight.bold)),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Flexible(
+                                      child: Text('Help us understand what\'s happening',
+                                          style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(

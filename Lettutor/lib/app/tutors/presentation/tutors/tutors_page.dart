@@ -168,7 +168,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
           Text(
             txt.findATutor,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.black,
+                  // color: Colors.black,
                   fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
                 ),
           ),
@@ -224,7 +224,9 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
             borderRadius: 16,
             optionTextStyle: Theme.of(context).textTheme.bodySmall!,
             selectedOptionIcon: const Icon(Icons.check),
-            selectedOptionBackgroundColor: Colors.blue.shade50,
+            selectedOptionBackgroundColor: Theme.of(context).primaryColorDark,
+            optionsBackgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
             padding: EdgeInsets.zero,
             hint: txt.selectTutorNationality,
             controller: nationalitiesController,
@@ -235,7 +237,7 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
           Text(
             '${txt.selectAvailableTime}:',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Colors.black,
+                  // color: Colors.black,
                   fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
                 ),
           ),
@@ -305,9 +307,9 @@ class _TutorsPageState extends ConsumerState<TutorsPage> {
           });
           handleOnSearchChange();
         },
-        style: ElevatedButton.styleFrom(
-          foregroundColor: specialties.contains(value) ? Colors.blue : Colors.grey,
-        ),
+        style: specialties.contains(value) ? ElevatedButton.styleFrom(
+          foregroundColor: Colors.blue,
+        ) : null,
         child: Text(label));
   }
 }

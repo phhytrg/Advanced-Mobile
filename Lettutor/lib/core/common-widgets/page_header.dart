@@ -29,7 +29,6 @@ class PageHeader extends StatelessWidget {
           fontFamily: GoogleFonts.poppins(
             fontWeight: FontWeight.w700,
           ).fontFamily,
-          color: Colors.black,
         )),
         ExpandableText(
           pageDescription,
@@ -47,6 +46,7 @@ class PageHeader extends StatelessWidget {
           if(constraints.maxWidth <= mobileWidth){
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 headerIcon,
                 headerDescription,
@@ -56,6 +56,7 @@ class PageHeader extends StatelessWidget {
           else{
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 headerIcon,
                 const SizedBox(

@@ -166,6 +166,7 @@ class _UpcomingLessonState extends ConsumerState<UpcomingLesson> {
                       },
                       child: Text(
                         txt.enterLessonRoom,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),

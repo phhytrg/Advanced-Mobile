@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/route/auth_provider.dart';
 import 'package:lettutor/core/route/router.dart';
 
 class LettutorDrawer extends StatefulWidget {
@@ -32,9 +34,11 @@ class _LettutorDrawerState extends State<LettutorDrawer> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('User'),
-            onTap: () {},
+            leading: const Icon(Icons.account_circle),
+            title: const Text('User'),
+            onTap: () {
+              GoRouter.of(context).go(AppRoute.profile.getPath());
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
@@ -71,9 +75,9 @@ class _LettutorDrawerState extends State<LettutorDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.collections_bookmark),
-            title: const Text('My course'),
+            title: const Text('Messages'),
             onTap: () {
-
+              GoRouter.of(context).go(AppRoute.messages.getPath());
             },
           ),
           ListTile(
@@ -82,9 +86,22 @@ class _LettutorDrawerState extends State<LettutorDrawer> {
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Log out'),
-            onTap: () {},
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              GoRouter.of(context).go(AppRoute.settings.getPath());
+            },
+          ),
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              return ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Log out'),
+                onTap: () {
+                  ref.read(authProvider.notifier).logout();
+                },
+              );
+            },
           ),
         ],
       ),

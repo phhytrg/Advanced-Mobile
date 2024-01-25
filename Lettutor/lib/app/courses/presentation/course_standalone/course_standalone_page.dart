@@ -79,8 +79,9 @@ class CourseStandalonePage extends ConsumerWidget {
             )
           ],
           borderRadius: BorderRadius.circular(16.0),
-          color: Colors.white,
-          border: Border.all(color: Colors.grey.shade300)),
+          color: Theme.of(context).primaryColor,
+          border: Border.all(color: Colors.grey.shade300)
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -222,7 +223,7 @@ class CourseStandalonePage extends ConsumerWidget {
                       });
                     },
                     borderRadius: BorderRadius.circular(8.0),
-                    hoverColor: Colors.grey.shade300,
+                    hoverColor: Theme.of(context).primaryColorDark,
                     child: _buildTopicCard(context, '${index + 1}. ${course.topics[index].name}'));
               },
             );
@@ -257,8 +258,9 @@ class CourseStandalonePage extends ConsumerWidget {
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: Colors.transparent,
-        border: Border.all(color: Colors.grey.shade300),
+        color: Theme.of(context).primaryColor,
+        border: Border.all(color: Colors.grey.shade300
+        ),
       ),
       child: Text(
         text,

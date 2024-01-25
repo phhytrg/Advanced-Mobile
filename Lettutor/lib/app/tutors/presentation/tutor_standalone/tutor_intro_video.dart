@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lettutor/core/constant.dart';
 import 'package:video_player/video_player.dart';
 
 class TutorIntroVideo extends StatefulWidget {
@@ -34,6 +35,7 @@ class _TutorIntroVideoState extends State<TutorIntroVideo> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return FutureBuilder(
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
@@ -41,7 +43,7 @@ class _TutorIntroVideoState extends State<TutorIntroVideo> {
             ? Stack(
           children: <Widget>[
             AspectRatio(
-              aspectRatio: videoPlayerController.value.aspectRatio * 5,
+              aspectRatio: width < mobileWidth ? videoPlayerController.value.aspectRatio : videoPlayerController.value.aspectRatio * 5,
               child: VideoPlayer(videoPlayerController),
             ),
             // Add a play or pause button overlay

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
+import 'package:lettutor/app/auth/data/user_repository.dart';
+import 'package:lettutor/app/auth/domain/user.dart';
 import 'package:lettutor/app/schedule/domain/booking_list_reponse/booking_list_response.dart';
 import 'package:lettutor/app/tutors/service/tutors_service.dart';
+import 'package:lettutor/app/video_conference/application/jitsi.dart';
 import 'package:lettutor/core/common-widgets/async_value_widget.dart';
 import 'package:lettutor/core/utils/date_untils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -51,7 +56,7 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
         child: Column(
           children: [
             PageHeader(
-              svgIconPath: 'icons/calendar-check.svg',
+              svgIconPath: 'assets/icons/calendar-check.svg',
               pageDescription: txt.whatSchedule,
               pageName: txt.schedule,
             ),
@@ -87,14 +92,14 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
             1: FlexColumnWidth(3),
           },
           border: TableBorder.all(
-            color: Colors.grey.shade300,
+            color: Theme.of(context).primaryColorDark,
             borderRadius: BorderRadius.circular(8),
           ),
           children: [
             TableRow(children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Theme.of(context).primaryColorDark,
                   borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.all(16.0),
@@ -113,7 +118,7 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
                       Container(
                           padding: const EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
+                            color: Theme.of(context).primaryColorDark,
                             borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                           ),
                           child: Text(txt.page)),
@@ -126,7 +131,7 @@ class _BookingStudentPageState extends ConsumerState<BookingStudentPage> {
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
+                    color: Theme.of(context).primaryColorDark,
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(8)),
                   ),
                   child: Text(txt.description),
@@ -244,7 +249,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                           alignment: Alignment.center,
                           child: Text(txt.cancelBooking),
                         ),
-                        surfaceTintColor: Colors.white,
+                        // surfaceTintColor: Colors.white,
                         content: SizedBox(
                           width: 400,
                           child: Column(
@@ -336,7 +341,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
   Widget _buildLessonLine(BuildContext context) {
     final txt = AppLocalizations.of(context)!;
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).dialogBackgroundColor,
       margin: const EdgeInsets.all(8.0),
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -391,7 +396,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                   ],
                 ),
           Card(
-            color: Colors.grey.shade100,
+            color: Theme.of(context).primaryColorLight,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -411,15 +416,11 @@ class _BookingItemState extends ConsumerState<BookingItem> {
                 expandedAlignment: Alignment.centerLeft,
                 children: [
                   Container(
-                    color: Colors.white,
+                    color: Theme.of(context).dialogBackgroundColor,
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: widget.bookingList[0].studentRequest == null
-                        ? Text(txt.currentlyNoRequest,
-                            style: TextStyle(
-                              color: Colors.grey.shade400,
-                            ),
-                          )
+                        ? Text(txt.currentlyNoRequest)
                         : Text(widget.bookingList[0].studentRequest!),
                   )
                 ],
@@ -431,7 +432,33 @@ class _BookingItemState extends ConsumerState<BookingItem> {
             child: Align(
               alignment: Alignment.bottomRight,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final booking = widget.bookingList[0];
+                  if (DateTime.now().millisecondsSinceEpoch <
+                      DateTime.fromMillisecondsSinceEpoch(
+                          booking.scheduleDetailInfo!.startPeriodTimestamp!)
+                          .millisecondsSinceEpoch) {
+                    GoRouter.of(context).push('/meeting/${booking.id}/waiting', extra: booking);
+                    return;
+                  }
+                  final User user = await ref.read(userRepositoryProvider).getUserInfo();
+                  var options = Jitsi.getOptions(
+                      meetingUrl: Jitsi.getToken(booking.studentMeetingLink!),
+                      subject:
+                      '${booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name!} - ${MyDateUtils.getHourMinute(DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp!))}',
+                      userDisplayName: user.name ?? '',
+                      userEmail: user.email ?? '',
+                      userAvatarUrl: user.avatar ?? '');
+                  JitsiMeetWrapper.joinMeeting(
+                    options: options,
+                    listener: JitsiMeetingListener(
+                      onConferenceWillJoin: (url) => print("onConferenceWillJoin: url: $url"),
+                      onConferenceJoined: (url) => print("onConferenceJoined: url: $url"),
+                      onConferenceTerminated: (url, error) =>
+                          print("onConferenceTerminated: url: $url, error: $error"),
+                    ),
+                  );
+                },
                 child: Text(txt.goToMeeting),
               ),
             ),
@@ -448,7 +475,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: Colors.grey.shade200,
+            color: Theme.of(context).primaryColorDark,
           ),
           child: Column(
             children: [
@@ -465,7 +492,7 @@ class _BookingItemState extends ConsumerState<BookingItem> {
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: Colors.grey.shade200,
+            color: Theme.of(context).primaryColorDark,
           ),
           child: Row(
             children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app/advertising/advertising_page.dart';
+import 'package:lettutor/app/app_settings/presentation/setting_page.dart';
 import 'package:lettutor/app/auth/presentation/login_page.dart';
 import 'package:lettutor/app/auth/presentation/reset_password.dart';
 import 'package:lettutor/app/become_tutor/presentation/register_tutor_page.dart';
@@ -41,6 +42,7 @@ enum AppRoute {
   profile,
   registerTutor,
   messages,
+  settings,
   resetPassword;
 
   String getPath() {
@@ -75,6 +77,8 @@ enum AppRoute {
         return '/register-tutor';
       case AppRoute.messages:
         return '/messages';
+      case AppRoute.settings:
+        return '/settings';
       case AppRoute.advertising:
         return '/';
     }
@@ -192,6 +196,13 @@ GoRouter routerGenerator(RouterGeneratorRef ref, AuthState authState) {
                 builder: (context, state) {
                   return const MessagesPage();
                 }),
+            GoRoute(
+                path: AppRoute.settings.getPath(),
+                name: AppRoute.settings.name,
+                builder: (context, state) {
+                  return const SettingsPage();
+                }
+            )
           ],
           builder: (context, state, child) {
             return AppScaffold(child: child);

@@ -50,7 +50,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         child: Column(
           children: [
             PageHeader(
-              svgIconPath: 'icons/history.svg',
+              svgIconPath: 'assets/icons/history.svg',
               pageDescription: txt.whatHistory,
               pageName: txt.history,
             ),
@@ -122,7 +122,7 @@ class HistoryItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: Colors.grey.shade200,
+        color: Theme.of(context).primaryColorDark,
       ),
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
       child: LayoutBuilder(builder: (context, constraints) {
@@ -200,7 +200,7 @@ class HistoryItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8.0),
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           child: Row(
             children: [
               Text('${txt.lessonTime}: '
@@ -214,7 +214,7 @@ class HistoryItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           width: double.infinity,
           margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 1),
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           child: booking.studentRequest == null || booking.studentRequest == ''
               ? Text(txt.noRequestForLesson)
               : Column(
@@ -228,7 +228,7 @@ class HistoryItem extends StatelessWidget {
             : Container(
                 padding: const EdgeInsets.all(8.0),
                 margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 16),
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
                 child: Row(
                   children: [
                     Text('${txt.mark} '),
@@ -240,7 +240,7 @@ class HistoryItem extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(8.0),
           margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 16),
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           child: booking.classReview == null
               ? Text(txt.tutorHaventReview)
               : _buildReviewItem(context, booking.classReview!),
@@ -248,7 +248,7 @@ class HistoryItem extends StatelessWidget {
         Container(
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.only(top: 1, bottom: 16, right: 16, left: 16),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -266,11 +266,15 @@ class HistoryItem extends StatelessWidget {
                                 });
                               });
                         })
-                    : Row(
+                    : Column(
                         children: [
-                          Text('${txt.yourRating} '),
-                          RatingWidget(
-                            rating: booking.feedbacks![0]["rating"],
+                          Row(
+                            children: [
+                              Text('${txt.yourRating} '),
+                              RatingWidget(
+                                rating: booking.feedbacks![0]["rating"],
+                              ),
+                            ],
                           ),
                           TextButton(
                               onPressed: () {
@@ -286,7 +290,6 @@ class HistoryItem extends StatelessWidget {
                                             controller: controller,
                                             type: 'edit',
                                             feedbackId: booking.feedbacks![0]["id"]
-
                                         );
                                       });
                                     });
@@ -360,7 +363,7 @@ class HistoryItem extends StatelessWidget {
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
         title: Text(txt.addARating),
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Theme.of(context).primaryColor,
         content: SizedBox(
           width: 500,
           child: Column(
