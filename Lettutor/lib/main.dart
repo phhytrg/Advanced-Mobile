@@ -22,12 +22,12 @@ void main() async {
   runApp(
     ProviderScope(overrides: [
       authProvider.overrideWith((ref) => authState),
-      languageControllerProvider.overrideWith(() {
-        return LanguageController()..getLanguage();
-      }),
-      themeModeControllerProvider.overrideWith(() {
-        return ThemeModeController()..getThemeMode();
-      }),
+      // languageControllerProvider.overrideWith(() {
+      //   return LanguageController()..getLanguage();
+      // }),
+      // themeModeControllerProvider.overrideWith(() {
+      //   return ThemeModeController()..getThemeMode();
+      // }),
     ], child: const MyApp()),
   );
 }

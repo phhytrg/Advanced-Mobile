@@ -77,13 +77,13 @@ class AuthRepository {
     late Response response;
     try {
       response = await dio.post(
-        '/auth/forgotPassword',
+        '/user/forgotPassword',
         data: {
           'email': email,
         },
       );
     } on DioException catch (e) {
-      return e.response!.data['message'] == 'Not found' ? 'Email not found' : e.response!.data['message'];
+      return e.response!.data['message'] == 'Not found' ? '404 not found' : e.response!.data['message'];
     }
     return response.data['message'];
   }
