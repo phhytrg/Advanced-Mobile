@@ -335,7 +335,9 @@ class CoursesHeader extends StatelessWidget {
       ),
       child: MultiSelectDropDown(
         showClearIcon: true,
-        onOptionSelected: (options) {},
+        onOptionSelected: (options) {
+
+        },
         options: valueItems,
         selectionType: SelectionType.multi,
         chipConfig: ChipConfig(

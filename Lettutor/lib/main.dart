@@ -113,6 +113,9 @@ class _MyAppState extends ConsumerState<MyApp> {
           iconTheme: IconThemeData(
             color: AppColors.white,
           ),
+          actionsIconTheme: IconThemeData(
+            color: AppColors.black,
+          ),
           foregroundColor: AppColors.black,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
